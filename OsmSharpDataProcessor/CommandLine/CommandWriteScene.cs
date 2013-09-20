@@ -197,7 +197,7 @@ namespace OsmSharpDataProcessor.CommandLine
                 string cutoffs = "";
                 for (int idx = 0; idx < this.ZoomLevelCutoffs.Length; idx++)
                 {
-                    cutoffs = cutoffs + idx.ToString() + ",";
+                    cutoffs = cutoffs + this.ZoomLevelCutoffs[idx].ToString(System.Globalization.CultureInfo.InvariantCulture) + ",";
                 }
                 cutoffs = cutoffs.Substring(0, cutoffs.Length - 1);
                 return string.Format("--write-scene css={0} scene={1} type={2} cutoffs={3}",

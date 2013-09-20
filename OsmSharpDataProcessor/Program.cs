@@ -35,6 +35,8 @@ namespace OsmSharpDataProcessor
         /// <param name="args"></param>
         private static void Main(string[] args)
         {
+            OsmSharp.Logging.Log.RegisterConsoleListener();
+
             // parse commands first.
             Command[] commands = CommandParser.ParseCommands(args);
 
