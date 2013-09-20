@@ -49,53 +49,14 @@ namespace OsmSharpDataProcessor.CommandLine
         private static readonly string[] SortSwitches = new string[] { "-so", "--sort" };
 
         /// <summary>
-        /// Contains the switches for  bounding box.
+        /// Contains the switches for bounding box.
         /// </summary>
         private static readonly string[] BoundingBoxSwitches = new string[] { "-bb", "--bounding-box" };
 
         /// <summary>
-        /// Returns true if the given string can be a switch.
+        /// Contains the switches for the write scene command.
         /// </summary>
-        /// <param name="switchCommand"></param>
-        /// <returns></returns>
-        private static bool IsSwitch(string switchCommand)
-        {
-            // make sure no caps mess things up.
-            switchCommand = switchCommand.ToLower();
-            switchCommand = switchCommand.Trim();
-
-            // test read-xml.
-            if (ReadXmlSwitches.Contains(switchCommand))
-            { // commmand can be a read-xml.
-                return true;
-            }
-
-            // test write-xml.
-            if (WriteXmlSwitches.Contains(switchCommand))
-            { // command can be a write-xml.
-                return true;
-            }
-
-            // test read-pbf.
-            if (ReadPBFSwitches.Contains(switchCommand))
-            { // commmand can be a read-xml.
-                return true;
-            }
-
-            // test sorting.
-            if (SortSwitches.Contains(switchCommand))
-            { // commmand can be a read-xml.
-                return true;
-            }
-
-            // test bounding-box.
-            if (BoundingBoxSwitches.Contains(switchCommand))
-            { // commmand can be a read-xml.
-                return true;
-            }
-
-            return false; // no switch found!
-        }
+        private static readonly string[] WriteSceneSwitches = new string[] { "-ws", "--write-scene" };
 
         /// <summary>
         /// Parses the command line arguments into a sorted list of commands.
@@ -180,11 +141,20 @@ namespace OsmSharpDataProcessor.CommandLine
 
             // test bounding-box.
             if (BoundingBoxSwitches.Contains(switchCommand))
-            { // command can be a sorting.
+            { // command can be a bb.
                 eatenArguments = eatenArguments +
                                  CommandFilterBoundingBox.Parse(args, idx + 1, out command);
                 return eatenArguments;
             }
+
+            // test write-scene.
+            if (WriteSceneSwitches.Contains(switchCommand))
+            { // command can be a write-scene.
+                eatenArguments = eatenArguments +
+                                 CommandWriteScene.Parse(args, idx + 1, out command);
+                return eatenArguments;
+            }
+
 
             throw new CommandLineParserException(args[idx], "Switch not found!");
         }
@@ -217,6 +187,91 @@ namespace OsmSharpDataProcessor.CommandLine
             }
 
             return stringToParse;
+        }
+
+        /// <summary>
+        /// Returns true if the given string can be a switch.
+        /// </summary>
+        /// <param name="switchCommand"></param>
+        /// <returns></returns>
+        public static bool IsSwitch(string switchCommand)
+        {
+            // make sure no caps mess things up.
+            switchCommand = switchCommand.ToLower();
+            switchCommand = switchCommand.Trim();
+
+            // test read-xml.
+            if (ReadXmlSwitches.Contains(switchCommand))
+            { // commmand can be a read-xml.
+                return true;
+            }
+
+            // test write-xml.
+            if (WriteXmlSwitches.Contains(switchCommand))
+            { // command can be a write-xml.
+                return true;
+            }
+
+            // test read-pbf.
+            if (ReadPBFSwitches.Contains(switchCommand))
+            { // commmand can be a read-xml.
+                return true;
+            }
+
+            // test sorting.
+            if (SortSwitches.Contains(switchCommand))
+            { // commmand can be a read-xml.
+                return true;
+            }
+
+            // test bounding-box.
+            if (BoundingBoxSwitches.Contains(switchCommand))
+            { // commmand can be a read-xml.
+                return true;
+            }
+
+            // test write-scene.
+            if (WriteSceneSwitches.Contains(switchCommand))
+            { // commmand can be a write-scene.
+                return true;
+            }
+
+            return false; // no switch found!
+        }
+
+        /// <summary>
+        /// Returns true if the given string contains a key value like 'key=value'.
+        /// </summary>
+        /// <param name="keyValueString"></param>
+        /// <param name="keyValue"></param>
+        /// <returns></returns>
+        public static bool SplitKeyValue(string keyValueString, out string[] keyValue)
+        {
+            keyValue = null;
+            if (keyValueString.Count(x => x == '=') == 1)
+            { // there is only one '=' sign here.
+                int idx = keyValueString.IndexOf('=');
+                if (idx > 0 && idx < keyValueString.Length - 1)
+                {
+                    keyValue = new string[2];
+                    keyValue[0] = keyValueString.Substring(0, idx);
+                    keyValue[1] = keyValueString.Substring(idx + 1, keyValueString.Length - (idx + 1));
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns true if the given string contains one or more comma seperated values.
+        /// </summary>
+        /// <param name="valuesArray"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static bool SplitValuesArray(string valuesArray, out string[] values)
+        {
+            values = valuesArray.Split(',');
+            return true;
         }
     }
 }

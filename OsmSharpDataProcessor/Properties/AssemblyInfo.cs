@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("OsmSharpDataProcessor")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HP")]
+[assembly: AssemblyCompany("SharpSoftware")]
 [assembly: AssemblyProduct("OsmSharpDataProcessor")]
-[assembly: AssemblyCopyright("Copyright © HP 2013")]
+[assembly: AssemblyCopyright("Copyright © Ben Abelshausen")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

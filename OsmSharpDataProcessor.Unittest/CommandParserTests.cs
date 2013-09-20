@@ -32,6 +32,55 @@ namespace OsmSharpDataProcessor.Unittest
     public class CommandParserTests
     {
         /// <summary>
+        /// Tests the split key-value parser.
+        /// </summary>
+        [Test]
+        public void SplitValuesArray()
+        {
+            string valuesArray = "1,1";
+            string[] values;
+            Assert.IsTrue(CommandParser.SplitValuesArray(valuesArray, out values));
+            Assert.AreEqual(2, values.Length);
+            Assert.AreEqual("1", values[0]);
+            Assert.AreEqual("1", values[1]);
+
+            valuesArray = "1";
+            Assert.IsTrue(CommandParser.SplitValuesArray(valuesArray, out values));
+            Assert.AreEqual(1, values.Length);
+            Assert.AreEqual("1", values[0]);
+        }
+
+        /// <summary>
+        /// Tests the split key-value parser.
+        /// </summary>
+        [Test]
+        public void TestSplitKeyValue()
+        {
+            string keyValueString = "key=value";
+            string[] keyValue;
+            Assert.IsTrue(CommandParser.SplitKeyValue(keyValueString, out keyValue));
+            Assert.AreEqual("key", keyValue[0]);
+            Assert.AreEqual("value", keyValue[1]);
+
+            keyValueString = "key=value=anothervalue";
+            Assert.IsFalse(CommandParser.SplitKeyValue(keyValueString, out keyValue));
+
+            keyValueString = "key=";
+            Assert.IsFalse(CommandParser.SplitKeyValue(keyValueString, out keyValue));
+
+            keyValueString = "=value";
+            Assert.IsFalse(CommandParser.SplitKeyValue(keyValueString, out keyValue));
+
+            keyValueString = "onlyvalueorkey";
+            Assert.IsFalse(CommandParser.SplitKeyValue(keyValueString, out keyValue));
+
+            keyValueString = "1=2";
+            Assert.IsTrue(CommandParser.SplitKeyValue(keyValueString, out keyValue));
+            Assert.AreEqual("1", keyValue[0]);
+            Assert.AreEqual("2", keyValue[1]);
+        }
+
+        /// <summary>
         /// Tests the read-xml command.
         /// </summary>
         [Test]
@@ -112,6 +161,51 @@ namespace OsmSharpDataProcessor.Unittest
             Assert.AreEqual("somefile.osm", (commands[0] as CommandReadXml).File);
             Assert.IsTrue(commands[1] is CommandWriteXml);
             Assert.AreEqual("someotherfile.osm", (commands[1] as CommandWriteXml).File);
+        }
+
+        /// <summary>
+        /// Tests a write scene command.
+        /// </summary>
+        [Test]
+        public void TestWriteScene()
+        {
+            // define some args.
+            var args = new string[] { "-rx", "somefile.osm", "--write-scene", "scene=scene.out", "css=scene.mapcss", "type=simple" };
+
+            // parse.
+            Command[] commands = CommandParser.ParseCommands(args);
+
+            // verify.
+            Assert.NotNull(commands);
+            Assert.AreEqual(2, commands.Length);
+            Assert.IsTrue(commands[0] is CommandReadXml);
+            Assert.AreEqual("somefile.osm", (commands[0] as CommandReadXml).File);
+            Assert.IsTrue(commands[1] is CommandWriteScene);
+            Assert.AreEqual("scene.mapcss", (commands[1] as CommandWriteScene).MapCSS);
+            Assert.AreEqual("scene.out", (commands[1] as CommandWriteScene).SceneFile);
+            Assert.AreEqual(SceneType.Simple, (commands[1] as CommandWriteScene).SceneType);
+            // define some args.
+            args = new string[] { "-rx", "somefile.osm", "--write-scene", "scene=scene.out", "css=scene.mapcss", "type=layered", "cutoffs=5,11,13,15,18" };
+
+            // parse.
+            commands = CommandParser.ParseCommands(args);
+
+            // verify.
+            Assert.NotNull(commands);
+            Assert.AreEqual(2, commands.Length);
+            Assert.IsTrue(commands[0] is CommandReadXml);
+            Assert.AreEqual("somefile.osm", (commands[0] as CommandReadXml).File);
+            Assert.IsTrue(commands[1] is CommandWriteScene);
+            Assert.AreEqual("scene.mapcss", (commands[1] as CommandWriteScene).MapCSS);
+            Assert.AreEqual("scene.out", (commands[1] as CommandWriteScene).SceneFile);
+            Assert.AreEqual(SceneType.Layered, (commands[1] as CommandWriteScene).SceneType);
+            Assert.IsNotNull((commands[1] as CommandWriteScene).ZoomLevelCutoffs);
+            Assert.AreEqual(5, (commands[1] as CommandWriteScene).ZoomLevelCutoffs.Length);
+            Assert.AreEqual(5, (commands[1] as CommandWriteScene).ZoomLevelCutoffs[0]);
+            Assert.AreEqual(11, (commands[1] as CommandWriteScene).ZoomLevelCutoffs[1]);
+            Assert.AreEqual(13, (commands[1] as CommandWriteScene).ZoomLevelCutoffs[2]);
+            Assert.AreEqual(15, (commands[1] as CommandWriteScene).ZoomLevelCutoffs[3]);
+            Assert.AreEqual(18, (commands[1] as CommandWriteScene).ZoomLevelCutoffs[4]);
         }
     }
 }
