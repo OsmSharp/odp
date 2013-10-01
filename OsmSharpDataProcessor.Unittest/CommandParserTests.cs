@@ -126,7 +126,7 @@ namespace OsmSharpDataProcessor.Unittest
             // verify.
             Assert.NotNull(commands);
             Assert.AreEqual(1, commands.Length);
-            Assert.IsTrue(commands[0] is CommandWriteXml);
+            Assert.IsTrue(commands[0] is CommandWriteSQLite);
             Assert.AreEqual("somefile.osm", (commands[0] as CommandWriteXml).File);
 
             // define short args.
@@ -138,7 +138,7 @@ namespace OsmSharpDataProcessor.Unittest
             // verify.
             Assert.NotNull(commands);
             Assert.AreEqual(1, commands.Length);
-            Assert.IsTrue(commands[0] is CommandWriteXml);
+            Assert.IsTrue(commands[0] is CommandWriteSQLite);
             Assert.AreEqual("somefile.osm", (commands[0] as CommandWriteXml).File);
         }
 
@@ -159,7 +159,7 @@ namespace OsmSharpDataProcessor.Unittest
             Assert.AreEqual(2, commands.Length);
             Assert.IsTrue(commands[0] is CommandReadXml);
             Assert.AreEqual("somefile.osm", (commands[0] as CommandReadXml).File);
-            Assert.IsTrue(commands[1] is CommandWriteXml);
+            Assert.IsTrue(commands[1] is CommandWriteSQLite);
             Assert.AreEqual("someotherfile.osm", (commands[1] as CommandWriteXml).File);
         }
 

@@ -59,6 +59,16 @@ namespace OsmSharpDataProcessor.CommandLine
         private static readonly string[] WriteSceneSwitches = new string[] { "-ws", "--write-scene" };
 
         /// <summary>
+        /// Contains the switches for the write redis command.
+        /// </summary>
+        private static readonly string[] WriteRedisSwitches = new string[] { "-wre", "--write-redis" };
+
+        /// <summary>
+        /// Contains the switches for the write sqlite command.
+        /// </summary>
+        private static readonly string[] WriteSQLiteSwitches = new string[] { "-wsl", "--write-sqlite" };
+
+        /// <summary>
         /// Parses the command line arguments into a sorted list of commands.
         /// </summary>
         /// <param name="args"></param>
@@ -119,7 +129,7 @@ namespace OsmSharpDataProcessor.CommandLine
             if (WriteXmlSwitches.Contains(switchCommand))
             { // command can be a write-xml.
                 eatenArguments = eatenArguments +
-                                 CommandWriteXml.Parse(args, idx + 1, out command);
+                                 CommandWriteSQLite.Parse(args, idx + 1, out command);
                 return eatenArguments;
             }
 
@@ -155,6 +165,21 @@ namespace OsmSharpDataProcessor.CommandLine
                 return eatenArguments;
             }
 
+            // test write-sqlite.
+            if (WriteSQLiteSwitches.Contains(switchCommand))
+            { // command can be a write-sqlite.
+                eatenArguments = eatenArguments +
+                                 CommandWriteSQLite.Parse(args, idx + 1, out command);
+                return eatenArguments;
+            }
+
+            // test write-redis.
+            if (WriteRedisSwitches.Contains(switchCommand))
+            { // command can be a write-redis.
+                eatenArguments = eatenArguments +
+                                 CommandWriteSQLite.Parse(args, idx + 1, out command);
+                return eatenArguments;
+            }
 
             throw new CommandLineParserException(args[idx], "Switch not found!");
         }
@@ -233,6 +258,18 @@ namespace OsmSharpDataProcessor.CommandLine
             // test write-scene.
             if (WriteSceneSwitches.Contains(switchCommand))
             { // commmand can be a write-scene.
+                return true;
+            }
+
+            // test write-sqlite.
+            if (WriteSQLiteSwitches.Contains(switchCommand))
+            { // command can be a write-sqlite.
+                return true;
+            }
+
+            // test write-redis.
+            if (WriteRedisSwitches.Contains(switchCommand))
+            { // command can be a write-redis.
                 return true;
             }
 

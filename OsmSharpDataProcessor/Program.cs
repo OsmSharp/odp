@@ -24,6 +24,7 @@ using System.Text;
 using OsmSharp.Osm.Data.Core.Processor;
 using OsmSharpDataProcessor.CommandLine;
 using OsmSharp.Osm.Data.Streams;
+using OsmSharp.Osm.Data.Streams.Filters;
 
 namespace OsmSharpDataProcessor
 {
@@ -98,6 +99,7 @@ namespace OsmSharpDataProcessor
                     {
                         // everything should end here!
                         var source = (processor as OsmStreamSource);
+                        source = new OsmStreamFilterProgress(source);
                         filter.RegisterSource(source);
 
                         if (commandIdx > 0)
@@ -115,6 +117,7 @@ namespace OsmSharpDataProcessor
             {
                 // everything should end here!
                 var source = (processor as OsmStreamSource);
+                source = new OsmStreamFilterProgress(source);
                 target.RegisterSource(source);
 
                 if (commands.Length > 2)
