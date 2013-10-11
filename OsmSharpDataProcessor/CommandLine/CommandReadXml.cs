@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OsmSharp.Osm.Data.Xml.Processor;
+using OsmSharp.Osm.Xml.Streams;
 
 namespace OsmSharpDataProcessor.CommandLine
 {
