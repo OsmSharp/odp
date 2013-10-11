@@ -69,6 +69,11 @@ namespace OsmSharpDataProcessor.CommandLine
         private static readonly string[] WriteSQLiteSwitches = new string[] { "-wsl", "--write-sqlite" };
 
         /// <summary>
+        /// Contains the switches for the write graph command.
+        /// </summary>
+        private static readonly string[] WriteGraphSwitches = new string[] { "-wgr", "--write-graph" };
+
+        /// <summary>
         /// Parses the command line arguments into a sorted list of commands.
         /// </summary>
         /// <param name="args"></param>
@@ -181,6 +186,14 @@ namespace OsmSharpDataProcessor.CommandLine
                 return eatenArguments;
             }
 
+            // test write-redis.
+            if (WriteGraphSwitches.Contains(switchCommand))
+            { // command can be a write-redis.
+                eatenArguments = eatenArguments +
+                                 CommandWriteGraph.Parse(args, idx + 1, out command);
+                return eatenArguments;
+            }
+
             throw new CommandLineParserException(args[idx], "Switch not found!");
         }
 
@@ -270,6 +283,12 @@ namespace OsmSharpDataProcessor.CommandLine
             // test write-redis.
             if (WriteRedisSwitches.Contains(switchCommand))
             { // command can be a write-redis.
+                return true;
+            }
+
+            // test write-redis.
+            if (WriteGraphSwitches.Contains(switchCommand))
+            { // command can be a write-graph.
                 return true;
             }
 
