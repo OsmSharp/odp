@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using OsmSharp.Osm.Data.PBF.Processor;
+using OsmSharp.Osm.PBF.Processor;
 
 namespace OsmSharpDataProcessor.CommandLine
 {
