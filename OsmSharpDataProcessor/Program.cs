@@ -22,8 +22,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using OsmSharpDataProcessor.CommandLine;
-using OsmSharp.Osm.Data.Streams;
-using OsmSharp.Osm.Data.Streams.Filters;
+using OsmSharp.Osm.Streams;
+using OsmSharp.Osm.Streams.Filters;
+using OsmSharp.Osm.Streams.Complete;
 
 namespace OsmSharpDataProcessor
 {
@@ -48,14 +49,15 @@ namespace OsmSharpDataProcessor
 
             // start from the final command, that should be a target.
             object processor = commands[commands.Length - 1].CreateProcessor();
-            if (!(processor is OsmStreamTarget))
+            if (!(processor is OsmStreamTarget) && !(processor is OsmCompleteStreamTarget))
             {
                 throw new InvalidCommandException(
                     string.Format("Last argument {0} does not present a data processing target!",
                                   commands[commands.Length - 1].ToString()));
             }
+
             // target is defined.
-            var target = (processor as OsmStreamTarget);
+            object target = processor;
 
             // get the second to last argument.
             processor = commands[commands.Length - 2].CreateProcessor();
@@ -71,7 +73,14 @@ namespace OsmSharpDataProcessor
             {
                 // there should be more filters or sources.
                 var filter = (processor as OsmStreamFilter);
-                target.RegisterSource(filter);
+                if (target is OsmStreamTarget)
+                {
+                    (target as OsmStreamTarget).RegisterSource(filter);
+                }
+                else if (target is OsmCompleteStreamTarget)
+                {
+                    (target as OsmCompleteStreamTarget).RegisterSource(filter);
+                }
 
                 int commandIdx = commands.Length - 3;
                 while (commandIdx >= 0)
@@ -117,7 +126,14 @@ namespace OsmSharpDataProcessor
                 // everything should end here!
                 var source = (processor as OsmStreamSource);
                 source = new OsmStreamFilterProgress(source);
-                target.RegisterSource(source);
+                if (target is OsmStreamTarget)
+                {
+                    (target as OsmStreamTarget).RegisterSource(source);
+                }
+                else if (target is OsmCompleteStreamTarget)
+                {
+                    (target as OsmCompleteStreamTarget).RegisterSource(source);
+                }
 
                 if (commands.Length > 2)
                 {
@@ -126,8 +142,15 @@ namespace OsmSharpDataProcessor
                 }
             }
 
-            // execute the command by pulling the data to the target.
-            target.Pull();
+            // execute the command by pulling the data to the target.                
+            if (target is OsmStreamTarget)
+            {
+                (target as OsmStreamTarget).Pull();
+            }
+            else if (target is OsmCompleteStreamTarget)
+            {
+                (target as OsmCompleteStreamTarget).Pull();
+            }
         }
     }
 }

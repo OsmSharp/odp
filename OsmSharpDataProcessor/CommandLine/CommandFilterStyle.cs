@@ -16,32 +16,35 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using System.IO;
-using OsmSharp.Math.Geo.Projections;
-using OsmSharp.UI.Map.Styles.MapCSS;
-using OsmSharp.UI.Map.Styles.MapCSS.v0_2.Domain;
-using OsmSharp.UI.Renderer.Scene;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using OsmSharp.Osm.Streams.Filters;
+using OsmSharp.UI.Map.Styles.Streams;
+using System.IO;
+using OsmSharp.UI.Map.Styles.MapCSS.v0_2.Domain;
+using OsmSharp.UI.Map.Styles.MapCSS;
 
 namespace OsmSharpDataProcessor.CommandLine
 {
     /// <summary>
-    /// The graph-write command.
+    /// A style filter command.
     /// </summary>
-    public class CommandWriteGraph : Command
+    class CommandFilterStyle : Command
     {
         /// <summary>
-        /// Gets or sets the graph output file.
+        /// Gets or sets the style type.
         /// </summary>
-        public string GraphFile { get; set; }
+        public StyleType StyleType { get; set; }
 
         /// <summary>
-        /// Gets or sets the graph type.
+        /// The style file.
         /// </summary>
-        public GraphType GraphType { get; set; }
+        public string File { get; set; }
 
         /// <summary>
-        /// Parse the command arguments for the write-xml command.
+        /// Parses the command line arguments for the sort command.
         /// </summary>
         /// <param name="args"></param>
         /// <param name="idx"></param>
@@ -49,11 +52,11 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <returns></returns>
         public static int Parse(string[] args, int idx, out Command command)
         {
-            CommandWriteGraph commandWriteGraph = new CommandWriteGraph();
+            CommandFilterStyle commandFilterStyle = new CommandFilterStyle();
             // check next argument.
             if (args.Length < idx)
             {
-                throw new CommandLineParserException("None", "Invalid arguments for --write-graph!");
+                throw new CommandLineParserException("None", "Invalid arguments for --write-scene!");
             }
 
             // parse arguments and keep parsing until the next switch.
@@ -68,51 +71,48 @@ namespace OsmSharpDataProcessor.CommandLine
                     keyValue[1] = CommandParser.RemoveQuotes(keyValue[1]);
                     switch (keyValue[0].ToLower())
                     {
-                        case "graph":
-                            commandWriteGraph.GraphFile = keyValue[1];
+                        case "file":
+                            commandFilterStyle.File = keyValue[1];
                             break;
                         case "type":
                             string typeValue = keyValue[1].ToLower();
                             switch (typeValue)
                             {
-                                case "simple":
-                                    commandWriteGraph.GraphType = GraphType.Simple;
-                                    break;
-                                case "contracted":
-                                    commandWriteGraph.GraphType = GraphType.Contracted;
+                                case "mapcss":
+                                    commandFilterStyle.StyleType = StyleType.MapCSS;
                                     break;
                             }
                             break;
                         default:
                             // the command splitting succeed but one of the arguments is unknown.
-                            throw new CommandLineParserException("--write-graph",
-                                string.Format("Invalid parameter for command --write-graph: {0} not recognized.", keyValue[0]));
+                            throw new CommandLineParserException("--filter-style",
+                                string.Format("Invalid parameter for command --filter-style: {0} not recognized.", keyValue[0]));
+
                     }
                 }
                 else
                 { // the command splitting failed and this is not a switch.
-                    throw new CommandLineParserException("--write-graph", "Invalid parameter for command --write-graph.");
+                    throw new CommandLineParserException("--write-scene", "Invalid parameter for command --write-scene.");
                 }
 
                 idx++; // increase the index.
             }
-
-            // everything ok, take the next argument as the filename.
-            command = commandWriteGraph;
-            return idx - startIdx;
+            command = commandFilterStyle;
+            return 2;
         }
 
         /// <summary>
-        /// Creates the stream processor associated with this command.
+        /// Returns the processor that corresponds to this filter.
         /// </summary>
         /// <returns></returns>
         public override object CreateProcessor()
         {
-            // scene stream.
-            Stream graphStream = (new FileInfo(this.GraphFile)).Open(FileMode.Create);
+            // mapCSS stream.
+            Stream mapCSSStream = (new FileInfo(this.File)).OpenRead();
+            MapCSSFile mapCSSFile = MapCSSFile.FromStream(mapCSSStream);
 
-            return new OsmSharp.Routing.Osm.Streams.CHEdgeGraphFileStreamTarget(graphStream, 
-                OsmSharp.Routing.Vehicle.Car);
+            return new StyleOsmStreamFilter(
+                new MapCSSInterpreter(mapCSSFile, new MapCSSDictionaryImageSource()));
         }
 
         /// <summary>
@@ -121,23 +121,19 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("--write-graph graph={0} type={1}",
-                this.GraphFile, this.GraphType);
+            return string.Format("--filter-style type={0} file={1}",
+                this.StyleType.ToString().ToLower(), this.File);
         }
     }
 
     /// <summary>
-    /// Graph type.
+    /// Scene type.
     /// </summary>
-    public enum GraphType
+    public enum StyleType
     {
         /// <summary>
-        /// Simple graph definition.
+        /// A MapCSS style.
         /// </summary>
-        Simple,
-        /// <summary>
-        /// Contracted graph definition.
-        /// </summary>
-        Contracted
+        MapCSS
     }
 }

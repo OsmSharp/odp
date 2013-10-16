@@ -74,6 +74,11 @@ namespace OsmSharpDataProcessor.CommandLine
         private static readonly string[] WriteGraphSwitches = new string[] { "-wgr", "--write-graph" };
 
         /// <summary>
+        /// Contains the switches for the filter style command.
+        /// </summary>
+        private static readonly string[] FilterStyleSwitches = new string[] { "-fs", "--filter-style" };
+
+        /// <summary>
         /// Parses the command line arguments into a sorted list of commands.
         /// </summary>
         /// <param name="args"></param>
@@ -134,7 +139,7 @@ namespace OsmSharpDataProcessor.CommandLine
             if (WriteXmlSwitches.Contains(switchCommand))
             { // command can be a write-xml.
                 eatenArguments = eatenArguments +
-                                 CommandWriteSQLite.Parse(args, idx + 1, out command);
+                                 CommandWriteXml.Parse(args, idx + 1, out command);
                 return eatenArguments;
             }
 
@@ -191,6 +196,14 @@ namespace OsmSharpDataProcessor.CommandLine
             { // command can be a write-redis.
                 eatenArguments = eatenArguments +
                                  CommandWriteGraph.Parse(args, idx + 1, out command);
+                return eatenArguments;
+            }
+
+            // test filter style.
+            if (FilterStyleSwitches.Contains(switchCommand))
+            { // command can be a filter-style.
+                eatenArguments = eatenArguments +
+                                 CommandFilterStyle.Parse(args, idx + 1, out command);
                 return eatenArguments;
             }
 
@@ -288,6 +301,12 @@ namespace OsmSharpDataProcessor.CommandLine
 
             // test write-redis.
             if (WriteGraphSwitches.Contains(switchCommand))
+            { // command can be a write-graph.
+                return true;
+            }
+
+            // test filter-style.
+            if (FilterStyleSwitches.Contains(switchCommand))
             { // command can be a write-graph.
                 return true;
             }

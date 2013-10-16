@@ -22,7 +22,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using OsmSharp.Math.Geo;
-using OsmSharp.Osm.Data.Streams.Filters;
+using OsmSharp.Osm.Streams.Filters;
 
 namespace OsmSharpDataProcessor.CommandLine
 {

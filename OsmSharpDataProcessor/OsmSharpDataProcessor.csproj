@@ -79,39 +79,31 @@
     </Reference>
     <Reference Include="OsmSharp, Version=4.0.0.246, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.0.0.246\lib\net40\OsmSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="OsmSharp.Data.Oracle, Version=4.0.0.9999, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.4.0.0.246\lib\net40\OsmSharp.Data.Oracle.dll</HintPath>
-    </Reference>
-    <Reference Include="OsmSharp.Data.PostgreSQL, Version=4.0.0.9999, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.4.0.0.246\lib\net40\OsmSharp.Data.PostgreSQL.dll</HintPath>
+      <HintPath>..\..\v4\Output\Debug\Any CPU\OsmSharp.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.Data.Redis, Version=4.0.0.9999, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.4.0.0.246\lib\net40\OsmSharp.Data.Redis.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\v4\Output\Debug\Any CPU\OsmSharp.Data.Redis.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.Data.SQLite, Version=4.0.0.9999, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.4.0.0.246\lib\net40\OsmSharp.Data.SQLite.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\v4\Output\Debug\Any CPU\OsmSharp.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.Data.SQLServer, Version=4.0.0.9999, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.4.0.0.246\lib\net40\OsmSharp.Data.SQLServer.dll</HintPath>
-    </Reference>
-    <Reference Include="OsmSharp.Data.Unittests">
-      <HintPath>..\..\v4\Output\Debug\Any CPU\OsmSharp.Data.Unittests.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\v4\Output\Debug\Any CPU\OsmSharp.Data.SQLServer.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.Osm, Version=4.0.0.246, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.0.0.246\lib\net40\OsmSharp.Osm.dll</HintPath>
+      <HintPath>..\..\v4\Output\Debug\Any CPU\OsmSharp.Osm.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.Routing, Version=4.0.0.246, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.0.0.246\lib\net40\OsmSharp.Routing.dll</HintPath>
+      <HintPath>..\..\v4\Output\Debug\Any CPU\OsmSharp.Routing.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.UI, Version=4.0.0.9999, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.4.0.0.246\lib\net40\OsmSharp.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="OsmSharp.WinForms.UI, Version=4.0.0.9999, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.4.0.0.246\lib\net40\OsmSharp.WinForms.UI.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\v4\Output\Debug\Any CPU\OsmSharp.UI.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Common">
       <HintPath>..\packages\ServiceStack.Common.3.9.62\lib\net35\ServiceStack.Common.dll</HintPath>
@@ -144,6 +136,7 @@
     <Compile Include="CommandLine\Command.cs" />
     <Compile Include="CommandLine\CommandFilterBoundingBox.cs" />
     <Compile Include="CommandLine\CommandFilterSort.cs" />
+    <Compile Include="CommandLine\CommandFilterStyle.cs" />
     <Compile Include="CommandLine\CommandLineParserException.cs" />
     <Compile Include="CommandLine\CommandParser.cs" />
     <Compile Include="CommandLine\CommandReadPBF.cs" />

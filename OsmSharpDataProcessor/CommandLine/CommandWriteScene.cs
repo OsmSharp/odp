@@ -20,12 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OsmSharp.UI.Map.Styles.MapCSS.Streams;
 using OsmSharp.UI.Map.Styles.MapCSS;
 using OsmSharp.UI.Map.Styles.MapCSS.v0_2.Domain;
 using System.IO;
 using OsmSharp.UI.Renderer.Scene;
 using OsmSharp.Math.Geo.Projections;
+using OsmSharp.UI.Map.Styles.Streams;
 
 namespace OsmSharpDataProcessor.CommandLine
 {
@@ -181,7 +181,7 @@ namespace OsmSharpDataProcessor.CommandLine
                     scene = new Scene2DLayered(this.ZoomLevelCutoffs.ToList());
                     break;
             }
-            return new MapCSSSceneOsmStreamTarget(
+            return new StyleOsmStreamSceneTarget(
                 new MapCSSInterpreter(mapCSSFile, new MapCSSDictionaryImageSource()),
                 sceneStream, scene, new WebMercator());
         }
