@@ -25,6 +25,8 @@ using OsmSharpDataProcessor.CommandLine;
 using OsmSharp.Osm.Streams;
 using OsmSharp.Osm.Streams.Filters;
 using OsmSharp.Osm.Streams.Complete;
+using OsmSharp.Osm.Cache;
+using ServiceStack.Redis;
 
 namespace OsmSharpDataProcessor
 {
@@ -36,6 +38,7 @@ namespace OsmSharpDataProcessor
         /// <param name="args"></param>
         private static void Main(string[] args)
         {
+            OsmSharp.Logging.Log.Enable();
             OsmSharp.Logging.Log.RegisterConsoleListener();
 
             // parse commands first.
@@ -132,7 +135,8 @@ namespace OsmSharpDataProcessor
                 }
                 else if (target is OsmCompleteStreamTarget)
                 {
-                    (target as OsmCompleteStreamTarget).RegisterSource(source);
+                    (target as OsmCompleteStreamTarget).RegisterSource(
+                        source);
                 }
 
                 if (commands.Length > 2)

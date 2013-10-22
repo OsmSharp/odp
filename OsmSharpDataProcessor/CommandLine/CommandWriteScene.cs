@@ -112,7 +112,7 @@ namespace OsmSharpDataProcessor.CommandLine
                                         System.Globalization.CultureInfo.InvariantCulture, out value))
                                     {
                                         throw new CommandLineParserException("--write-scene",
-                                            string.Format("Invalid parameter value for command --write-scen parameter {0}: {1} not recognized.", keyValue[0], values[valueIdx]));
+                                            string.Format("Invalid parameter value for command --write-scene parameter {0}: {1} not recognized.", keyValue[0], values[valueIdx]));
                                     }
                                     cutoffs[valueIdx] = value;
                                 }
