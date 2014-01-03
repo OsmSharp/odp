@@ -170,7 +170,7 @@ namespace OsmSharpDataProcessor.Unittest
         public void TestWriteScene()
         {
             // define some args.
-            var args = new string[] { "-rx", "somefile.osm", "--write-scene", "scene=scene.out", "css=scene.mapcss", "type=simple" };
+            var args = new string[] { "-rx", "somefile.osm", "--write-scene", "scene=scene.out", "css=scene.mapcss", "cutoffs=5,11,13,15,18" };
 
             // parse.
             Command[] commands = CommandParser.ParseCommands(args);
@@ -183,22 +183,6 @@ namespace OsmSharpDataProcessor.Unittest
             Assert.IsTrue(commands[1] is CommandWriteScene);
             Assert.AreEqual("scene.mapcss", (commands[1] as CommandWriteScene).MapCSS);
             Assert.AreEqual("scene.out", (commands[1] as CommandWriteScene).SceneFile);
-            Assert.AreEqual(SceneType.Simple, (commands[1] as CommandWriteScene).SceneType);
-            // define some args.
-            args = new string[] { "-rx", "somefile.osm", "--write-scene", "scene=scene.out", "css=scene.mapcss", "type=layered", "cutoffs=5,11,13,15,18" };
-
-            // parse.
-            commands = CommandParser.ParseCommands(args);
-
-            // verify.
-            Assert.NotNull(commands);
-            Assert.AreEqual(2, commands.Length);
-            Assert.IsTrue(commands[0] is CommandReadXml);
-            Assert.AreEqual("somefile.osm", (commands[0] as CommandReadXml).File);
-            Assert.IsTrue(commands[1] is CommandWriteScene);
-            Assert.AreEqual("scene.mapcss", (commands[1] as CommandWriteScene).MapCSS);
-            Assert.AreEqual("scene.out", (commands[1] as CommandWriteScene).SceneFile);
-            Assert.AreEqual(SceneType.Layered, (commands[1] as CommandWriteScene).SceneType);
             Assert.IsNotNull((commands[1] as CommandWriteScene).ZoomLevelCutoffs);
             Assert.AreEqual(5, (commands[1] as CommandWriteScene).ZoomLevelCutoffs.Length);
             Assert.AreEqual(5, (commands[1] as CommandWriteScene).ZoomLevelCutoffs[0]);

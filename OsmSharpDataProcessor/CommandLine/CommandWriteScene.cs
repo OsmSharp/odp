@@ -45,11 +45,6 @@ namespace OsmSharpDataProcessor.CommandLine
         public string SceneFile { get; set; }
 
         /// <summary>
-        /// Gets or sets the scene type.
-        /// </summary>
-        public SceneType SceneType { get; set; }
-
-        /// <summary>
         /// Gets or sets the zoom level cutoffs.
         /// </summary>
         public float[] ZoomLevelCutoffs { get; set; }
@@ -88,18 +83,6 @@ namespace OsmSharpDataProcessor.CommandLine
                         case "css":
                             commandWriteScene.MapCSS = keyValue[1];
                             break;
-                        case "type":
-                            string typeValue = keyValue[1].ToLower();
-                            switch (typeValue)
-                            {
-                                case "simple":
-                                    commandWriteScene.SceneType = SceneType.Simple;
-                                    break;
-                                case "layered":
-                                    commandWriteScene.SceneType = SceneType.Layered;
-                                    break;
-                            }
-                            break;
                         case "cutoffs":
                             string[] values;
                             if (CommandParser.SplitValuesArray(keyValue[1], out values))
@@ -135,21 +118,12 @@ namespace OsmSharpDataProcessor.CommandLine
             }
 
             // check command consistency.
-            if (commandWriteScene.ZoomLevelCutoffs != null &&
-                commandWriteScene.ZoomLevelCutoffs.Length > 0 &&
-                commandWriteScene.SceneType != SceneType.Layered)
+            if (commandWriteScene.ZoomLevelCutoffs == null ||
+                    commandWriteScene.ZoomLevelCutoffs.Length == 0)
             {
                 // the command splitting succeed but one of the arguments is unknown.
                 throw new CommandLineParserException("--write-scene",
-                    "Invalid parameter combination for command --write-scene: zoom level cutoffs found but scene type is not layered.");
-            }
-            else if ((commandWriteScene.ZoomLevelCutoffs == null ||
-                    commandWriteScene.ZoomLevelCutoffs.Length == 0) &&
-                    commandWriteScene.SceneType == SceneType.Layered)
-            {
-                // the command splitting succeed but one of the arguments is unknown.
-                throw new CommandLineParserException("--write-scene",
-                    "Invalid parameter combination for command --write-scene: zoom level cutoffs not found but scene type is layered.");
+                    "Invalid parameter combination for command --write-scene: zoom level cutoffs not found.");
             }
 
             // everything ok, take the next argument as the filename.
@@ -170,20 +144,16 @@ namespace OsmSharpDataProcessor.CommandLine
             // scene stream.
             Stream sceneStream = (new FileInfo(this.SceneFile)).Open(FileMode.Create);
 
+            // create web mercator.
+            IProjection projection = new WebMercator();
+
             // create scene.
-            Scene2D scene = null;
-            switch(this.SceneType)
-            {
-                case CommandLine.SceneType.Simple:
-                    scene = new Scene2DSimple();
-                    break;
-                case CommandLine.SceneType.Layered:
-                    scene = new Scene2DLayered(this.ZoomLevelCutoffs.ToList());
-                    break;
-            }
+            Scene2D scene = new Scene2D(projection, this.ZoomLevelCutoffs.ToList());
+            
             return new StyleOsmStreamSceneTarget(
                 new MapCSSInterpreter(mapCSSFile, new MapCSSDictionaryImageSource()),
-                sceneStream, scene, new WebMercator());
+                scene, 
+                projection);
         }
 
         /// <summary>
@@ -200,26 +170,11 @@ namespace OsmSharpDataProcessor.CommandLine
                     cutoffs = cutoffs + this.ZoomLevelCutoffs[idx].ToString(System.Globalization.CultureInfo.InvariantCulture) + ",";
                 }
                 cutoffs = cutoffs.Substring(0, cutoffs.Length - 1);
-                return string.Format("--write-scene css={0} scene={1} type={2} cutoffs={3}",
-                    this.MapCSS, this.SceneFile, this.SceneType.ToString().ToLower(), cutoffs);
+                return string.Format("--write-scene css={0} scene={1} cutoffs={2}",
+                    this.MapCSS, this.SceneFile, cutoffs);
             }
-            return string.Format("--write-scene css={0} scene={1} type={2}", 
-                this.MapCSS, this.SceneFile, this.SceneType.ToString().ToLower());
+            return string.Format("--write-scene css={0} scene={1}", 
+                this.MapCSS, this.SceneFile);
         }
-    }
-
-    /// <summary>
-    /// Scene type.
-    /// </summary>
-    public enum SceneType
-    {
-        /// <summary>
-        /// Simple scene definition.
-        /// </summary>
-        Simple,
-        /// <summary>
-        /// Layered scene definition.
-        /// </summary>
-        Layered
     }
 }

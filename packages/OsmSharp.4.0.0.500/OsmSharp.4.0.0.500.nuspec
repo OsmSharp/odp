@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>OsmSharp</id>
-    <version>4.0.0.245</version>
-    <title>OsmSharp</title>
+    <version>4.0.0.500</version>
+    <title>OsmSharp - OpenStreetMap-based Mapping Tools!</title>
     <authors>Ben Abelshausen</authors>
     <owners>Ben Abelshausen</owners>
     <licenseUrl>https://osmsharp.codeplex.com/license</licenseUrl>
@@ -12,6 +12,9 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OsmSharp is an open-source mapping project designed to work with OpenStreetMap-data.</description>
     <summary>OsmSharp is an open-source mapping project designed to work with OpenStreetMap-data.</summary>
+    <releaseNotes />
+    <copyright>Ben Abelshausen</copyright>
+    <language />
     <tags>osm, openstreetmap, routing, rendering, mapcss</tags>
   </metadata>
 </package>

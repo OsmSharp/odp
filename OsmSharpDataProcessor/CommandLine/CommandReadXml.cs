@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OsmSharp.Osm.Xml.Streams;
+using System.IO;
 
 namespace OsmSharpDataProcessor.CommandLine
 {
@@ -63,7 +64,8 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <returns></returns>
         public override object CreateProcessor()
         {
-            return new XmlOsmStreamSource(this.File);
+            FileInfo inputFile = new FileInfo(this.File);
+            return new XmlOsmStreamSource(inputFile.Open(FileMode.Open));
         }
 
         /// <summary>

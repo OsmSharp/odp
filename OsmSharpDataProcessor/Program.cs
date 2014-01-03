@@ -39,7 +39,7 @@ namespace OsmSharpDataProcessor
         private static void Main(string[] args)
         {
             OsmSharp.Logging.Log.Enable();
-            OsmSharp.Logging.Log.RegisterConsoleListener();
+            OsmSharp.Logging.Log.RegisterListener(new OsmSharp.WinForms.UI.Logging.ConsoleTraceListener());
 
             // parse commands first.
             Command[] commands = CommandParser.ParseCommands(args);

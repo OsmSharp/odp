@@ -16,12 +16,12 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
+using OsmSharp.Osm.PBF.Streams;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using OsmSharp.Osm.PBF.Processor;
 
 namespace OsmSharpDataProcessor.CommandLine
 {
