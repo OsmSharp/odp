@@ -142,7 +142,7 @@ namespace OsmSharpDataProcessor.CommandLine
             MapCSSFile mapCSSFile = MapCSSFile.FromStream(mapCSSStream);
 
             // scene stream.
-            Stream sceneStream = (new FileInfo(this.SceneFile)).Open(FileMode.Create);
+            Stream sceneStream = (new FileInfo(this.SceneFile)).Open(FileMode.OpenOrCreate);
 
             // create web mercator.
             IProjection projection = new WebMercator();
@@ -150,10 +150,11 @@ namespace OsmSharpDataProcessor.CommandLine
             // create scene.
             Scene2D scene = new Scene2D(projection, this.ZoomLevelCutoffs.ToList());
             
-            return new StyleOsmStreamSceneTarget(
+            return new StyleOsmStreamSceneStreamTarget(
                 new MapCSSInterpreter(mapCSSFile, new MapCSSDictionaryImageSource()),
                 scene, 
-                projection);
+                projection,
+                sceneStream);
         }
 
         /// <summary>
