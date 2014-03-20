@@ -135,7 +135,7 @@ namespace OsmSharpDataProcessor.CommandLine
                     switch(this.GraphFormat)
                     {
                         case FormatType.Flat:
-                            return LiveEdgeFlatfileStreamTarget.CreateTarget();
+                            return LiveEdgeFlatfileStreamTarget.CreateTarget(graphStream);
                         case FormatType.Tiled:
                             throw new NotSupportedException("Graphtype simple and format tiled is not supported.");
                         case FormatType.Mobile:
@@ -146,7 +146,7 @@ namespace OsmSharpDataProcessor.CommandLine
                     switch (this.GraphFormat)
                     {
                         case FormatType.Flat:
-                            return CHEdgeFlatfileStreamTarget.CreateTarget(Vehicle.Car);
+                            return CHEdgeFlatfileStreamTarget.CreateTarget(graphStream, Vehicle.Car);
                         case FormatType.Tiled:
                             throw new NotSupportedException("Graphtype simple and format tiled is not supported.");
                         case FormatType.Mobile:
