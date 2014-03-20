@@ -16,12 +16,10 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using System.IO;
-using OsmSharp.Math.Geo.Projections;
-using OsmSharp.UI.Map.Styles.MapCSS;
-using OsmSharp.UI.Map.Styles.MapCSS.v0_2.Domain;
-using OsmSharp.UI.Renderer.Scene;
+using OsmSharp.Routing;
+using OsmSharpDataProcessor.Streams;
 using System;
+using System.IO;
 
 namespace OsmSharpDataProcessor.CommandLine
 {
@@ -39,6 +37,11 @@ namespace OsmSharpDataProcessor.CommandLine
         /// Gets or sets the graph type.
         /// </summary>
         public GraphType GraphType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the graph format.
+        /// </summary>
+        public FormatType GraphFormat { get; set; }
 
         /// <summary>
         /// Parse the command arguments for the write-xml command.
@@ -83,6 +86,21 @@ namespace OsmSharpDataProcessor.CommandLine
                                     break;
                             }
                             break;
+                        case "format":
+                            string formatValue = keyValue[1].ToLower();
+                            switch(formatValue)
+                            {
+                                case "flat":
+                                    commandWriteGraph.GraphFormat = FormatType.Flat;
+                                    break;
+                                case "tiled":
+                                    commandWriteGraph.GraphFormat = FormatType.Tiled;
+                                    break;
+                                case "mobile":
+                                    commandWriteGraph.GraphFormat = FormatType.Mobile;
+                                    break;
+                            }
+                            break;
                         default:
                             // the command splitting succeed but one of the arguments is unknown.
                             throw new CommandLineParserException("--write-graph",
@@ -108,11 +126,35 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <returns></returns>
         public override object CreateProcessor()
         {
-            // scene stream.
-            Stream graphStream = (new FileInfo(this.GraphFile)).Open(FileMode.Create);
+            // create output stream.
+            var graphStream = (new FileInfo(this.GraphFile)).Open(FileMode.Create);
 
-            return new OsmSharp.Routing.Osm.Streams.CHEdgeGraphFileStreamTarget(graphStream, 
-                OsmSharp.Routing.Vehicle.Car);
+            switch(this.GraphType)
+            {
+                case CommandLine.GraphType.Simple:
+                    switch(this.GraphFormat)
+                    {
+                        case FormatType.Flat:
+                            return LiveEdgeFlatfileStreamTarget.CreateTarget();
+                        case FormatType.Tiled:
+                            throw new NotSupportedException("Graphtype simple and format tiled is not supported.");
+                        case FormatType.Mobile:
+                            throw new NotSupportedException("Graphtype simple and format mobile is not supported.");
+                    }
+                    break;
+                case CommandLine.GraphType.Contracted:
+                    switch (this.GraphFormat)
+                    {
+                        case FormatType.Flat:
+                            return CHEdgeFlatfileStreamTarget.CreateTarget(Vehicle.Car);
+                        case FormatType.Tiled:
+                            throw new NotSupportedException("Graphtype simple and format tiled is not supported.");
+                        case FormatType.Mobile:
+                            return new OsmSharp.Routing.Osm.Streams.CHEdgeGraphFileStreamTarget(graphStream, Vehicle.Car);
+                    }
+                    break;
+            }
+            throw new InvalidCommandException("Invalid command: " + this.ToString());
         }
 
         /// <summary>
@@ -121,8 +163,8 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("--write-graph graph={0} type={1}",
-                this.GraphFile, this.GraphType);
+            return string.Format("--write-graph graph={0} type={1} format={2}",
+                this.GraphFile, this.GraphType, this.GraphFormat);
         }
     }
 
@@ -139,5 +181,24 @@ namespace OsmSharpDataProcessor.CommandLine
         /// Contracted graph definition.
         /// </summary>
         Contracted
+    }
+
+    /// <summary>
+    /// Format type.
+    /// </summary>
+    public enum FormatType
+    {
+        /// <summary>
+        /// The flat-file format.
+        /// </summary>
+        Flat,
+        /// <summary>
+        /// The tiled format.
+        /// </summary>
+        Tiled,
+        /// <summary>
+        /// The mobile format.
+        /// </summary>
+        Mobile
     }
 }

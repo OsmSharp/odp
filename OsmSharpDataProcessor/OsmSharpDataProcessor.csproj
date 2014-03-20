@@ -191,7 +191,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandConvertor.cs" />
     <Compile Include="CommandLine\Command.cs" />
     <Compile Include="CommandLine\CommandFilterBoundingBox.cs" />
     <Compile Include="CommandLine\CommandFilterSort.cs" />
@@ -208,6 +207,8 @@
     <Compile Include="InvalidCommandException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Streams\CHEdgeFlatfileStreamTarget.cs" />
+    <Compile Include="Streams\LiveEdgeFlatfileStreamTarget.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

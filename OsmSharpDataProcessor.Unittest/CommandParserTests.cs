@@ -191,5 +191,28 @@ namespace OsmSharpDataProcessor.Unittest
             Assert.AreEqual(15, (commands[1] as CommandWriteScene).ZoomLevelCutoffs[3]);
             Assert.AreEqual(18, (commands[1] as CommandWriteScene).ZoomLevelCutoffs[4]);
         }
+
+        /// <summary>
+        /// Tests a write graph command.
+        /// </summary>
+        [Test]
+        public void TestWriteGraph()
+        {
+            // define some args.
+            var args = new string[] { "-rx", "somefile.osm", "--write-graph", "graph=graph.out", "type=simple", "format=flat" };
+
+            // parse.
+            var commands = CommandParser.ParseCommands(args);
+
+            // verify.
+            Assert.NotNull(commands);
+            Assert.AreEqual(2, commands.Length);
+            Assert.IsTrue(commands[0] is CommandReadXml);
+            Assert.AreEqual("somefile.osm", (commands[0] as CommandReadXml).File);
+            Assert.IsTrue(commands[1] is CommandWriteGraph);
+            Assert.AreEqual(FormatType.Flat, (commands[1] as CommandWriteGraph).GraphFormat);
+            Assert.AreEqual("graph.out", (commands[1] as CommandWriteGraph).GraphFile);
+            Assert.AreEqual(GraphType.Simple, (commands[1] as CommandWriteGraph).GraphType);
+        }
     }
 }
