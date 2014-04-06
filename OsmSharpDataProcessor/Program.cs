@@ -20,6 +20,7 @@ using OsmSharp.Osm.Streams;
 using OsmSharp.Osm.Streams.Complete;
 using OsmSharp.Osm.Streams.Filters;
 using OsmSharpDataProcessor.CommandLine;
+using OsmSharpDataProcessor.Streams;
 using System;
 
 namespace OsmSharpDataProcessor
@@ -65,8 +66,42 @@ namespace OsmSharpDataProcessor
                                   commands[commands.Length - 2].ToString()));
             }
 
-            // two options.
-            if (processor is OsmStreamFilter)
+            // three options: merge/filter/source.
+            if (processor is MergedOsmStreamSource)
+            { // special case: register all source with this merge-filter.
+                var mergeStream = (processor as MergedOsmStreamSource);
+                if (target is OsmStreamTarget)
+                {
+                    (target as OsmStreamTarget).RegisterSource(mergeStream);
+                }
+                else if (target is OsmCompleteStreamTarget)
+                {
+                    (target as OsmCompleteStreamTarget).RegisterSource(mergeStream);
+                }
+                int commandIdx = commands.Length - 3;
+                while (commandIdx >= 0)
+                {
+                    processor = commands[commandIdx].CreateProcessor();
+
+                    if (processor is OsmStreamFilter)
+                    {
+                        throw new InvalidCommandException("No filter allowed before a merge.");
+                    }
+                    else if(processor is OsmStreamTarget)
+                    {
+                        throw new InvalidCommandException("No targets allowed before a merge.");
+                    }
+                    else if (processor is OsmStreamSource)
+                    { // register this source for the merge operation.
+                        var source = (processor as OsmStreamSource);
+                        mergeStream.RegisterSource(source);
+                    }
+
+                    // move to next command.
+                    commandIdx--;
+                }
+            }
+            else if (processor is OsmStreamFilter)
             {
                 // there should be more filters or sources.
                 var filter = (processor as OsmStreamFilter);

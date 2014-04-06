@@ -79,6 +79,11 @@ namespace OsmSharpDataProcessor.CommandLine
         private static readonly string[] FilterStyleSwitches = new string[] { "-fs", "--filter-style" };
 
         /// <summary>
+        /// Contains the switches for merging.
+        /// </summary>
+        private static readonly string[] MergeSwitches = new string[] { "-m", "--merge" };
+
+        /// <summary>
         /// Parses the command line arguments into a sorted list of commands.
         /// </summary>
         /// <param name="args"></param>
@@ -207,6 +212,14 @@ namespace OsmSharpDataProcessor.CommandLine
                 return eatenArguments;
             }
 
+            // test merge.
+            if (MergeSwitches.Contains(switchCommand))
+            { // command can be a filter-style.
+                eatenArguments = eatenArguments +
+                                 CommandFilterMerge.Parse(args, idx + 1, out command);
+                return eatenArguments;
+            }
+
             throw new CommandLineParserException(args[idx], "Switch not found!");
         }
 
@@ -307,6 +320,12 @@ namespace OsmSharpDataProcessor.CommandLine
 
             // test filter-style.
             if (FilterStyleSwitches.Contains(switchCommand))
+            { // command can be a write-graph.
+                return true;
+            }
+
+            // test merge.
+            if (MergeSwitches.Contains(switchCommand))
             { // command can be a write-graph.
                 return true;
             }

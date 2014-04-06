@@ -16,7 +16,11 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
+using OsmSharp.Collections.Tags.Index;
 using OsmSharp.Routing;
+using OsmSharp.Routing.CH.PreProcessing;
+using OsmSharp.Routing.Graph;
+using OsmSharp.Routing.Osm.Interpreter;
 using OsmSharpDataProcessor.Streams;
 using System;
 using System.IO;
@@ -150,7 +154,10 @@ namespace OsmSharpDataProcessor.CommandLine
                         case FormatType.Tiled:
                             throw new NotSupportedException("Graphtype simple and format tiled is not supported.");
                         case FormatType.Mobile:
-                            return new OsmSharp.Routing.Osm.Streams.CHEdgeGraphFileStreamTarget(graphStream, Vehicle.Car);
+                            var tagsIndex = new TagsTableCollectionIndex();
+                            var interpreter = new OsmRoutingInterpreter();
+                            var graph = new DynamicGraphRouterDataSource<CHEdgeData>(tagsIndex);
+                            return new OsmSharp.Routing.Osm.Streams.CHEdgeGraphFileStreamTarget(graphStream,graph, interpreter, tagsIndex, Vehicle.Car);
                     }
                     break;
             }

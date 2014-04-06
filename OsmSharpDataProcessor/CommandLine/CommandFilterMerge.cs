@@ -20,23 +20,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OsmSharp.Osm.Xml.Streams;
-using System.IO;
+using OsmSharp.Osm.Streams.Filters;
+using OsmSharpDataProcessor.Streams;
 
 namespace OsmSharpDataProcessor.CommandLine
 {
     /// <summary>
-    /// The write-xml command.
+    /// A merge filter command.
     /// </summary>
-    public class CommandWriteXml : Command
+    class CommandFilterMerge : Command
     {
         /// <summary>
-        /// The file to write to.
-        /// </summary>
-        public string File { get; set; }
-
-        /// <summary>
-        /// Parse the command arguments for the write-xml command.
+        /// Parses the command line arguments for the merge command.
         /// </summary>
         /// <param name="args"></param>
         /// <param name="idx"></param>
@@ -44,28 +39,18 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <returns></returns>
         public static int Parse(string[] args, int idx, out Command command)
         {
-            // check next argument.
-            if (args.Length < idx)
-            {
-                throw new CommandLineParserException("None", "Invalid file name for write-xml command!");
-            }
-
-            // everything ok, take the next argument as the filename.
-            command = new CommandWriteXml()
-                          {
-                              File = args[idx]
-                          };
-            return 1;
+            // everything ok, there are no arguments.
+            command = new CommandFilterMerge();
+            return 0;
         }
 
         /// <summary>
-        /// Creates a processor that corresponds to this command.
+        /// Returns the processor that corresponds to this filter.
         /// </summary>
         /// <returns></returns>
         public override object CreateProcessor()
         {
-            FileInfo outputFile = new FileInfo(this.File);
-            return new XmlOsmStreamTarget(outputFile.Open(FileMode.OpenOrCreate));
+            return new MergedOsmStreamSource();
         }
 
         /// <summary>
@@ -74,7 +59,7 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("--write-xml {0}", this.File);
+            return string.Format("--merge");
         }
     }
 }

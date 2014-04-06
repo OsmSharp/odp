@@ -55,6 +55,7 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <DocumentationFile>..\Output\OsmSharpDataProcessor.XML</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>..\Output\</OutputPath>
@@ -114,72 +115,87 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\Antlr3.Runtime.PCL.3.5.0.3\lib\portable-win+net40+sl40+wp\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="OsmSharp, Version=4.0.4.628, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.0.4.628\lib\net40\OsmSharp.dll</HintPath>
+      <HintPath>..\..\flowpilots_latests\Output\Debug\Any CPU\OsmSharp.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.Data.Oracle, Version=4.0.4.628, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.0.4.628\lib\net40\OsmSharp.Data.Oracle.dll</HintPath>
+      <HintPath>..\..\flowpilots_latests\Output\Debug\Any CPU\OsmSharp.Data.Oracle.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.Data.PostgreSQL, Version=4.0.4.628, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.0.4.628\lib\net40\OsmSharp.Data.PostgreSQL.dll</HintPath>
+      <HintPath>..\..\flowpilots_latests\Output\Debug\Any CPU\OsmSharp.Data.PostgreSQL.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.Data.Redis, Version=4.0.4.628, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.0.4.628\lib\net40\OsmSharp.Data.Redis.dll</HintPath>
+      <HintPath>..\..\flowpilots_latests\Output\Debug\Any CPU\OsmSharp.Data.Redis.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.Data.SQLite, Version=4.0.4.628, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.0.4.628\lib\net40\OsmSharp.Data.SQLite.dll</HintPath>
+      <HintPath>..\..\flowpilots_latests\Output\Debug\Any CPU\OsmSharp.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.Data.SQLServer, Version=4.0.4.628, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.0.4.628\lib\net40\OsmSharp.Data.SQLServer.dll</HintPath>
+      <HintPath>..\..\flowpilots_latests\Output\Debug\Any CPU\OsmSharp.Data.SQLServer.dll</HintPath>
+    </Reference>
+    <Reference Include="OsmSharp.Data.Test.Unittests">
+      <HintPath>..\..\flowpilots_latests\Output\Debug\Any CPU\OsmSharp.Data.Test.Unittests.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.Osm, Version=4.0.4.628, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.0.4.628\lib\net40\OsmSharp.Osm.dll</HintPath>
+      <HintPath>..\..\flowpilots_latests\Output\Debug\Any CPU\OsmSharp.Osm.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.Routing, Version=4.0.4.628, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.0.4.628\lib\net40\OsmSharp.Routing.dll</HintPath>
+      <HintPath>..\..\flowpilots_latests\Output\Debug\Any CPU\OsmSharp.Routing.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.UI, Version=4.0.4.628, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.0.4.628\lib\net40\OsmSharp.UI.dll</HintPath>
+      <HintPath>..\..\flowpilots_latests\Output\Debug\Any CPU\OsmSharp.UI.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.WinForms.UI, Version=4.0.4.628, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.0.4.628\lib\net40\OsmSharp.WinForms.UI.dll</HintPath>
+      <HintPath>..\..\flowpilots_latests\Output\Debug\Any CPU\OsmSharp.WinForms.UI.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Common, Version=3.9.67.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ServiceStack.Common, Version=4.0.15.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Common.3.9.67\lib\net35\ServiceStack.Common.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Common.4.0.15\lib\net40\ServiceStack.Common.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Common.3.9.67\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Interfaces.4.0.15\lib\net40\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Redis, Version=3.9.67.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ServiceStack.Redis, Version=4.0.15.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Redis.3.9.67\lib\net35\ServiceStack.Redis.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Redis.4.0.15\lib\net40\ServiceStack.Redis.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Text, Version=3.9.67.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ServiceStack.Text, Version=4.0.15.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Text.3.9.67\lib\net35\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Text.4.0.15\lib\net40\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\packages\System.Data.SQLite.1.0.88.0\lib\net40\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.92.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.92.0\lib\net40\System.Data.SQLite.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data.SQLite.Linq">
-      <HintPath>..\packages\System.Data.SQLite.1.0.88.0\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
+    <Reference Include="System.Data.SQLite.EF6">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.92.0\lib\net40\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.92.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.92.0\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -193,6 +209,7 @@
   <ItemGroup>
     <Compile Include="CommandLine\Command.cs" />
     <Compile Include="CommandLine\CommandFilterBoundingBox.cs" />
+    <Compile Include="CommandLine\CommandFilterMerge.cs" />
     <Compile Include="CommandLine\CommandFilterSort.cs" />
     <Compile Include="CommandLine\CommandFilterStyle.cs" />
     <Compile Include="CommandLine\CommandLineParserException.cs" />
@@ -209,6 +226,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Streams\CHEdgeFlatfileStreamTarget.cs" />
     <Compile Include="Streams\LiveEdgeFlatfileStreamTarget.cs" />
+    <Compile Include="Streams\MergedOsmStreamSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
