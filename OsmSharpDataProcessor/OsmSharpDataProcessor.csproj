@@ -207,6 +207,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SharedAssemblyVersion.cs">
+      <Link>Properties\SharedAssemblyVersion.cs</Link>
+    </Compile>
     <Compile Include="CommandLine\Command.cs" />
     <Compile Include="CommandLine\CommandFilterBoundingBox.cs" />
     <Compile Include="CommandLine\CommandFilterMerge.cs" />
