@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OsmSharpDataProcessor")]
+[assembly: AssemblyTitle("OsmSharp - Data Processor")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SharpSoftware")]
-[assembly: AssemblyProduct("OsmSharpDataProcessor")]
+[assembly: AssemblyProduct("OsmSharp")]
 [assembly: AssemblyCopyright("Copyright © OsmSharp")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
