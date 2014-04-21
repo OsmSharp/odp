@@ -49,11 +49,17 @@ namespace OsmSharpDataProcessor
                 }
                 catch (ReflectionTypeLoadException ex)
                 { // retrow load exception.
-                    if(ex.LoaderExceptions != null &&
-                        ex.LoaderExceptions.Length > 0)
+                    StringBuilder builder = new StringBuilder();
+                    if(ex.LoaderExceptions != null)
                     {
-                        throw ex.LoaderExceptions[0];
+                        foreach(var loadedEx in ex.LoaderExceptions)
+                        {
+                            builder.Append(loadedEx.ToString());
+                            builder.Append(Environment.NewLine);
+                        }
                     }
+                    OsmSharp.Logging.Log.TraceEvent("CommandLoaded", OsmSharp.Logging.TraceEventType.Warning, "Failed to load Assembly: {0} with exceptions {1}",
+                        file, builder.ToString());
                 }
             }
 
