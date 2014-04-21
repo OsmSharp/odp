@@ -37,12 +37,23 @@ namespace OsmSharpDataProcessor
 
             foreach(var file in new DirectoryInfo(executingLocation).GetFiles("*.dll"))
             {
-                if(!loadedAssemblies.Any(x => x.Location == file.FullName))
-                { // assembly not loaded yet.
-                    var assembly = Assembly.LoadFrom(file.FullName);
-                    commands.AddRange(from t in assembly.GetTypes()
-                                      where t.IsSubclassOf(typeof(Command))
-                                      select (Command)Activator.CreateInstance(t));
+                try
+                {
+                    if (!loadedAssemblies.Any(x => x.Location == file.FullName))
+                    { // assembly not loaded yet.
+                        var assembly = Assembly.LoadFrom(file.FullName);
+                        commands.AddRange(from t in assembly.GetTypes()
+                                          where t.IsSubclassOf(typeof(Command))
+                                          select (Command)Activator.CreateInstance(t));
+                    }
+                }
+                catch (ReflectionTypeLoadException ex)
+                { // retrow load exception.
+                    if(ex.LoaderExceptions != null &&
+                        ex.LoaderExceptions.Length > 0)
+                    {
+                        throw ex.LoaderExceptions[0];
+                    }
                 }
             }
 
