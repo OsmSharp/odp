@@ -16,56 +16,64 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
+using OsmSharp.Osm.PBF.Streams;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using OsmSharp.Osm.Xml.Streams;
-using System.IO;
 
-namespace OsmSharpDataProcessor.CommandLine
+namespace OsmSharpDataProcessor.Commands
 {
     /// <summary>
-    /// The write-xml command.
+    /// A PBF reading command.
     /// </summary>
-    public class CommandWriteXml : Command
+    public class CommandReadPBF : Command
     {
         /// <summary>
-        /// The file to write to.
+        /// Returns the switches for this command.
+        /// </summary>
+        /// <returns></returns>
+        public override string[] GetSwitch()
+        {
+            return new string[] { "-rp", "--read-pbf" };
+        }
+
+        /// <summary>
+        /// The file to read from.
         /// </summary>
         public string File { get; set; }
 
         /// <summary>
-        /// Parse the command arguments for the write-xml command.
+        /// Parse the command arguments for the read-pbf command.
         /// </summary>
         /// <param name="args"></param>
         /// <param name="idx"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        public static int Parse(string[] args, int idx, out Command command)
+        public override int Parse(string[] args, int idx, out Command command)
         {
             // check next argument.
             if (args.Length < idx)
             {
-                throw new CommandLineParserException("None", "Invalid file name for write-xml command!");
+                throw new CommandLineParserException("None", "Invalid file name for read-pbf command!");
             }
 
             // everything ok, take the next argument as the filename.
-            command = new CommandWriteXml()
-                          {
-                              File = args[idx]
-                          };
+            command = new CommandReadPBF()
+            {
+                File = args[idx]
+            };
             return 1;
         }
 
         /// <summary>
-        /// Creates a processor that corresponds to this command.
+        /// Creates the processor that corresponds to this command.
         /// </summary>
         /// <returns></returns>
         public override object CreateProcessor()
         {
-            FileInfo outputFile = new FileInfo(this.File);
-            return new XmlOsmStreamTarget(outputFile.Open(FileMode.OpenOrCreate));
+            return new PBFOsmStreamSource(new FileInfo(this.File).OpenRead());
         }
 
         /// <summary>
@@ -74,7 +82,7 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("--write-xml {0}", this.File);
+            return string.Format("--read-pbf {0}", this.File);
         }
     }
 }

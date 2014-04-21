@@ -25,13 +25,22 @@ using OsmSharpDataProcessor.Streams;
 using System;
 using System.IO;
 
-namespace OsmSharpDataProcessor.CommandLine
+namespace OsmSharpDataProcessor.Commands
 {
     /// <summary>
     /// The graph-write command.
     /// </summary>
     public class CommandWriteGraph : Command
     {
+        /// <summary>
+        /// Returns the switches for this command.
+        /// </summary>
+        /// <returns></returns>
+        public override string[] GetSwitch()
+        {
+            return new string[] { "-wgr", "--write-graph" };
+        }
+
         /// <summary>
         /// Gets or sets the graph output file.
         /// </summary>
@@ -54,7 +63,7 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <param name="idx"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        public static int Parse(string[] args, int idx, out Command command)
+        public override int Parse(string[] args, int idx, out Command command)
         {
             CommandWriteGraph commandWriteGraph = new CommandWriteGraph();
             // check next argument.
@@ -135,7 +144,7 @@ namespace OsmSharpDataProcessor.CommandLine
 
             switch(this.GraphType)
             {
-                case CommandLine.GraphType.Simple:
+                case GraphType.Simple:
                     switch(this.GraphFormat)
                     {
                         case FormatType.Flat:
@@ -146,7 +155,7 @@ namespace OsmSharpDataProcessor.CommandLine
                             throw new NotSupportedException("Graphtype simple and format mobile is not supported.");
                     }
                     break;
-                case CommandLine.GraphType.Contracted:
+                case GraphType.Contracted:
                     switch (this.GraphFormat)
                     {
                         case FormatType.Flat:

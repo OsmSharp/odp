@@ -26,13 +26,22 @@ using System.IO;
 using OsmSharp.UI.Map.Styles.MapCSS.v0_2.Domain;
 using OsmSharp.UI.Map.Styles.MapCSS;
 
-namespace OsmSharpDataProcessor.CommandLine
+namespace OsmSharpDataProcessor.Commands
 {
     /// <summary>
     /// A style filter command.
     /// </summary>
-    class CommandFilterStyle : Command
+    public class CommandFilterStyle : Command
     {
+        /// <summary>
+        /// Returns the switches for this command.
+        /// </summary>
+        /// <returns></returns>
+        public override string[] GetSwitch()
+        {
+            return new string[] { "-fs", "--filter-style" };
+        }
+
         /// <summary>
         /// Gets or sets the style type.
         /// </summary>
@@ -50,7 +59,7 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <param name="idx"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        public static int Parse(string[] args, int idx, out Command command)
+        public override int Parse(string[] args, int idx, out Command command)
         {
             CommandFilterStyle commandFilterStyle = new CommandFilterStyle();
             // check next argument.

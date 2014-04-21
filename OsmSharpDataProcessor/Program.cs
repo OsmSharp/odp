@@ -19,7 +19,7 @@
 using OsmSharp.Osm.Streams;
 using OsmSharp.Osm.Streams.Complete;
 using OsmSharp.Osm.Streams.Filters;
-using OsmSharpDataProcessor.CommandLine;
+using OsmSharpDataProcessor.Commands;
 using OsmSharpDataProcessor.Streams;
 using System;
 

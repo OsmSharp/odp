@@ -23,13 +23,22 @@ using System.Text;
 using OsmSharp.Osm.Streams.Filters;
 using OsmSharpDataProcessor.Streams;
 
-namespace OsmSharpDataProcessor.CommandLine
+namespace OsmSharpDataProcessor.Commands
 {
     /// <summary>
     /// A merge filter command.
     /// </summary>
-    class CommandFilterMerge : Command
+    public class CommandFilterMerge : Command
     {
+        /// <summary>
+        /// Returns the switches for this command.
+        /// </summary>
+        /// <returns></returns>
+        public override string[] GetSwitch()
+        {
+            return new string[] { "-m", "--merge" };
+        }
+
         /// <summary>
         /// Parses the command line arguments for the merge command.
         /// </summary>
@@ -37,7 +46,7 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <param name="idx"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        public static int Parse(string[] args, int idx, out Command command)
+        public override int Parse(string[] args, int idx, out Command command)
         {
             // everything ok, there are no arguments.
             command = new CommandFilterMerge();

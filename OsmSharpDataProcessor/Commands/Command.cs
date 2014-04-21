@@ -21,13 +21,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OsmSharpDataProcessor.CommandLine
+namespace OsmSharpDataProcessor.Commands
 {
     /// <summary>
     /// Base class for all possible commands.
     /// </summary>
     public abstract class Command
     {
+        /// <summary>
+        /// Gets the switches for this command.
+        /// </summary>
+        /// <returns></returns>
+        public abstract string[] GetSwitch();
+
         /// <summary>
         /// Creates a new processor that corresponds with the action in this command.
         /// </summary>
@@ -40,5 +46,24 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <remarks>Forces all implementations of Command to implement a description.</remarks>
         /// <returns></returns>
         public abstract override string ToString();
+
+        /// <summary>
+        /// Parses string arguments into an actual command object.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <param name="idx"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public abstract int Parse(string[] args, int idx, out Command command);
+
+        /// <summary>
+        /// Returns true if the given switch points to this command.
+        /// </summary>
+        /// <param name="switchString"></param>
+        /// <returns></returns>
+        public virtual bool HasSwitch(string switchString)
+        {
+            return this.GetSwitch().Contains(switchString);
+        }
     }
 }

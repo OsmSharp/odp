@@ -24,13 +24,22 @@ using System.Text;
 using OsmSharp.Math.Geo;
 using OsmSharp.Osm.Streams.Filters;
 
-namespace OsmSharpDataProcessor.CommandLine
+namespace OsmSharpDataProcessor.Commands
 {
     /// <summary>
     /// A filter command filtering a boundingbox of data.
     /// </summary>
-    class CommandFilterBoundingBox : Command
+    public class CommandFilterBoundingBox : Command
     {
+        /// <summary>
+        /// Returns the switches for this command.
+        /// </summary>
+        /// <returns></returns>
+        public override string[] GetSwitch()
+        {
+            return new string[] { "-bb", "--bounding-box" };
+        }
+
         /// <summary>
         /// The right bound.
         /// </summary>
@@ -58,7 +67,7 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <param name="idx"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        public static int Parse(string[] args, int idx, out Command command)
+        public override int Parse(string[] args, int idx, out Command command)
         {
             // check next argument.
             if (args.Length < idx + 3)

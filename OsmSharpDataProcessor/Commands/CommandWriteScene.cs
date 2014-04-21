@@ -27,13 +27,22 @@ using OsmSharp.UI.Renderer.Scene;
 using OsmSharp.Math.Geo.Projections;
 using OsmSharp.UI.Map.Styles.Streams;
 
-namespace OsmSharpDataProcessor.CommandLine
+namespace OsmSharpDataProcessor.Commands
 {
     /// <summary>
     /// The scene-write command.
     /// </summary>
     public class CommandWriteScene : Command
     {
+        /// <summary>
+        /// Returns the switches for this command.
+        /// </summary>
+        /// <returns></returns>
+        public override string[] GetSwitch()
+        {
+            return new string[] { "-ws", "--write-scene" };
+        }
+
         /// <summary>
         /// Gets or sets the MapCSS file.
         /// </summary>
@@ -56,7 +65,7 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <param name="idx"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        public static int Parse(string[] args, int idx, out Command command)
+        public override int Parse(string[] args, int idx, out Command command)
         {
             CommandWriteScene commandWriteScene = new CommandWriteScene();
             // check next argument.
@@ -67,7 +76,7 @@ namespace OsmSharpDataProcessor.CommandLine
 
             // parse arguments and keep parsing until the next switch.
             int startIdx = idx;
-            while (args.Length > idx && 
+            while (args.Length > idx &&
                 !CommandParser.IsSwitch(args[idx]))
             {
                 string[] keyValue;
@@ -104,7 +113,7 @@ namespace OsmSharpDataProcessor.CommandLine
                             break;
                         default:
                             // the command splitting succeed but one of the arguments is unknown.
-                            throw new CommandLineParserException("--write-scene", 
+                            throw new CommandLineParserException("--write-scene",
                                 string.Format("Invalid parameter for command --write-scene: {0} not recognized.", keyValue[0]));
 
                     }
@@ -149,10 +158,10 @@ namespace OsmSharpDataProcessor.CommandLine
 
             // create scene.
             Scene2D scene = new Scene2D(projection, this.ZoomLevelCutoffs.ToList());
-            
+
             return new StyleOsmStreamSceneStreamTarget(
                 new MapCSSInterpreter(mapCSSFile, new MapCSSDictionaryImageSource()),
-                scene, 
+                scene,
                 projection,
                 sceneStream);
         }
@@ -174,7 +183,7 @@ namespace OsmSharpDataProcessor.CommandLine
                 return string.Format("--write-scene css={0} scene={1} cutoffs={2}",
                     this.MapCSS, this.SceneFile, cutoffs);
             }
-            return string.Format("--write-scene css={0} scene={1}", 
+            return string.Format("--write-scene css={0} scene={1}",
                 this.MapCSS, this.SceneFile);
         }
     }

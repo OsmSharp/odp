@@ -118,12 +118,6 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\Antlr3.Runtime.PCL.3.5.0.3\lib\portable-win+net40+sl40+wp\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="OsmSharp">
       <HintPath>..\packages\OsmSharp.4.0.5.667\lib\net40\OsmSharp.dll</HintPath>
     </Reference>
@@ -142,9 +136,6 @@
     <Reference Include="OsmSharp.Data.SQLServer">
       <HintPath>..\packages\OsmSharp.4.0.5.667\lib\net40\OsmSharp.Data.SQLServer.dll</HintPath>
     </Reference>
-    <Reference Include="OsmSharp.Data.Test.Unittests">
-      <HintPath>..\..\flowpilots_latests\Output\Debug\Any CPU\OsmSharp.Data.Test.Unittests.dll</HintPath>
-    </Reference>
     <Reference Include="OsmSharp.Osm">
       <HintPath>..\packages\OsmSharp.4.0.5.667\lib\net40\OsmSharp.Osm.dll</HintPath>
     </Reference>
@@ -160,40 +151,11 @@
     <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Common, Version=4.0.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Common.4.0.15\lib\net40\ServiceStack.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Interfaces.4.0.15\lib\net40\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Redis, Version=4.0.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Redis.4.0.15\lib\net40\ServiceStack.Redis.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Text, Version=4.0.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Text.4.0.15\lib\net40\ServiceStack.Text.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.92.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.92.0\lib\net40\System.Data.SQLite.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SQLite.EF6">
-      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.92.0\lib\net40\System.Data.SQLite.EF6.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.92.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.92.0\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Zlib.Portable">
       <HintPath>..\packages\Zlib.Portable.1.9.2\lib\portable-net4+sl4+wp71+win8\Zlib.Portable.dll</HintPath>
@@ -203,20 +165,19 @@
     <Compile Include="..\SharedAssemblyVersion.cs">
       <Link>Properties\SharedAssemblyVersion.cs</Link>
     </Compile>
-    <Compile Include="CommandLine\Command.cs" />
-    <Compile Include="CommandLine\CommandFilterBoundingBox.cs" />
-    <Compile Include="CommandLine\CommandFilterMerge.cs" />
-    <Compile Include="CommandLine\CommandFilterSort.cs" />
-    <Compile Include="CommandLine\CommandFilterStyle.cs" />
-    <Compile Include="CommandLine\CommandLineParserException.cs" />
-    <Compile Include="CommandLine\CommandParser.cs" />
-    <Compile Include="CommandLine\CommandReadPBF.cs" />
-    <Compile Include="CommandLine\CommandReadXml.cs" />
-    <Compile Include="CommandLine\CommandWriteGraph.cs" />
-    <Compile Include="CommandLine\CommandWriteRedis.cs" />
-    <Compile Include="CommandLine\CommandWriteSQLite.cs" />
-    <Compile Include="CommandLine\CommandWriteScene.cs" />
-    <Compile Include="CommandLine\CommandWriteXml.cs" />
+    <Compile Include="CommandLoader.cs" />
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\CommandFilterBoundingBox.cs" />
+    <Compile Include="Commands\CommandFilterMerge.cs" />
+    <Compile Include="Commands\CommandFilterSort.cs" />
+    <Compile Include="Commands\CommandFilterStyle.cs" />
+    <Compile Include="Commands\CommandLineParserException.cs" />
+    <Compile Include="CommandParser.cs" />
+    <Compile Include="Commands\CommandReadPBF.cs" />
+    <Compile Include="Commands\CommandReadXml.cs" />
+    <Compile Include="Commands\CommandWriteGraph.cs" />
+    <Compile Include="Commands\CommandWriteScene.cs" />
+    <Compile Include="Commands\CommandWriteXml.cs" />
     <Compile Include="InvalidCommandException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -227,14 +188,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="x64\SQLite.Interop.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x86\SQLite.Interop.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

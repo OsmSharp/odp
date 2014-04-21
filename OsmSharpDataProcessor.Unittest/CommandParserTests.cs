@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using OsmSharpDataProcessor.CommandLine;
+using OsmSharpDataProcessor.Commands;
 
 namespace OsmSharpDataProcessor.Unittest
 {

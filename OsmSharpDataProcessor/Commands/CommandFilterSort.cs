@@ -20,52 +20,45 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OsmSharp.Osm.Xml.Streams;
-using System.IO;
+using OsmSharp.Osm.Streams.Filters;
 
-namespace OsmSharpDataProcessor.CommandLine
+namespace OsmSharpDataProcessor.Commands
 {
     /// <summary>
-    /// The read-xml command.
+    /// A sort filter command.
     /// </summary>
-    public class CommandReadXml : Command
+    public class CommandFilterSort : Command
     {
         /// <summary>
-        /// The file to read from.
+        /// Returns the switches for this command.
         /// </summary>
-        public string File { get; set; }
+        /// <returns></returns>
+        public override string[] GetSwitch()
+        {
+            return new string[] { "-so", "--sort" };
+        }
 
         /// <summary>
-        /// Parses the command line arguments for the read-xml command.
+        /// Parses the command line arguments for the sort command.
         /// </summary>
         /// <param name="args"></param>
         /// <param name="idx"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        public static int Parse(string[] args, int idx, out Command command)
+        public override int Parse(string[] args, int idx, out Command command)
         {
-            // check next argument.
-            if (args.Length < idx)
-            {
-                throw new CommandLineParserException("None", "Invalid file name for read-xml command!");
-            }
-
-            // everything ok, take the next argument as the filename.
-            command = new CommandReadXml()
-            {
-                File = args[idx]
-            };
-            return 1;
+            // everything ok, there are no arguments.
+            command = new CommandFilterSort();
+            return 0;
         }
 
         /// <summary>
-        /// Creates a processor that corresponds to this command.
+        /// Returns the processor that corresponds to this filter.
         /// </summary>
         /// <returns></returns>
         public override object CreateProcessor()
         {
-            FileInfo inputFile = new FileInfo(this.File);
-            return new XmlOsmStreamSource(inputFile.Open(FileMode.Open));
+            return new OsmStreamFilterSort();
         }
 
         /// <summary>
@@ -74,7 +67,7 @@ namespace OsmSharpDataProcessor.CommandLine
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("--read-xml {0}", this.File);
+            return string.Format("--sort");
         }
     }
 }
