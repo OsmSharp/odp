@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>OsmSharpDataProcessor</id>
+        <version>$version$</version>
+        <title>OsmSharp - Data Processor Plugin Libary</title>
+        <authors>Ben Abelshausen</authors>
+        <owners>Ben Abelshausen</owners>
+        <licenseUrl>https://raw.githubusercontent.com/OsmSharp/OsmSharpService/master/LICENCE.TXT</licenseUrl>
+        <projectUrl>http://www.osmsharp.com/</projectUrl>
+        <iconUrl>http://raw.github.com/xivk/OsmSharp/master/packages_nuspec/osmsharp_logo64.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Library to create plugins for the OsmSharp data processor.</description>
+        <summary>Library to create plugins for OsmSharp data processor allowing custom implementations of readers/writers/filters.</summary>
+        <copyright>Ben Abelshausen</copyright>
+        <tags>osm, openstreetmap, routing, rendering, mapcss</tags>
+        <dependencies>
+          <dependency id="OsmSharp" version="4.0.5.667" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="Output\odp.exe" target="lib\net45\odp.exe" />
+    </files>
+</package>
