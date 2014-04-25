@@ -136,6 +136,9 @@
     <Reference Include="OsmSharp.Data.SQLServer">
       <HintPath>..\packages\OsmSharp.4.0.5.667\lib\net40\OsmSharp.Data.SQLServer.dll</HintPath>
     </Reference>
+    <Reference Include="OsmSharp.MultiNet.DataProcessor.Plugin">
+      <HintPath>..\..\OsmSharp.MultiNet\Output\OsmSharp.MultiNet.DataProcessor.Plugin.dll</HintPath>
+    </Reference>
     <Reference Include="OsmSharp.Osm">
       <HintPath>..\packages\OsmSharp.4.0.5.667\lib\net40\OsmSharp.Osm.dll</HintPath>
     </Reference>

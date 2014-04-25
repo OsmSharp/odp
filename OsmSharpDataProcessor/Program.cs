@@ -42,7 +42,7 @@ namespace OsmSharpDataProcessor
             Command[] commands = CommandParser.ParseCommands(args);
 
             // convert commands into data processors.
-            if (commands == null || commands.Length < 2)
+            if (commands == null)
             {
                 throw new Exception("Please specifiy a valid data processing command!");
             }
