@@ -1,0 +1,2 @@
+- Changed name to odp.
+- Added a plugin infrastructure. Working towards #2.

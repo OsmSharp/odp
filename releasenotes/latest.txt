@@ -1,2 +1,2 @@
-- Changed name to odp.
-- Added a plugin infrastructure. Working towards #2.
+- Improved command parsing by adding extra abstraction layer. Fixed #5.
+- Assigned some defaults for scene cutoff parameters. Fixed #4.
