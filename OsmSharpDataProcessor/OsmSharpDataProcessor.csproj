@@ -178,6 +178,12 @@
     <Compile Include="Commands\CommandWriteGraph.cs" />
     <Compile Include="Commands\CommandWriteScene.cs" />
     <Compile Include="Commands\CommandWriteXml.cs" />
+    <Compile Include="Commands\Processors\ProcessorBase.cs" />
+    <Compile Include="Commands\Processors\ProcessorCompleteTarget.cs" />
+    <Compile Include="Commands\Processors\ProcessorFilter.cs" />
+    <Compile Include="Commands\Processors\ProcessorMergedFilter.cs" />
+    <Compile Include="Commands\Processors\ProcessorSource.cs" />
+    <Compile Include="Commands\Processors\ProcessorTarget.cs" />
     <Compile Include="InvalidCommandException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

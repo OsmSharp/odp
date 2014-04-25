@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using OsmSharp.Data.SQLite.Osm.Streams;
 using OsmSharpDataProcessor.Commands;
+using OsmSharpDataProcessor.Commands.Processors;
 
 namespace OsmSharpDataProcessor.CommandLine
 {
@@ -90,9 +91,9 @@ namespace OsmSharpDataProcessor.CommandLine
         /// Creates a processor that corresponds to this command.
         /// </summary>
         /// <returns></returns>
-        public override object CreateProcessor()
+        public override ProcessorBase CreateProcessor()
         {
-            return new SQLiteOsmStreamTarget(this.ConnectionString);
+            return new ProcessorTarget(new SQLiteOsmStreamTarget(this.ConnectionString));
         }
 
         /// <summary>

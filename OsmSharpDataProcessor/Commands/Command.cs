@@ -16,6 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
+using OsmSharpDataProcessor.Commands.Processors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace OsmSharpDataProcessor.Commands
         /// Creates a new processor that corresponds with the action in this command.
         /// </summary>
         /// <returns></returns>
-        public abstract object CreateProcessor();
+        public abstract ProcessorBase CreateProcessor();
 
         /// <summary>
         /// Returns a description of this command.

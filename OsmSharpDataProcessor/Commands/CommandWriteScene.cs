@@ -26,6 +26,7 @@ using System.IO;
 using OsmSharp.UI.Renderer.Scene;
 using OsmSharp.Math.Geo.Projections;
 using OsmSharp.UI.Map.Styles.Streams;
+using OsmSharpDataProcessor.Commands.Processors;
 
 namespace OsmSharpDataProcessor.Commands
 {
@@ -144,7 +145,7 @@ namespace OsmSharpDataProcessor.Commands
         /// Creates the stream processor associated with this command.
         /// </summary>
         /// <returns></returns>
-        public override object CreateProcessor()
+        public override ProcessorBase CreateProcessor()
         {
             // mapCSS stream.
             Stream mapCSSStream = (new FileInfo(this.MapCSS)).OpenRead();
@@ -159,11 +160,11 @@ namespace OsmSharpDataProcessor.Commands
             // create scene.
             Scene2D scene = new Scene2D(projection, this.ZoomLevelCutoffs.ToList());
 
-            return new StyleOsmStreamSceneStreamTarget(
+            return new ProcessorCompleteTarget(new StyleOsmStreamSceneStreamTarget(
                 new MapCSSInterpreter(mapCSSFile, new MapCSSDictionaryImageSource()),
                 scene,
                 projection,
-                sceneStream);
+                sceneStream));
         }
 
         /// <summary>

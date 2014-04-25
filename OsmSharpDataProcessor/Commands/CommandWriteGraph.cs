@@ -21,6 +21,7 @@ using OsmSharp.Routing;
 using OsmSharp.Routing.CH.PreProcessing;
 using OsmSharp.Routing.Graph;
 using OsmSharp.Routing.Osm.Interpreter;
+using OsmSharpDataProcessor.Commands.Processors;
 using OsmSharpDataProcessor.Streams;
 using System;
 using System.IO;
@@ -137,7 +138,7 @@ namespace OsmSharpDataProcessor.Commands
         /// Creates the stream processor associated with this command.
         /// </summary>
         /// <returns></returns>
-        public override object CreateProcessor()
+        public override ProcessorBase CreateProcessor()
         {
             // create output stream.
             var graphStream = (new FileInfo(this.GraphFile)).Open(FileMode.Create);
@@ -148,7 +149,7 @@ namespace OsmSharpDataProcessor.Commands
                     switch(this.GraphFormat)
                     {
                         case FormatType.Flat:
-                            return LiveEdgeFlatfileStreamTarget.CreateTarget(graphStream);
+                            return new ProcessorTarget(LiveEdgeFlatfileStreamTarget.CreateTarget(graphStream));
                         case FormatType.Tiled:
                             throw new NotSupportedException("Graphtype simple and format tiled is not supported.");
                         case FormatType.Mobile:
@@ -159,14 +160,14 @@ namespace OsmSharpDataProcessor.Commands
                     switch (this.GraphFormat)
                     {
                         case FormatType.Flat:
-                            return CHEdgeFlatfileStreamTarget.CreateTarget(graphStream, Vehicle.Car);
+                            return new ProcessorTarget(CHEdgeFlatfileStreamTarget.CreateTarget(graphStream, Vehicle.Car));
                         case FormatType.Tiled:
                             throw new NotSupportedException("Graphtype simple and format tiled is not supported.");
                         case FormatType.Mobile:
                             var tagsIndex = new TagsTableCollectionIndex();
                             var interpreter = new OsmRoutingInterpreter();
                             var graph = new DynamicGraphRouterDataSource<CHEdgeData>(tagsIndex);
-                            return new OsmSharp.Routing.Osm.Streams.CHEdgeGraphFileStreamTarget(graphStream,graph, interpreter, tagsIndex, Vehicle.Car);
+                            return new ProcessorTarget(new OsmSharp.Routing.Osm.Streams.CHEdgeGraphFileStreamTarget(graphStream,graph, interpreter, tagsIndex, Vehicle.Car));
                     }
                     break;
             }

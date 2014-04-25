@@ -17,6 +17,7 @@
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using OsmSharp.Osm.PBF.Streams;
+using OsmSharpDataProcessor.Commands.Processors;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -71,9 +72,9 @@ namespace OsmSharpDataProcessor.Commands
         /// Creates the processor that corresponds to this command.
         /// </summary>
         /// <returns></returns>
-        public override object CreateProcessor()
+        public override ProcessorBase CreateProcessor()
         {
-            return new PBFOsmStreamSource(new FileInfo(this.File).OpenRead());
+            return new ProcessorSource(new PBFOsmStreamSource(new FileInfo(this.File).OpenRead()));
         }
 
         /// <summary>

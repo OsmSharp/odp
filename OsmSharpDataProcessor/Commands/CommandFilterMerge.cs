@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using OsmSharp.Osm.Streams.Filters;
 using OsmSharpDataProcessor.Streams;
+using OsmSharpDataProcessor.Commands.Processors;
 
 namespace OsmSharpDataProcessor.Commands
 {
@@ -57,9 +58,9 @@ namespace OsmSharpDataProcessor.Commands
         /// Returns the processor that corresponds to this filter.
         /// </summary>
         /// <returns></returns>
-        public override object CreateProcessor()
+        public override ProcessorBase CreateProcessor()
         {
-            return new MergedOsmStreamSource();
+            return new ProcessorMergedFilter(new MergedOsmStreamSource());
         }
 
         /// <summary>

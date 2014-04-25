@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using OsmSharp.Osm.Xml.Streams;
 using System.IO;
+using OsmSharpDataProcessor.Commands.Processors;
 
 namespace OsmSharpDataProcessor.Commands
 {
@@ -71,10 +72,10 @@ namespace OsmSharpDataProcessor.Commands
         /// Creates a processor that corresponds to this command.
         /// </summary>
         /// <returns></returns>
-        public override object CreateProcessor()
+        public override ProcessorBase CreateProcessor()
         {
-            FileInfo inputFile = new FileInfo(this.File);
-            return new XmlOsmStreamSource(inputFile.Open(FileMode.Open));
+            var inputFile = new FileInfo(this.File);
+            return new ProcessorSource(new XmlOsmStreamSource(inputFile.Open(FileMode.Open)));
         }
 
         /// <summary>

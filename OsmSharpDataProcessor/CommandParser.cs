@@ -17,10 +17,8 @@
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using OsmSharpDataProcessor.Commands;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace OsmSharpDataProcessor
 {

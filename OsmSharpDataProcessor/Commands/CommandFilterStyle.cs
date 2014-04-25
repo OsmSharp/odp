@@ -25,6 +25,7 @@ using OsmSharp.UI.Map.Styles.Streams;
 using System.IO;
 using OsmSharp.UI.Map.Styles.MapCSS.v0_2.Domain;
 using OsmSharp.UI.Map.Styles.MapCSS;
+using OsmSharpDataProcessor.Commands.Processors;
 
 namespace OsmSharpDataProcessor.Commands
 {
@@ -114,14 +115,14 @@ namespace OsmSharpDataProcessor.Commands
         /// Returns the processor that corresponds to this filter.
         /// </summary>
         /// <returns></returns>
-        public override object CreateProcessor()
+        public override ProcessorBase CreateProcessor()
         {
             // mapCSS stream.
             Stream mapCSSStream = (new FileInfo(this.File)).OpenRead();
             MapCSSFile mapCSSFile = MapCSSFile.FromStream(mapCSSStream);
 
-            return new StyleOsmStreamFilter(
-                new MapCSSInterpreter(mapCSSFile, new MapCSSDictionaryImageSource()));
+            return new ProcessorFilter(new StyleOsmStreamFilter(
+                new MapCSSInterpreter(mapCSSFile, new MapCSSDictionaryImageSource())));
         }
 
         /// <summary>

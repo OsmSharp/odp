@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using OsmSharp.Math.Geo;
 using OsmSharp.Osm.Streams.Filters;
+using OsmSharpDataProcessor.Commands.Processors;
 
 namespace OsmSharpDataProcessor.Commands
 {
@@ -164,12 +165,12 @@ namespace OsmSharpDataProcessor.Commands
         /// Creates the processor that belongs to this data.
         /// </summary>
         /// <returns></returns>
-        public override object CreateProcessor()
+        public override ProcessorBase CreateProcessor()
         {
-            return new OsmStreamFilterBoundingBox(
+            return new ProcessorFilter(new OsmStreamFilterBoundingBox(
                 new GeoCoordinateBox(
                     new GeoCoordinate(this.Top, this.Left),
-                    new GeoCoordinate(this.Bottom, this.Right)));
+                    new GeoCoordinate(this.Bottom, this.Right))));
         }
 
         /// <summary>

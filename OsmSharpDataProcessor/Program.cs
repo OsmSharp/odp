@@ -20,8 +20,10 @@ using OsmSharp.Osm.Streams;
 using OsmSharp.Osm.Streams.Complete;
 using OsmSharp.Osm.Streams.Filters;
 using OsmSharpDataProcessor.Commands;
+using OsmSharpDataProcessor.Commands.Processors;
 using OsmSharpDataProcessor.Streams;
 using System;
+using System.Collections.Generic;
 
 namespace OsmSharpDataProcessor
 {
@@ -45,144 +47,21 @@ namespace OsmSharpDataProcessor
                 throw new Exception("Please specifiy a valid data processing command!");
             }
 
-            // start from the final command, that should be a target.
-            object processor = commands[commands.Length - 1].CreateProcessor();
-            if (!(processor is OsmStreamTarget) && !(processor is OsmCompleteStreamTarget))
+            var collapsedCommands = new List<ProcessorBase>();
+            for(int idx = 0; idx < commands.Length; idx++)
             {
-                throw new InvalidCommandException(
-                    string.Format("Last argument {0} does not present a data processing target!",
-                                  commands[commands.Length - 1].ToString()));
+                var processor = commands[idx].CreateProcessor();
+                processor.Collapse(collapsedCommands);
             }
 
-            // target is defined.
-            object target = processor;
-
-            // get the second to last argument.
-            processor = commands[commands.Length - 2].CreateProcessor();
-            if (!(processor is OsmStreamSource))
-            {
-                throw new InvalidCommandException(
-                    string.Format("Second last argument {0} does not present a data processing source or filter!",
-                                  commands[commands.Length - 2].ToString()));
+            if(collapsedCommands.Count > 1)
+            { // there is more than one command left.
+                throw new Exception("Command list could not be interpreted. Make sure you have the correct source/filter/target combinations.");
             }
 
-            // three options: merge/filter/source.
-            if (processor is MergedOsmStreamSource)
-            { // special case: register all source with this merge-filter.
-                var mergeStream = (processor as MergedOsmStreamSource);
-                if (target is OsmStreamTarget)
-                {
-                    (target as OsmStreamTarget).RegisterSource(mergeStream);
-                }
-                else if (target is OsmCompleteStreamTarget)
-                {
-                    (target as OsmCompleteStreamTarget).RegisterSource(mergeStream);
-                }
-                int commandIdx = commands.Length - 3;
-                while (commandIdx >= 0)
-                {
-                    processor = commands[commandIdx].CreateProcessor();
-
-                    if (processor is OsmStreamFilter)
-                    {
-                        throw new InvalidCommandException("No filter allowed before a merge.");
-                    }
-                    else if(processor is OsmStreamTarget)
-                    {
-                        throw new InvalidCommandException("No targets allowed before a merge.");
-                    }
-                    else if (processor is OsmStreamSource)
-                    { // register this source for the merge operation.
-                        var source = (processor as OsmStreamSource);
-                        mergeStream.RegisterSource(source);
-                    }
-
-                    // move to next command.
-                    commandIdx--;
-                }
-            }
-            else if (processor is OsmStreamFilter)
-            {
-                // there should be more filters or sources.
-                var filter = (processor as OsmStreamFilter);
-                if (target is OsmStreamTarget)
-                {
-                    (target as OsmStreamTarget).RegisterSource(filter);
-                }
-                else if (target is OsmCompleteStreamTarget)
-                {
-                    (target as OsmCompleteStreamTarget).RegisterSource(filter);
-                }
-
-                int commandIdx = commands.Length - 3;
-                while (commandIdx >= 0)
-                {
-                    processor = commands[commandIdx].CreateProcessor();
-
-                    // check source/filter.
-                    if (!(processor is OsmStreamSource))
-                    {
-                        throw new InvalidCommandException(
-                            string.Format(
-                                "Second last argument {0} does not present a data processing source or filter!",
-                                commands[commands.Length - 2].ToString()));
-                    }
-
-                    if (processor is OsmStreamFilter)
-                    {
-                        // another filter!
-                        var newFilter = (processor as OsmStreamFilter);
-                        filter.RegisterSource(newFilter);
-                        filter = newFilter;
-                    }
-                    else if (processor is OsmStreamSource)
-                    {
-                        // everything should end here!
-                        var source = (processor as OsmStreamSource);
-                        source = new OsmStreamFilterProgress(source);
-                        filter.RegisterSource(source);
-
-                        if (commandIdx > 0)
-                        {
-                            throw new InvalidCommandException(
-                                string.Format("Wrong order in filter/source specification!"));
-                        }
-                    }
-
-                    // move to next command.
-                    commandIdx--;
-                }
-            }
-            else if (processor is OsmStreamSource)
-            {
-                // everything should end here!
-                var source = (processor as OsmStreamSource);
-                source = new OsmStreamFilterProgress(source);
-                if (target is OsmStreamTarget)
-                {
-                    (target as OsmStreamTarget).RegisterSource(source);
-                }
-                else if (target is OsmCompleteStreamTarget)
-                {
-                    (target as OsmCompleteStreamTarget).RegisterSource(
-                        source);
-                }
-
-                if (commands.Length > 2)
-                {
-                    throw new InvalidCommandException(
-                        string.Format("Wrong order in filter/source specification!"));
-                }
-            }
-
-            // execute the command by pulling the data to the target.                
-            if (target is OsmStreamTarget)
-            {
-                (target as OsmStreamTarget).Pull();
-            }
-            else if (target is OsmCompleteStreamTarget)
-            {
-                (target as OsmCompleteStreamTarget).Pull();
+            if(collapsedCommands[0].CanExecute)
+            { // execute the last remaining fully collapsed command.
+                collapsedCommands[0].Execute();
             }
         }
     }
