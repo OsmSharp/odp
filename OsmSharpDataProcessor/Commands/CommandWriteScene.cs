@@ -130,10 +130,8 @@ namespace OsmSharpDataProcessor.Commands
             // check command consistency.
             if (commandWriteScene.ZoomLevelCutoffs == null ||
                     commandWriteScene.ZoomLevelCutoffs.Length == 0)
-            {
-                // the command splitting succeed but one of the arguments is unknown.
-                throw new CommandLineParserException("--write-scene",
-                    "Invalid parameter combination for command --write-scene: zoom level cutoffs not found.");
+            { // assign some defaults instead of complaining.
+                commandWriteScene.ZoomLevelCutoffs = new float[] { 16, 13, 10, 7, 4 };
             }
 
             // everything ok, take the next argument as the filename.
