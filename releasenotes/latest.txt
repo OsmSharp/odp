@@ -1,2 +1,11 @@
-- Improved command parsing by adding extra abstraction layer. Fixed #5.
-- Assigned some defaults for scene cutoff parameters. Fixed #4.
+Enhancements:
+
+- Updated OsmSharp to latest version d3dd2602127af16e51d1aa1f5b53c43c0636393f :
+	- Speedup of MapCSS and vector file processing.
+	- Speedup of routing file processing for mobile.
+	- Speedup of writing routing flatfiles.
+	- Improvements in PBF-reader.
+
+Bugixes:
+
+- Some plugins use just one argument, this was blocked. 54d54eb0de1a6ca2d0f377a526abcc977bd6624d
