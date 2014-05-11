@@ -20,6 +20,8 @@ using OsmSharp.Collections.Tags;
 using OsmSharp.Collections.Tags.Index;
 using OsmSharp.Routing;
 using OsmSharp.Routing.CH.PreProcessing;
+using OsmSharp.Routing.CH.PreProcessing.Ordering;
+using OsmSharp.Routing.CH.PreProcessing.Witnesses;
 using OsmSharp.Routing.CH.Serialization;
 using OsmSharp.Routing.Graph;
 using OsmSharp.Routing.Osm.Graphs;
@@ -70,5 +72,38 @@ namespace OsmSharpDataProcessor.Streams
         {
             return new CHEdgeFlatfileStreamTarget(stream, new TagsTableCollectionIndex(), vehicle);
         }
+
+
+        /// <summary>
+        /// Returns the preprocessor for this stream.
+        /// </summary>
+        /// <returns></returns>
+        public override OsmSharp.Routing.Graph.PreProcessor.IPreProcessor GetPreprocessor()
+        {
+            var witnessCalculator = new DykstraWitnessCalculator();
+            var edgeDifference = new EdgeDifference(
+                this.DynamicGraph, witnessCalculator);
+            return new CHPreProcessorWrapper(new CHPreProcessor(this.DynamicGraph, edgeDifference, witnessCalculator));
+        }
+
+        /// <summary>
+        /// TODO: remove this after issue: https://github.com/OsmSharp/OsmSharp/issues/112
+        /// </summary>
+        private class CHPreProcessorWrapper : OsmSharp.Routing.Graph.PreProcessor.IPreProcessor
+        {
+            private CHPreProcessor _preProcessor;
+
+            public CHPreProcessorWrapper(CHPreProcessor preProcessor)
+            {
+                _preProcessor = preProcessor;
+            }
+
+            public void Start()
+            {
+                _preProcessor.Start();
+            }
+        }
     }
+
+
 }
