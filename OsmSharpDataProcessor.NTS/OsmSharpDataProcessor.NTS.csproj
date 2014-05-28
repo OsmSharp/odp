@@ -89,8 +89,8 @@
   <ItemGroup>
     <Compile Include="IFeatureStreamTarget.cs" />
     <Compile Include="IFeatureStreamSource.cs" />
-    <Compile Include="Osm\GeometryInterpreterStreamSource.cs" />
-    <Compile Include="Osm\OsmSharpToNTSGeometryConvertor.cs" />
+    <Compile Include="Osm\FeatureInterpreterStreamSource.cs" />
+    <Compile Include="Osm\OsmSharpToNTSFeatureConvertor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
