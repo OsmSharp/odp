@@ -23,6 +23,7 @@ namespace OsmSharpDataProcessor
             commands.Add(new CommandFilterBoundingBox());
             commands.Add(new CommandFilterMerge());
             commands.Add(new CommandFilterSort());
+            commands.Add(new CommandFilterProgress());
             commands.Add(new CommandFilterStyle());
             commands.Add(new CommandReadPBF());
             commands.Add(new CommandReadXml());
