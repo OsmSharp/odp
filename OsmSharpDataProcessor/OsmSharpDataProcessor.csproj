@@ -169,6 +169,7 @@
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandFilterBoundingBox.cs" />
     <Compile Include="Commands\CommandFilterMerge.cs" />
+    <Compile Include="Commands\CommandFilterProgress.cs" />
     <Compile Include="Commands\CommandFilterSort.cs" />
     <Compile Include="Commands\CommandFilterStyle.cs" />
     <Compile Include="Commands\CommandLineParserException.cs" />
