@@ -15,6 +15,9 @@ using NetTopologySuite.Features;
 
 namespace OsmSharpDataProcessor.Unittest.NTS.Osm
 {
+    /// <summary>
+    /// Geometry interpreter stream tests.
+    /// </summary>
     [TestFixture]
     public class GeometryInterpreterStreamSourceTests
     {

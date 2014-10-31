@@ -43,7 +43,6 @@ namespace OsmSharpDataProcessor.Streams
         /// <summary>
         /// Creates a new merged OsmStreamSource.
         /// </summary>
-        /// <param name="sources"></param>
         public MergedOsmStreamSource()
         {
             _sources = new List<OsmStreamSource>();
