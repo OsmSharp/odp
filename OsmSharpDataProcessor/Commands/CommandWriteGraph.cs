@@ -58,6 +58,11 @@ namespace OsmSharpDataProcessor.Commands
         public FormatType GraphFormat { get; set; }
 
         /// <summary>
+        /// Gets or sets the vehicle profile.
+        /// </summary>
+        public Vehicle Vehicle { get; set; }
+
+        /// <summary>
         /// Parse the command arguments for the write-xml command.
         /// </summary>
         /// <param name="args"></param>
@@ -72,6 +77,9 @@ namespace OsmSharpDataProcessor.Commands
             {
                 throw new CommandLineParserException("None", "Invalid arguments for --write-graph!");
             }
+
+            // set default vehicle to car.
+            commandWriteGraph.Vehicle = Vehicle.Car;
 
             // parse arguments and keep parsing until the next switch.
             int startIdx = idx;
@@ -114,6 +122,16 @@ namespace OsmSharpDataProcessor.Commands
                                     commandWriteGraph.GraphFormat = FormatType.Mobile;
                                     break;
                             }
+                            break;
+                        case "vehicle":
+                            string vehicleValue = keyValue[1].ToLower();
+                            var vehicle = Vehicle.GetByUniqueName(vehicleValue);
+                            if (vehicle == null)
+                            { // the vehicle with the given name was not detected.
+                                throw new CommandLineParserException("--write-graph",
+                                    string.Format("Invalid parameter for command --write-graph: vehicle={0} not found.", keyValue[1]));
+                            }
+                            commandWriteGraph.Vehicle = vehicle;
                             break;
                         default:
                             // the command splitting succeed but one of the arguments is unknown.
@@ -160,14 +178,14 @@ namespace OsmSharpDataProcessor.Commands
                     switch (this.GraphFormat)
                     {
                         case FormatType.Flat:
-                            return new ProcessorTarget(CHEdgeFlatfileStreamTarget.CreateTarget(graphStream, Vehicle.Car));
+                            return new ProcessorTarget(CHEdgeFlatfileStreamTarget.CreateTarget(graphStream, this.Vehicle));
                         case FormatType.Tiled:
                             throw new NotSupportedException("Graphtype simple and format tiled is not supported.");
                         case FormatType.Mobile:
                             var tagsIndex = new TagsTableCollectionIndex();
                             var interpreter = new OsmRoutingInterpreter();
                             var graph = new DynamicGraphRouterDataSource<CHEdgeData>(tagsIndex);
-                            return new ProcessorTarget(new OsmSharp.Routing.Osm.Streams.CHEdgeGraphFileStreamTarget(graphStream,graph, interpreter, tagsIndex, Vehicle.Car));
+                            return new ProcessorTarget(new OsmSharp.Routing.Osm.Streams.CHEdgeGraphFileStreamTarget(graphStream, graph, interpreter, tagsIndex, this.Vehicle));
                     }
                     break;
             }

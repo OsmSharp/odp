@@ -19,6 +19,7 @@
 using OsmSharp.Osm.Streams;
 using OsmSharp.Osm.Streams.Complete;
 using OsmSharp.Osm.Streams.Filters;
+using OsmSharp.Routing;
 using OsmSharpDataProcessor.Commands;
 using OsmSharpDataProcessor.Commands.Processors;
 using OsmSharpDataProcessor.Streams;
@@ -35,8 +36,12 @@ namespace OsmSharpDataProcessor
         /// <param name="args"></param>
         private static void Main(string[] args)
         {
+            // enable logging.
             OsmSharp.Logging.Log.Enable();
             OsmSharp.Logging.Log.RegisterListener(new OsmSharp.WinForms.UI.Logging.ConsoleTraceListener());
+
+            // register OsmSharp vehicles.
+            Vehicle.RegisterVehicles();
 
             // parse commands first.
             Command[] commands = CommandParser.ParseCommands(args);
