@@ -30,45 +30,45 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OsmSharp, Version=4.3.0.854, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="OsmSharp, Version=4.3.0.879, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.3.0.854-beta\lib\net45\OsmSharp.dll</HintPath>
+      <HintPath>..\packages\OsmSharp.4.3.0.879-beta\lib\net45\OsmSharp.dll</HintPath>
     </Reference>
-    <Reference Include="OsmSharp.Data.Oracle, Version=4.3.0.854, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="OsmSharp.Data.Oracle, Version=4.3.0.879, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.3.0.854-beta\lib\net45\OsmSharp.Data.Oracle.dll</HintPath>
+      <HintPath>..\packages\OsmSharp.4.3.0.879-beta\lib\net45\OsmSharp.Data.Oracle.dll</HintPath>
     </Reference>
-    <Reference Include="OsmSharp.Data.PostgreSQL, Version=4.3.0.854, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="OsmSharp.Data.PostgreSQL, Version=4.3.0.879, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.3.0.854-beta\lib\net45\OsmSharp.Data.PostgreSQL.dll</HintPath>
+      <HintPath>..\packages\OsmSharp.4.3.0.879-beta\lib\net45\OsmSharp.Data.PostgreSQL.dll</HintPath>
     </Reference>
-    <Reference Include="OsmSharp.Data.Redis, Version=4.3.0.854, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="OsmSharp.Data.Redis, Version=4.3.0.879, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.3.0.854-beta\lib\net45\OsmSharp.Data.Redis.dll</HintPath>
+      <HintPath>..\packages\OsmSharp.4.3.0.879-beta\lib\net45\OsmSharp.Data.Redis.dll</HintPath>
     </Reference>
-    <Reference Include="OsmSharp.Data.SQLite, Version=4.3.0.854, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="OsmSharp.Data.SQLite, Version=4.3.0.879, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.3.0.854-beta\lib\net45\OsmSharp.Data.SQLite.dll</HintPath>
+      <HintPath>..\packages\OsmSharp.4.3.0.879-beta\lib\net45\OsmSharp.Data.SQLite.dll</HintPath>
     </Reference>
-    <Reference Include="OsmSharp.Data.SQLServer, Version=4.3.0.854, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="OsmSharp.Data.SQLServer, Version=4.3.0.879, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.3.0.854-beta\lib\net45\OsmSharp.Data.SQLServer.dll</HintPath>
+      <HintPath>..\packages\OsmSharp.4.3.0.879-beta\lib\net45\OsmSharp.Data.SQLServer.dll</HintPath>
     </Reference>
-    <Reference Include="OsmSharp.Osm, Version=4.3.0.854, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="OsmSharp.Osm, Version=4.3.0.879, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.3.0.854-beta\lib\net45\OsmSharp.Osm.dll</HintPath>
+      <HintPath>..\packages\OsmSharp.4.3.0.879-beta\lib\net45\OsmSharp.Osm.dll</HintPath>
     </Reference>
-    <Reference Include="OsmSharp.Routing, Version=4.3.0.854, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="OsmSharp.Routing, Version=4.3.0.879, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.3.0.854-beta\lib\net45\OsmSharp.Routing.dll</HintPath>
+      <HintPath>..\packages\OsmSharp.4.3.0.879-beta\lib\net45\OsmSharp.Routing.dll</HintPath>
     </Reference>
-    <Reference Include="OsmSharp.UI, Version=4.3.0.854, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="OsmSharp.UI, Version=4.3.0.879, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.3.0.854-beta\lib\net45\OsmSharp.UI.dll</HintPath>
+      <HintPath>..\packages\OsmSharp.4.3.0.879-beta\lib\net45\OsmSharp.UI.dll</HintPath>
     </Reference>
-    <Reference Include="OsmSharp.WinForms.UI, Version=4.3.0.854, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="OsmSharp.WinForms.UI, Version=4.3.0.879, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\OsmSharp.4.3.0.854-beta\lib\net45\OsmSharp.WinForms.UI.dll</HintPath>
+      <HintPath>..\packages\OsmSharp.4.3.0.879-beta\lib\net45\OsmSharp.WinForms.UI.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
