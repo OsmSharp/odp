@@ -81,7 +81,7 @@ namespace OsmSharpDataProcessor.Streams
         public override OsmSharp.Routing.Graph.PreProcessor.IPreProcessor GetPreprocessor()
         {
             var witnessCalculator = new DykstraWitnessCalculator();
-            var edgeDifference = new EdgeDifference(
+            var edgeDifference = new EdgeDifferenceContractedSearchSpace(
                 this.DynamicGraph, witnessCalculator);
             return new CHPreProcessorWrapper(new CHPreProcessor(this.DynamicGraph, edgeDifference, witnessCalculator));
         }
