@@ -3,7 +3,6 @@ using OsmSharp.Collections.Tags;
 using OsmSharp.Osm;
 using OsmSharp.Osm.Streams;
 using OsmSharp.Osm.Data.Memory;
-using OsmSharp.Osm.Interpreter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +11,7 @@ using OsmSharp.Osm.Streams.Complete;
 using OsmSharpDataProcessor.NTS.Osm;
 using GeoAPI.Geometries;
 using NetTopologySuite.Features;
+using OsmSharp.Osm.Geo.Interpreter;
 
 namespace OsmSharpDataProcessor.Unittest.NTS.Osm
 {
@@ -57,7 +57,7 @@ namespace OsmSharpDataProcessor.Unittest.NTS.Osm
             source.Add(way);
 
             // the use of natural=water implies an area-type.
-            var interpreter = new SimpleGeometryInterpreter();
+            var interpreter = new SimpleFeatureInterpreter();
             var completeStreamSource = new OsmSimpleCompleteStreamSource(source.ToOsmStreamSource());
 
             // use the stream to interpret.

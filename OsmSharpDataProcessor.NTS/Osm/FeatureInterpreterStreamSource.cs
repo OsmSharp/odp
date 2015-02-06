@@ -1,6 +1,7 @@
 ﻿using GeoAPI.Geometries;
 using NetTopologySuite.Features;
-using OsmSharp.Osm.Interpreter;
+using OsmSharp.Osm;
+using OsmSharp.Osm.Geo.Interpreter;
 using OsmSharp.Osm.Streams.Complete;
 using System;
 using System.Collections;
@@ -24,16 +25,16 @@ namespace OsmSharpDataProcessor.NTS.Osm
         /// <summary>
         /// Holds the geometry interpreter.
         /// </summary>
-        private readonly GeometryInterpreter _geometryInterpreter;
+        private readonly FeatureInterpreter _featureInterpreter;
 
         /// <summary>
         /// Creates a geometry interpreter stream source.
         /// </summary>
         /// <param name="completeSource"></param>
-        /// <param name="geometryInterpreter"></param>
-        public FeatureInterpreterStreamSource(OsmCompleteStreamSource completeSource, GeometryInterpreter geometryInterpreter)
+        /// <param name="featureInterpreter"></param>
+        public FeatureInterpreterStreamSource(OsmCompleteStreamSource completeSource, FeatureInterpreter featureInterpreter)
         {
-            _geometryInterpreter = geometryInterpreter;
+            _featureInterpreter = featureInterpreter;
             _completeSource = completeSource;
 
             _nextFeatures = new List<Feature>();
@@ -83,10 +84,10 @@ namespace OsmSharpDataProcessor.NTS.Osm
             while(_completeSource.MoveNext())
             {
                 // interpret the geometries.
-                var geometries = _geometryInterpreter.Interpret(_completeSource.Current());
-                if(geometries != null && geometries.Count > 0)
+                var features = _featureInterpreter.Interpret(_completeSource.Current());
+                if(features != null && features.Count > 0)
                 { // there are geometries found!
-                    _nextFeatures = OsmSharpToNTSFeatureConvertor.Convert(geometries);
+                    _nextFeatures = OsmSharpToNTSFeatureConvertor.Convert(features);
                     return this.MoveNext();
                 }
             }

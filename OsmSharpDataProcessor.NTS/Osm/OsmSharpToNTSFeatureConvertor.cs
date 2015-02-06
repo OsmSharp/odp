@@ -14,33 +14,33 @@ namespace OsmSharpDataProcessor.NTS.Osm
     public static class OsmSharpToNTSFeatureConvertor
     {
         /// <summary>
-        /// Converts the given OsmSharp geometry collection into a list of NTS geometry collection.
+        /// Converts the given OsmSharp feature collection into a list of NTS feature collection.
         /// </summary>
-        /// <param name="geometryCollection"></param>
+        /// <param name="featureCollection"></param>
         /// <returns></returns>
-        public static List<Feature> Convert(OsmSharp.Geo.Geometries.GeometryCollection geometryCollection)
+        public static List<Feature> Convert(OsmSharp.Geo.Features.FeatureCollection featureCollection)
         {
-            var geometries = new List<Feature>(geometryCollection.Count);
-            foreach(var geometry in geometryCollection)
+            var features = new List<Feature>(featureCollection.Count);
+            foreach (var feature in featureCollection)
             {
-                geometries.Add(OsmSharpToNTSFeatureConvertor.Convert(geometry));
+                features.Add(OsmSharpToNTSFeatureConvertor.Convert(feature));
             }
-            return geometries;
+            return features;
         }
 
         /// <summary>
-        /// Converts the given OsmSharp geometry into an NTS feature.
+        /// Converts the given OsmSharp feature into an NTS feature.
         /// </summary>
-        /// <param name="geometry"></param>
+        /// <param name="feature"></param>
         /// <returns></returns>
-        public static Feature Convert(OsmSharp.Geo.Geometries.Geometry geometry)
+        public static Feature Convert(OsmSharp.Geo.Features.Feature feature)
         {
-            if (geometry == null) { throw new ArgumentNullException("geometry"); }
+            if (feature == null) { throw new ArgumentNullException("feature"); }
 
             var geometryFactory = new NetTopologySuite.Geometries.GeometryFactory();
-            if(geometry is OsmSharp.Geo.Geometries.Polygon)
+            if(feature.Geometry is OsmSharp.Geo.Geometries.Polygon)
             { // a polygon.
-                var polygon = (geometry as OsmSharp.Geo.Geometries.Polygon);
+                var polygon = (feature.Geometry as OsmSharp.Geo.Geometries.Polygon);
                 var holes = polygon.Holes.Select((hole) => {
                     return (ILinearRing)geometryFactory.CreateLinearRing(hole.Coordinates.Select((coordinate) => {
                         return new Coordinate(coordinate.Longitude, coordinate.Latitude);
@@ -50,46 +50,46 @@ namespace OsmSharpDataProcessor.NTS.Osm
                     return new Coordinate(coordinate.Longitude, coordinate.Latitude);
                 }).ToArray());
                 return new Feature(geometryFactory.CreatePolygon(shell, holes),
-                    OsmSharpToNTSFeatureConvertor.Convert(geometry.Attributes));
+                    OsmSharpToNTSFeatureConvertor.Convert(feature.Attributes));
             }
-            else if (geometry is OsmSharp.Geo.Geometries.LineairRing)
+            else if (feature.Geometry is OsmSharp.Geo.Geometries.LineairRing)
             { // a lineair ring.
-                var lineairRing = (geometry as OsmSharp.Geo.Geometries.LineairRing);
+                var lineairRing = (feature.Geometry as OsmSharp.Geo.Geometries.LineairRing);
                 var coordinates = lineairRing.Coordinates.Select((coordinate) => {
                     return new Coordinate(coordinate.Longitude, coordinate.Latitude);
                 });
                 return new Feature(geometryFactory.CreateLinearRing(coordinates.ToArray()),
-                    OsmSharpToNTSFeatureConvertor.Convert(geometry.Attributes));
+                    OsmSharpToNTSFeatureConvertor.Convert(feature.Attributes));
             }
-            else if (geometry is OsmSharp.Geo.Geometries.LineString)
+            else if (feature.Geometry is OsmSharp.Geo.Geometries.LineString)
             { // a line string.
-                var lineString = (geometry as OsmSharp.Geo.Geometries.LineString);
+                var lineString = (feature.Geometry as OsmSharp.Geo.Geometries.LineString);
                 var coordinates = lineString.Coordinates.Select((coordinate) =>
                 {
                     return new Coordinate(coordinate.Longitude, coordinate.Latitude);
                 });
                 return new Feature(geometryFactory.CreateLineString(coordinates.ToArray()),
-                    OsmSharpToNTSFeatureConvertor.Convert(geometry.Attributes));
+                    OsmSharpToNTSFeatureConvertor.Convert(feature.Attributes));
             }
-            else if (geometry is OsmSharp.Geo.Geometries.Point)
+            else if (feature.Geometry is OsmSharp.Geo.Geometries.Point)
             { // a point.
-                var point = (geometry as OsmSharp.Geo.Geometries.Point);
+                var point = (feature.Geometry as OsmSharp.Geo.Geometries.Point);
                 return new Feature(geometryFactory.CreatePoint(new Coordinate(point.Coordinate.Longitude, point.Coordinate.Latitude)),
-                    OsmSharpToNTSFeatureConvertor.Convert(geometry.Attributes));
+                    OsmSharpToNTSFeatureConvertor.Convert(feature.Attributes));
             }
-            else if (geometry is OsmSharp.Geo.Geometries.MultiLineString)
+            else if (feature.Geometry is OsmSharp.Geo.Geometries.MultiLineString)
             { // a multi line string.
                 throw new NotSupportedException("A MultiLineString is not supported.");
             }
-            else if (geometry is OsmSharp.Geo.Geometries.MultiPoint)
+            else if (feature.Geometry is OsmSharp.Geo.Geometries.MultiPoint)
             { // a multi point.
                 throw new NotSupportedException("A MultiPoint is not supported.");
             }
-            else if (geometry is OsmSharp.Geo.Geometries.MultiPolygon)
+            else if (feature.Geometry is OsmSharp.Geo.Geometries.MultiPolygon)
             { // a multi polygon.
                 throw new NotSupportedException("A MultiPolygon is not supported.");
             }
-            throw new ArgumentOutOfRangeException("Geometry not recognized: {0}", geometry.ToString());
+            throw new ArgumentOutOfRangeException("Geometry not recognized: {0}", feature.ToString());
         }
 
         /// <summary>
