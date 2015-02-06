@@ -47,7 +47,7 @@ namespace OsmSharpDataProcessor.Streams
         /// <param name="vehicle"></param>
         /// <param name="stream"></param>
         public CHEdgeFlatfileStreamTarget(Stream stream, ITagsCollectionIndex tagsIndex, Vehicle vehicle)
-            : base(new DynamicGraphRouterDataSource<CHEdgeData>(tagsIndex), new OsmRoutingInterpreter(), tagsIndex, vehicle)
+            : base(new DynamicGraphRouterDataSource<CHEdgeData>(new MemoryDirectedGraph<CHEdgeData>(), tagsIndex), new OsmRoutingInterpreter(), tagsIndex, vehicle)
         {
             _stream = stream;
         }
