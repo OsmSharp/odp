@@ -184,7 +184,7 @@ namespace OsmSharpDataProcessor.Commands
                         case FormatType.Mobile:
                             var tagsIndex = new TagsTableCollectionIndex();
                             var interpreter = new OsmRoutingInterpreter();
-                            var graph = new DynamicGraphRouterDataSource<CHEdgeData>(tagsIndex);
+                            var graph = new DynamicGraphRouterDataSource<CHEdgeData>(new MemoryDirectedGraph<CHEdgeData>(), tagsIndex);
                             return new ProcessorTarget(new OsmSharp.Routing.Osm.Streams.CHEdgeGraphFileStreamTarget(graphStream, graph, interpreter, tagsIndex, this.Vehicle));
                     }
                     break;
