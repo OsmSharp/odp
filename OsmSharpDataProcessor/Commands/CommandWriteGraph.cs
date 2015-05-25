@@ -53,14 +53,9 @@ namespace OsmSharpDataProcessor.Commands
         public GraphType GraphType { get; set; }
 
         /// <summary>
-        /// Gets or sets the graph format.
-        /// </summary>
-        public FormatType GraphFormat { get; set; }
-
-        /// <summary>
         /// Gets or sets the vehicle profile.
         /// </summary>
-        public Vehicle Vehicle { get; set; }
+        public OsmSharp.Routing.Vehicles.Vehicle Vehicle { get; set; }
 
         /// <summary>
         /// Parse the command arguments for the write-xml command.
@@ -79,7 +74,8 @@ namespace OsmSharpDataProcessor.Commands
             }
 
             // set default vehicle to car.
-            commandWriteGraph.Vehicle = Vehicle.Car;
+            commandWriteGraph.Vehicle = OsmSharp.Routing.Vehicles.Vehicle.Car;
+            commandWriteGraph.GraphType = GraphType.Regular;
 
             // parse arguments and keep parsing until the next switch.
             int startIdx = idx;
@@ -100,32 +96,14 @@ namespace OsmSharpDataProcessor.Commands
                             string typeValue = keyValue[1].ToLower();
                             switch (typeValue)
                             {
-                                case "simple":
-                                    commandWriteGraph.GraphType = GraphType.Simple;
-                                    break;
                                 case "contracted":
                                     commandWriteGraph.GraphType = GraphType.Contracted;
                                     break;
                             }
                             break;
-                        case "format":
-                            string formatValue = keyValue[1].ToLower();
-                            switch(formatValue)
-                            {
-                                case "flat":
-                                    commandWriteGraph.GraphFormat = FormatType.Flat;
-                                    break;
-                                case "tiled":
-                                    commandWriteGraph.GraphFormat = FormatType.Tiled;
-                                    break;
-                                case "mobile":
-                                    commandWriteGraph.GraphFormat = FormatType.Mobile;
-                                    break;
-                            }
-                            break;
                         case "vehicle":
                             string vehicleValue = keyValue[1].ToLower();
-                            var vehicle = Vehicle.GetByUniqueName(vehicleValue);
+                            var vehicle = OsmSharp.Routing.Vehicles.Vehicle.GetByUniqueName(vehicleValue);
                             if (vehicle == null)
                             { // the vehicle with the given name was not detected.
                                 throw new CommandLineParserException("--write-graph",
@@ -163,31 +141,10 @@ namespace OsmSharpDataProcessor.Commands
 
             switch(this.GraphType)
             {
-                case GraphType.Simple:
-                    switch(this.GraphFormat)
-                    {
-                        case FormatType.Flat:
-                            return new ProcessorTarget(LiveEdgeFlatfileStreamTarget.CreateTarget(graphStream));
-                        case FormatType.Tiled:
-                            throw new NotSupportedException("Graphtype simple and format tiled is not supported.");
-                        case FormatType.Mobile:
-                            throw new NotSupportedException("Graphtype simple and format mobile is not supported.");
-                    }
-                    break;
+                case GraphType.Regular:
+                    return new ProcessorTarget(LiveEdgeFlatfileStreamTarget.CreateTarget(graphStream));
                 case GraphType.Contracted:
-                    switch (this.GraphFormat)
-                    {
-                        case FormatType.Flat:
-                            return new ProcessorTarget(CHEdgeFlatfileStreamTarget.CreateTarget(graphStream, this.Vehicle));
-                        case FormatType.Tiled:
-                            throw new NotSupportedException("Graphtype simple and format tiled is not supported.");
-                        case FormatType.Mobile:
-                            var tagsIndex = new TagsTableCollectionIndex();
-                            var interpreter = new OsmRoutingInterpreter();
-                            var graph = new DynamicGraphRouterDataSource<CHEdgeData>(new MemoryDirectedGraph<CHEdgeData>(), tagsIndex);
-                            return new ProcessorTarget(new OsmSharp.Routing.Osm.Streams.CHEdgeGraphFileStreamTarget(graphStream, graph, interpreter, tagsIndex, this.Vehicle));
-                    }
-                    break;
+                    return new ProcessorTarget(CHEdgeFlatfileStreamTarget.CreateTarget(graphStream, this.Vehicle));
             }
             throw new InvalidCommandException("Invalid command: " + this.ToString());
         }
@@ -198,8 +155,8 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("--write-graph graph={0} type={1} format={2}",
-                this.GraphFile, this.GraphType, this.GraphFormat);
+            return string.Format("--write-graph graph={0} type={1}",
+                this.GraphFile, this.GraphType);
         }
     }
 
@@ -209,9 +166,9 @@ namespace OsmSharpDataProcessor.Commands
     public enum GraphType
     {
         /// <summary>
-        /// Simple graph definition.
+        /// Regular graph definition.
         /// </summary>
-        Simple,
+        Regular,
         /// <summary>
         /// Contracted graph definition.
         /// </summary>

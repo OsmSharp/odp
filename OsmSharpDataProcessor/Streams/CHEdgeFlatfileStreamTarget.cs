@@ -18,14 +18,16 @@
 
 using OsmSharp.Collections.Tags;
 using OsmSharp.Collections.Tags.Index;
+using OsmSharp.IO.MemoryMappedFiles;
 using OsmSharp.Routing;
 using OsmSharp.Routing.CH.PreProcessing;
 using OsmSharp.Routing.CH.PreProcessing.Ordering;
 using OsmSharp.Routing.CH.PreProcessing.Witnesses;
 using OsmSharp.Routing.CH.Serialization;
 using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Osm.Graphs;
+using OsmSharp.Routing.Graph.Serialization;
 using OsmSharp.Routing.Osm.Interpreter;
+using OsmSharp.Routing.Vehicles;
 using System.IO;
 
 namespace OsmSharpDataProcessor.Streams
@@ -33,7 +35,7 @@ namespace OsmSharpDataProcessor.Streams
     /// <summary>
     /// A stream target that writes a flatfile.
     /// </summary>
-    public class CHEdgeFlatfileStreamTarget : OsmSharp.Routing.Osm.Streams.Graphs.CHEdgeGraphOsmStreamTarget
+    public class CHEdgeFlatfileStreamTarget : OsmSharp.Routing.Osm.Streams.CHEdgeGraphOsmStreamTarget
     {
         /// <summary>
         /// Holds the output stream.
@@ -46,8 +48,8 @@ namespace OsmSharpDataProcessor.Streams
         /// <param name="tagsIndex"></param>
         /// <param name="vehicle"></param>
         /// <param name="stream"></param>
-        public CHEdgeFlatfileStreamTarget(Stream stream, ITagsCollectionIndex tagsIndex, Vehicle vehicle)
-            : base(new DynamicGraphRouterDataSource<CHEdgeData>(new MemoryDirectedGraph<CHEdgeData>(), tagsIndex), new OsmRoutingInterpreter(), tagsIndex, vehicle)
+        public CHEdgeFlatfileStreamTarget(Stream stream, ITagsIndex tagsIndex, Vehicle vehicle)
+            : base(new RouterDataSource<CHEdgeData>(new DirectedGraph<CHEdgeData>(), tagsIndex), new OsmRoutingInterpreter(), tagsIndex, vehicle)
         {
             _stream = stream;
         }
@@ -59,8 +61,8 @@ namespace OsmSharpDataProcessor.Streams
         {
             base.OnAfterPull();
 
-            var serializer = new CHEdgeFlatfileSerializer();
-            serializer.Serialize(_stream, this.DynamicGraph as DynamicGraphRouterDataSource<CHEdgeData>, new TagsCollection());
+            var serializer = new CHEdgeSerializer();
+            serializer.Serialize(_stream, this.Graph as RouterDataSource<CHEdgeData>, new TagsCollection());
             _stream.Flush();
         }
 
@@ -70,7 +72,7 @@ namespace OsmSharpDataProcessor.Streams
         /// <returns></returns>
         public static CHEdgeFlatfileStreamTarget CreateTarget(Stream stream, Vehicle vehicle)
         {
-            return new CHEdgeFlatfileStreamTarget(stream, new TagsTableCollectionIndex(), vehicle);
+            return new CHEdgeFlatfileStreamTarget(stream, new TagsIndex(new MemoryMappedStream()), vehicle);
         }
 
 
@@ -82,26 +84,8 @@ namespace OsmSharpDataProcessor.Streams
         {
             var witnessCalculator = new DykstraWitnessCalculator();
             var edgeDifference = new EdgeDifferenceContractedSearchSpace(
-                this.DynamicGraph, witnessCalculator);
-            return new CHPreProcessorWrapper(new CHPreProcessor(this.DynamicGraph, edgeDifference, witnessCalculator));
-        }
-
-        /// <summary>
-        /// TODO: remove this after issue: https://github.com/OsmSharp/OsmSharp/issues/112
-        /// </summary>
-        private class CHPreProcessorWrapper : OsmSharp.Routing.Graph.PreProcessor.IPreProcessor
-        {
-            private CHPreProcessor _preProcessor;
-
-            public CHPreProcessorWrapper(CHPreProcessor preProcessor)
-            {
-                _preProcessor = preProcessor;
-            }
-
-            public void Start()
-            {
-                _preProcessor.Start();
-            }
+                this.Graph, witnessCalculator);
+            return new CHPreProcessor(this.Graph, edgeDifference, witnessCalculator);
         }
     }
 

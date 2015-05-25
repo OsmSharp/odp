@@ -199,7 +199,7 @@ namespace OsmSharpDataProcessor.Unittest
         public void TestWriteGraph()
         {
             // define some args.
-            var args = new string[] { "-rx", "somefile.osm", "--write-graph", "graph=graph.out", "type=simple", "format=flat" };
+            var args = new string[] { "-rx", "somefile.osm", "--write-graph", "graph=graph.out", "type=contracted" };
 
             // parse.
             var commands = CommandParser.ParseCommands(args);
@@ -210,9 +210,8 @@ namespace OsmSharpDataProcessor.Unittest
             Assert.IsTrue(commands[0] is CommandReadXml);
             Assert.AreEqual("somefile.osm", (commands[0] as CommandReadXml).File);
             Assert.IsTrue(commands[1] is CommandWriteGraph);
-            Assert.AreEqual(FormatType.Flat, (commands[1] as CommandWriteGraph).GraphFormat);
             Assert.AreEqual("graph.out", (commands[1] as CommandWriteGraph).GraphFile);
-            Assert.AreEqual(GraphType.Simple, (commands[1] as CommandWriteGraph).GraphType);
+            Assert.AreEqual(GraphType.Contracted, (commands[1] as CommandWriteGraph).GraphType);
         }
     }
 }

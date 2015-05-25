@@ -18,9 +18,9 @@
 
 using OsmSharp.Collections.Tags;
 using OsmSharp.Collections.Tags.Index;
+using OsmSharp.IO.MemoryMappedFiles;
 using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Osm.Graphs;
-using OsmSharp.Routing.Osm.Graphs.Serialization;
+using OsmSharp.Routing.Graph.Serialization;
 using OsmSharp.Routing.Osm.Interpreter;
 using System.IO;
 
@@ -29,7 +29,7 @@ namespace OsmSharpDataProcessor.Streams
     /// <summary>
     /// A stream target that writes a flatfile.
     /// </summary>
-    public class LiveEdgeFlatfileStreamTarget : OsmSharp.Routing.Osm.Streams.Graphs.LiveGraphOsmStreamTarget
+    public class LiveEdgeFlatfileStreamTarget : OsmSharp.Routing.Osm.Streams.GraphOsmStreamTarget
     {
         /// <summary>
         /// Holds the output stream.
@@ -41,8 +41,8 @@ namespace OsmSharpDataProcessor.Streams
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="tagsIndex"></param>
-        public LiveEdgeFlatfileStreamTarget(Stream stream, ITagsCollectionIndex tagsIndex)
-            : base(new DynamicGraphRouterDataSource<LiveEdge>(tagsIndex), new OsmRoutingInterpreter(), tagsIndex)
+        public LiveEdgeFlatfileStreamTarget(Stream stream, ITagsIndex tagsIndex)
+            : base(new RouterDataSource<Edge>(new Graph<Edge>(), tagsIndex), new OsmRoutingInterpreter(), tagsIndex)
         {
             _stream = stream;
         }
@@ -54,8 +54,8 @@ namespace OsmSharpDataProcessor.Streams
         {
             base.OnAfterPull();
 
-            var serializer = new LiveEdgeFlatfileSerializer();
-            serializer.Serialize(_stream, this.DynamicGraph as DynamicGraphRouterDataSource<LiveEdge>, new TagsCollection());
+            var serializer = new RoutingDataSourceSerializer();
+            serializer.Serialize(_stream, this.Graph as RouterDataSource<Edge>, new TagsCollection());
             _stream.Flush();
         }
 
@@ -66,7 +66,7 @@ namespace OsmSharpDataProcessor.Streams
         /// <returns></returns>
         public static LiveEdgeFlatfileStreamTarget CreateTarget(Stream stream)
         {
-            return new LiveEdgeFlatfileStreamTarget(stream, new TagsTableCollectionIndex());
+            return new LiveEdgeFlatfileStreamTarget(stream, new TagsIndex(new MemoryMappedStream()));
         }
     }
 }

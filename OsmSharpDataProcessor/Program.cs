@@ -38,10 +38,10 @@ namespace OsmSharpDataProcessor
         {
             // enable logging.
             OsmSharp.Logging.Log.Enable();
-            OsmSharp.Logging.Log.RegisterListener(new OsmSharp.WinForms.UI.Logging.ConsoleTraceListener());
+            OsmSharp.Logging.Log.RegisterListener(new global::OsmSharp.WinForms.UI.Logging.ConsoleTraceListener());
 
             // register OsmSharp vehicles.
-            Vehicle.RegisterVehicles();
+            OsmSharp.Routing.Vehicles.Vehicle.RegisterVehicles();
 
             // parse commands first.
             Command[] commands = CommandParser.ParseCommands(args);
