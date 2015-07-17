@@ -20,9 +20,9 @@ using OsmSharp.Collections.Tags;
 using OsmSharp.Collections.Tags.Index;
 using OsmSharp.IO.MemoryMappedFiles;
 using OsmSharp.Routing;
-using OsmSharp.Routing.CH.PreProcessing;
-using OsmSharp.Routing.CH.PreProcessing.Ordering;
-using OsmSharp.Routing.CH.PreProcessing.Witnesses;
+using OsmSharp.Routing.CH.Preprocessing;
+using OsmSharp.Routing.CH.Preprocessing.Ordering;
+using OsmSharp.Routing.CH.Preprocessing.Witnesses;
 using OsmSharp.Routing.CH.Serialization;
 using OsmSharp.Routing.Graph;
 using OsmSharp.Routing.Graph.Serialization;
@@ -74,20 +74,5 @@ namespace OsmSharpDataProcessor.Streams
         {
             return new CHEdgeFlatfileStreamTarget(stream, new TagsIndex(new MemoryMappedStream()), vehicle);
         }
-
-
-        /// <summary>
-        /// Returns the preprocessor for this stream.
-        /// </summary>
-        /// <returns></returns>
-        public override OsmSharp.Routing.Graph.PreProcessor.IPreProcessor GetPreprocessor()
-        {
-            var witnessCalculator = new DykstraWitnessCalculator();
-            var edgeDifference = new EdgeDifferenceContractedSearchSpace(
-                this.Graph, witnessCalculator);
-            return new CHPreProcessor(this.Graph, edgeDifference, witnessCalculator);
-        }
     }
-
-
 }
