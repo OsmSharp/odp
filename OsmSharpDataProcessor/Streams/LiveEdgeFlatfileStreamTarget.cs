@@ -62,11 +62,14 @@ namespace OsmSharpDataProcessor.Streams
         /// <summary>
         /// Creates the target.
         /// </summary>
-        /// <param name="stream"></param>
         /// <returns></returns>
-        public static LiveEdgeFlatfileStreamTarget CreateTarget(Stream stream)
+        public static LiveEdgeFlatfileStreamTarget CreateTarget(Stream stream, MemoryMappedStream memoryMappedStream)
         {
-            return new LiveEdgeFlatfileStreamTarget(stream, new TagsIndex(new MemoryMappedStream()));
+            if(stream == null)
+            {
+                return new LiveEdgeFlatfileStreamTarget(stream, new TagsIndex(new MemoryMappedStream()));
+            }
+            return new LiveEdgeFlatfileStreamTarget(stream, new TagsIndex(memoryMappedStream));
         }
     }
 }

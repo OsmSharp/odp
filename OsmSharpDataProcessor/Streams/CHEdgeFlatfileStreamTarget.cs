@@ -1,5 +1,5 @@
 ﻿// OsmSharp - OpenStreetMap (OSM) SDK
-// Copyright (C) 2013 Abelshausen Ben
+// Copyright (C) 2015 Abelshausen Ben
 // 
 // This file is part of OsmSharp.
 // 
@@ -19,13 +19,9 @@
 using OsmSharp.Collections.Tags;
 using OsmSharp.Collections.Tags.Index;
 using OsmSharp.IO.MemoryMappedFiles;
-using OsmSharp.Routing;
 using OsmSharp.Routing.CH.Preprocessing;
-using OsmSharp.Routing.CH.Preprocessing.Ordering;
-using OsmSharp.Routing.CH.Preprocessing.Witnesses;
 using OsmSharp.Routing.CH.Serialization;
 using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Graph.Serialization;
 using OsmSharp.Routing.Osm.Interpreter;
 using OsmSharp.Routing.Vehicles;
 using System.IO;
@@ -37,21 +33,27 @@ namespace OsmSharpDataProcessor.Streams
     /// </summary>
     public class CHEdgeFlatfileStreamTarget : OsmSharp.Routing.Osm.Streams.CHEdgeGraphOsmStreamTarget
     {
-        /// <summary>
-        /// Holds the output stream.
-        /// </summary>
-        private Stream _stream;
+        private readonly Stream _stream = null;
+        private readonly MemoryMappedStream _memoryMappedStream = null;
 
         /// <summary>
-        /// Creates a new live edge flat file.
+        /// Creates a new stream target.
         /// </summary>
-        /// <param name="tagsIndex"></param>
-        /// <param name="vehicle"></param>
-        /// <param name="stream"></param>
         public CHEdgeFlatfileStreamTarget(Stream stream, ITagsIndex tagsIndex, Vehicle vehicle)
             : base(new RouterDataSource<CHEdgeData>(new DirectedGraph<CHEdgeData>(), tagsIndex), new OsmRoutingInterpreter(), tagsIndex, vehicle)
         {
             _stream = stream;
+        }
+
+        /// <summary>
+        /// Creates a new stream target.
+        /// </summary>
+        public CHEdgeFlatfileStreamTarget(Stream stream, ITagsIndex tagsIndex, Vehicle vehicle, MemoryMappedStream memoryMappedStream)
+            : base(new RouterDataSource<CHEdgeData>(new DirectedGraph<CHEdgeData>(memoryMappedStream, 1000, 
+                CHEdgeData.MapFromDelegate, CHEdgeData.MapToDelegate, CHEdgeData.SizeUints), tagsIndex), new OsmRoutingInterpreter(), tagsIndex, vehicle)
+        {
+            _stream = stream;
+            _memoryMappedStream = memoryMappedStream;
         }
 
         /// <summary>
@@ -61,8 +63,24 @@ namespace OsmSharpDataProcessor.Streams
         {
             base.OnAfterPull();
 
+            RouterDataSource<CHEdgeData> copy = null;
+            if(_memoryMappedStream == null)
+            {
+                copy = new RouterDataSource<CHEdgeData>(new DirectedGraph<CHEdgeData>(),
+                    (this.Graph as RouterDataSource<CHEdgeData>).TagsIndex);
+            }
+            else
+            {
+                copy = new RouterDataSource<CHEdgeData>(new DirectedGraph<CHEdgeData>(_memoryMappedStream, this.Graph.VertexCount, 
+                    CHEdgeData.MapFromDelegate, CHEdgeData.MapToDelegate, CHEdgeData.SizeUints), 
+                        (this.Graph as RouterDataSource<CHEdgeData>).TagsIndex);
+            }
+            copy.CopyFrom(this.Graph);
+            copy.Trim();
+            copy.Compress();
+
             var serializer = new CHEdgeSerializer();
-            serializer.Serialize(_stream, this.Graph as RouterDataSource<CHEdgeData>, new TagsCollection());
+            serializer.Serialize(_stream, copy as RouterDataSource<CHEdgeData>, new TagsCollection());
             _stream.Flush();
         }
 
@@ -70,9 +88,13 @@ namespace OsmSharpDataProcessor.Streams
         /// Creates the target.
         /// </summary>
         /// <returns></returns>
-        public static CHEdgeFlatfileStreamTarget CreateTarget(Stream stream, Vehicle vehicle)
+        public static CHEdgeFlatfileStreamTarget CreateTarget(Stream stream, Vehicle vehicle, MemoryMappedStream memoryMappedStream)
         {
-            return new CHEdgeFlatfileStreamTarget(stream, new TagsIndex(new MemoryMappedStream()), vehicle);
+            if(memoryMappedStream == null)
+            {
+                return new CHEdgeFlatfileStreamTarget(stream, new TagsIndex(new MemoryMappedStream()), vehicle);
+            }
+            return new CHEdgeFlatfileStreamTarget(stream, new TagsIndex(memoryMappedStream), vehicle, memoryMappedStream);
         }
     }
 }

@@ -17,6 +17,7 @@
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using OsmSharp.Collections.Tags.Index;
+using OsmSharp.IO.MemoryMappedFiles;
 using OsmSharp.Routing;
 using OsmSharp.Routing.CH.Preprocessing;
 using OsmSharp.Routing.Graph;
@@ -56,6 +57,11 @@ namespace OsmSharpDataProcessor.Commands
         /// Gets or sets the vehicle profile.
         /// </summary>
         public OsmSharp.Routing.Vehicles.Vehicle Vehicle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the memory-map file.
+        /// </summary>
+        public string MemoryMapFile { get; set; }
 
         /// <summary>
         /// Parse the command arguments for the write-xml command.
@@ -111,6 +117,9 @@ namespace OsmSharpDataProcessor.Commands
                             }
                             commandWriteGraph.Vehicle = vehicle;
                             break;
+                        case "mm":
+                            commandWriteGraph.MemoryMapFile = keyValue[1];
+                            break;
                         default:
                             // the command splitting succeed but one of the arguments is unknown.
                             throw new CommandLineParserException("--write-graph",
@@ -139,12 +148,19 @@ namespace OsmSharpDataProcessor.Commands
             // create output stream.
             var graphStream = (new FileInfo(this.GraphFile)).Open(FileMode.Create);
 
+            // create memory mappped stream if option is there.
+            MemoryMappedStream memoryMappedStream = null;
+            if(!string.IsNullOrWhiteSpace(this.MemoryMapFile))
+            {
+                memoryMappedStream = new MemoryMappedStream((new FileInfo(this.MemoryMapFile)).Open(FileMode.Create));
+            }
+
             switch(this.GraphType)
             {
                 case GraphType.Regular:
-                    return new ProcessorTarget(LiveEdgeFlatfileStreamTarget.CreateTarget(graphStream));
+                    return new ProcessorTarget(LiveEdgeFlatfileStreamTarget.CreateTarget(graphStream, memoryMappedStream));
                 case GraphType.Contracted:
-                    return new ProcessorTarget(CHEdgeFlatfileStreamTarget.CreateTarget(graphStream, this.Vehicle));
+                    return new ProcessorTarget(CHEdgeFlatfileStreamTarget.CreateTarget(graphStream, this.Vehicle, memoryMappedStream));
             }
             throw new InvalidCommandException("Invalid command: " + this.ToString());
         }
