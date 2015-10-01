@@ -16,17 +16,14 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using OsmSharp.Math.Geo.Projections;
 using OsmSharp.UI.Map.Styles.MapCSS;
 using OsmSharp.UI.Map.Styles.MapCSS.v0_2.Domain;
-using System.IO;
-using OsmSharp.UI.Renderer.Scene;
-using OsmSharp.Math.Geo.Projections;
 using OsmSharp.UI.Map.Styles.Streams;
+using OsmSharp.UI.Renderer.Scene;
 using OsmSharpDataProcessor.Commands.Processors;
+using System.IO;
+using System.Linq;
 
 namespace OsmSharpDataProcessor.Commands
 {
