@@ -18,18 +18,14 @@
 
 using OsmSharp.Osm.PBF.Streams;
 using OsmSharpDataProcessor.Commands.Processors;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace OsmSharpDataProcessor.Commands
 {
     /// <summary>
-    /// A PBF reading command.
+    /// The write-pbf command.
     /// </summary>
-    public class CommandReadPBF : Command
+    public class CommandWritePBF : Command
     {
         /// <summary>
         /// Returns the switches for this command.
@@ -37,16 +33,16 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override string[] GetSwitch()
         {
-            return new string[] { "--rb", "--read-pbf" };
+            return new string[] { "--wb", "--write-pbf" };
         }
 
         /// <summary>
-        /// The file to read from.
+        /// The file to write to.
         /// </summary>
         public string File { get; set; }
 
         /// <summary>
-        /// Parse the command arguments for the read-pbf command.
+        /// Parse the command arguments for the write-xml command.
         /// </summary>
         /// <param name="args"></param>
         /// <param name="idx"></param>
@@ -57,24 +53,25 @@ namespace OsmSharpDataProcessor.Commands
             // check next argument.
             if (args.Length < idx)
             {
-                throw new CommandLineParserException("None", "Invalid file name for read-pbf command!");
+                throw new CommandLineParserException("None", "Invalid file name for write-xml command!");
             }
 
             // everything ok, take the next argument as the filename.
-            command = new CommandReadPBF()
-            {
-                File = args[idx]
-            };
+            command = new CommandWritePBF()
+                          {
+                              File = args[idx]
+                          };
             return 1;
         }
 
         /// <summary>
-        /// Creates the processor that corresponds to this command.
+        /// Creates a processor that corresponds to this command.
         /// </summary>
         /// <returns></returns>
         public override ProcessorBase CreateProcessor()
         {
-            return new ProcessorSource(new PBFOsmStreamSource(new FileInfo(this.File).OpenRead()));
+            var outputFile = new FileInfo(this.File);
+            return new ProcessorTarget(new PBFOsmStreamTarget(outputFile.Open(FileMode.OpenOrCreate)));
         }
 
         /// <summary>
@@ -83,7 +80,7 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("--read-pbf {0}", this.File);
+            return string.Format("--write-pbf {0}", this.File);
         }
     }
 }

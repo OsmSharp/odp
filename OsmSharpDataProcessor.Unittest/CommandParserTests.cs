@@ -99,7 +99,7 @@ namespace OsmSharpDataProcessor.Unittest
             Assert.AreEqual("somefile.osm", (commands[0] as CommandReadXml).File);
 
             // define short args.
-            args = new string[] { "-rx", "somefile.osm" };
+            args = new string[] { "--rx", "somefile.osm" };
 
             // parse.
             commands = CommandParser.ParseCommands(args);
@@ -130,7 +130,7 @@ namespace OsmSharpDataProcessor.Unittest
             Assert.AreEqual("somefile.osm", (commands[0] as CommandWriteXml).File);
 
             // define short args.
-            args = new string[] { "-wx", "somefile.osm" };
+            args = new string[] { "--wx", "somefile.osm" };
 
             // parse.
             commands = CommandParser.ParseCommands(args);
@@ -149,7 +149,7 @@ namespace OsmSharpDataProcessor.Unittest
         public void TestReadWriteXml()
         {
             // define some args.
-            var args = new string[] { "--read-xml", "somefile.osm", "-wx", "someotherfile.osm" };
+            var args = new string[] { "--read-xml", "somefile.osm", "--wx", "someotherfile.osm" };
 
             // parse.
             Command[] commands = CommandParser.ParseCommands(args);
@@ -164,13 +164,48 @@ namespace OsmSharpDataProcessor.Unittest
         }
 
         /// <summary>
+        /// Tests a real read-write pbf command.
+        /// </summary>
+        [Test]
+        public void TestReadWritePBF()
+        {
+            // define some args.
+            var args = new string[] { "--read-pbf", "somefile.osm.pbf", "--wb", "someotherfile.osm.pbf" };
+
+            // parse.
+            Command[] commands = CommandParser.ParseCommands(args);
+
+            // verify.
+            Assert.NotNull(commands);
+            Assert.AreEqual(2, commands.Length);
+            Assert.IsTrue(commands[0] is CommandReadPBF);
+            Assert.AreEqual("somefile.osm.pbf", (commands[0] as CommandReadPBF).File);
+            Assert.IsTrue(commands[1] is CommandWritePBF);
+            Assert.AreEqual("someotherfile.osm.pbf", (commands[1] as CommandWritePBF).File);
+
+            // define some args.
+            args = new string[] { "--rb", "somefile.osm.pbf", "--write-pbf", "someotherfile.osm.pbf" };
+
+            // parse.
+            commands = CommandParser.ParseCommands(args);
+
+            // verify.
+            Assert.NotNull(commands);
+            Assert.AreEqual(2, commands.Length);
+            Assert.IsTrue(commands[0] is CommandReadPBF);
+            Assert.AreEqual("somefile.osm.pbf", (commands[0] as CommandReadPBF).File);
+            Assert.IsTrue(commands[1] is CommandWritePBF);
+            Assert.AreEqual("someotherfile.osm.pbf", (commands[1] as CommandWritePBF).File);
+        }
+
+        /// <summary>
         /// Tests a write scene command.
         /// </summary>
         [Test]
         public void TestWriteScene()
         {
             // define some args.
-            var args = new string[] { "-rx", "somefile.osm", "--write-scene", "scene=scene.out", "css=scene.mapcss", "cutoffs=5,11,13,15,18" };
+            var args = new string[] { "--rx", "somefile.osm", "--write-scene", "scene=scene.out", "css=scene.mapcss", "cutoffs=5,11,13,15,18" };
 
             // parse.
             Command[] commands = CommandParser.ParseCommands(args);
@@ -199,7 +234,7 @@ namespace OsmSharpDataProcessor.Unittest
         public void TestWriteGraph()
         {
             // define some args.
-            var args = new string[] { "-rx", "somefile.osm", "--write-graph", "graph=graph.out", "type=contracted" };
+            var args = new string[] { "--rx", "somefile.osm", "--write-graph", "graph=graph.out", "type=contracted" };
 
             // parse.
             var commands = CommandParser.ParseCommands(args);

@@ -191,6 +191,7 @@
     <Compile Include="Commands\CommandReadXml.cs" />
     <Compile Include="Commands\CommandWriteGraph.cs" />
     <Compile Include="Commands\CommandWriteScene.cs" />
+    <Compile Include="Commands\CommandWritePBF.cs" />
     <Compile Include="Commands\CommandWriteXml.cs" />
     <Compile Include="Commands\Processors\ProcessorBase.cs" />
     <Compile Include="Commands\Processors\ProcessorCompleteTarget.cs" />
