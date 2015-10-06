@@ -120,12 +120,12 @@
       <HintPath>..\packages\Antlr3.Runtime.PCL.3.5.0.2\lib\portable-win+net40+sl40+wp\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OsmSharp, Version=0.0.0.44, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.Core.0.0.0.44-beta\lib\net45\OsmSharp.dll</HintPath>
+    <Reference Include="OsmSharp, Version=0.0.0.45, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OsmSharp.Core.0.0.0.45-beta\lib\net45\OsmSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OsmSharp.Osm, Version=0.0.0.44, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.Core.0.0.0.44-beta\lib\net45\OsmSharp.Osm.dll</HintPath>
+    <Reference Include="OsmSharp.Osm, Version=0.0.0.45, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OsmSharp.Core.0.0.0.45-beta\lib\net45\OsmSharp.Osm.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OsmSharp.Routing, Version=0.0.0.23, Culture=neutral, processorArchitecture=MSIL">
@@ -182,6 +182,7 @@
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandFilterBoundingBox.cs" />
     <Compile Include="Commands\CommandFilterMerge.cs" />
+    <Compile Include="Commands\CommandFilterGeoJson.cs" />
     <Compile Include="Commands\CommandFilterProgress.cs" />
     <Compile Include="Commands\CommandFilterSort.cs" />
     <Compile Include="Commands\CommandFilterPoly.cs" />

@@ -71,7 +71,11 @@ namespace OsmSharpDataProcessor.Commands
         public override ProcessorBase CreateProcessor()
         {
             var outputFile = new FileInfo(this.File);
-            return new ProcessorTarget(new PBFOsmStreamTarget(outputFile.Open(FileMode.OpenOrCreate)));
+            if (outputFile.Exists)
+            {
+                return new ProcessorTarget(new PBFOsmStreamTarget(outputFile.Open(FileMode.Truncate)));
+            }
+            return new ProcessorTarget(new PBFOsmStreamTarget(outputFile.Open(FileMode.Create)));
         }
 
         /// <summary>
