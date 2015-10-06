@@ -184,6 +184,7 @@
     <Compile Include="Commands\CommandFilterMerge.cs" />
     <Compile Include="Commands\CommandFilterProgress.cs" />
     <Compile Include="Commands\CommandFilterSort.cs" />
+    <Compile Include="Commands\CommandFilterPoly.cs" />
     <Compile Include="Commands\CommandFilterStyle.cs" />
     <Compile Include="Commands\CommandLineParserException.cs" />
     <Compile Include="CommandParser.cs" />

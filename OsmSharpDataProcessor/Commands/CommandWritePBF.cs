@@ -53,7 +53,7 @@ namespace OsmSharpDataProcessor.Commands
             // check next argument.
             if (args.Length < idx)
             {
-                throw new CommandLineParserException("None", "Invalid file name for write-xml command!");
+                throw new CommandLineParserException("None", "Invalid file name for write-pbf command!");
             }
 
             // everything ok, take the next argument as the filename.

@@ -31,6 +31,7 @@ namespace OsmSharpDataProcessor
             commands.Add(new CommandWriteScene());
             commands.Add(new CommandWriteXml());
             commands.Add(new CommandWritePBF());
+            commands.Add(new CommandFilterPoly());
 
             // use reflection to load others.
             var executingAssembly = Assembly.GetExecutingAssembly();

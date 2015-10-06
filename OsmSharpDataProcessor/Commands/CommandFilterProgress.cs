@@ -68,7 +68,7 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("--sort");
+            return string.Format("--progress");
         }
     }
 }
