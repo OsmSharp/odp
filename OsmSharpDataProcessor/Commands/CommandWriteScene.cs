@@ -38,7 +38,7 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override string[] GetSwitch()
         {
-            return new string[] { "-ws", "--write-scene" };
+            return new string[] { "--ws", "--write-scene" };
         }
 
         /// <summary>

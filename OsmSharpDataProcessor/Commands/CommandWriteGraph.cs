@@ -40,7 +40,7 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override string[] GetSwitch()
         {
-            return new string[] { "-wgr", "--write-graph" };
+            return new string[] { "--wgr", "--write-graph" };
         }
 
         /// <summary>

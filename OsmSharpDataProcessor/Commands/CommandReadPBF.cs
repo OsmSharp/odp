@@ -37,7 +37,7 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override string[] GetSwitch()
         {
-            return new string[] { "-rp", "--read-pbf" };
+            return new string[] { "--rp", "--read-pbf" };
         }
 
         /// <summary>

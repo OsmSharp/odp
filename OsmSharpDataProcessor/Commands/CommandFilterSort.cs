@@ -36,7 +36,7 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override string[] GetSwitch()
         {
-            return new string[] { "-so", "--sort" };
+            return new string[] { "--so", "--sort" };
         }
 
         /// <summary>

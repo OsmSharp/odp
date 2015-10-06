@@ -38,7 +38,7 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override string[] GetSwitch()
         {
-            return new string[] { "-bb", "--bounding-box" };
+            return new string[] { "--bb", "--bounding-box" };
         }
 
         /// <summary>

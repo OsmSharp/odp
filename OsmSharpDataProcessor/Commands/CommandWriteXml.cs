@@ -37,7 +37,7 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override string[] GetSwitch()
         {
-            return new string[] { "-wx", "--write-xml" };
+            return new string[] { "--wx", "--write-xml" };
         }
 
         /// <summary>
