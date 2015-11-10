@@ -59,10 +59,6 @@ namespace OsmSharpDataProcessor.Commands
         /// <summary>
         /// Parse the command arguments for the write-xml command.
         /// </summary>
-        /// <param name="args"></param>
-        /// <param name="idx"></param>
-        /// <param name="command"></param>
-        /// <returns></returns>
         public override int Parse(string[] args, int idx, out Command command)
         {
             CommandWriteScene commandWriteScene = new CommandWriteScene();

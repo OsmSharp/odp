@@ -16,15 +16,11 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using OsmSharp.Collections.Tags.Index;
 using OsmSharp.IO.MemoryMappedFiles;
-using OsmSharp.Routing;
-using OsmSharp.Routing.CH.Preprocessing;
-using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Osm.Interpreter;
+using OsmSharp.Routing.Osm.Vehicles;
+using OsmSharp.Routing.Profiles;
 using OsmSharpDataProcessor.Commands.Processors;
-using OsmSharpDataProcessor.Streams;
-using System;
+using Reminiscence.IO;
 using System.IO;
 
 namespace OsmSharpDataProcessor.Commands
@@ -46,17 +42,17 @@ namespace OsmSharpDataProcessor.Commands
         /// <summary>
         /// Gets or sets the graph output file.
         /// </summary>
-        public string GraphFile { get; set; }
+        public string File { get; set; }
 
         /// <summary>
-        /// Gets or sets the graph type.
+        /// Gets or sets the vehicles.
         /// </summary>
-        public GraphType GraphType { get; set; }
+        public OsmSharp.Routing.Osm.Vehicles.Vehicle[] Vehicles { get; set; }
 
         /// <summary>
-        /// Gets or sets the vehicle profile.
+        /// Gets or sets the contraction profiles.
         /// </summary>
-        public OsmSharp.Routing.Vehicles.Vehicle Vehicle { get; set; }
+        public OsmSharp.Routing.Profiles.Profile[] ContractionProfiles { get; set; }
 
         /// <summary>
         /// Gets or sets the memory-map file.
@@ -66,13 +62,10 @@ namespace OsmSharpDataProcessor.Commands
         /// <summary>
         /// Parse the command arguments for the write-xml command.
         /// </summary>
-        /// <param name="args"></param>
-        /// <param name="idx"></param>
-        /// <param name="command"></param>
-        /// <returns></returns>
         public override int Parse(string[] args, int idx, out Command command)
         {
-            CommandWriteGraph commandWriteGraph = new CommandWriteGraph();
+            var commandWriteGraph = new CommandWriteGraph();
+
             // check next argument.
             if (args.Length < idx)
             {
@@ -80,8 +73,10 @@ namespace OsmSharpDataProcessor.Commands
             }
 
             // set default vehicle to car.
-            commandWriteGraph.Vehicle = OsmSharp.Routing.Vehicles.Vehicle.Car;
-            commandWriteGraph.GraphType = GraphType.Regular;
+            commandWriteGraph.Vehicles = new OsmSharp.Routing.Osm.Vehicles.Vehicle[] 
+            {
+                Vehicle.Car
+            };
 
             // parse arguments and keep parsing until the next switch.
             int startIdx = idx;
@@ -96,28 +91,47 @@ namespace OsmSharpDataProcessor.Commands
                     switch (keyValue[0].ToLower())
                     {
                         case "graph":
-                            commandWriteGraph.GraphFile = keyValue[1];
+                            commandWriteGraph.File = keyValue[1];
                             break;
-                        case "type":
-                            string typeValue = keyValue[1].ToLower();
-                            switch (typeValue)
-                            {
-                                case "contracted":
-                                    commandWriteGraph.GraphType = GraphType.Contracted;
-                                    break;
+                        case "vehicles":
+                            string[] vehicleValues;
+                            if (CommandParser.SplitValuesArray(keyValue[1].ToLower(), out vehicleValues))
+                            { // split the values array.
+                                var vehicles = new Vehicle[vehicleValues.Length];
+                                for (int i = 0; i < vehicleValues.Length; i++)
+                                {
+                                    Vehicle vehicle;
+                                    if (!Vehicle.TryGetByUniqueName(vehicleValues[i], out vehicle))
+                                    {
+                                        throw new CommandLineParserException("--write-graph",
+                                            string.Format("Invalid parameter value for command --write-graph: Vehicle profile '{0}' not found.", 
+                                                vehicleValues[i]));
+                                    }
+                                    vehicles[i] = vehicle;
+                                }
+                                commandWriteGraph.Vehicles = vehicles;
                             }
                             break;
-                        case "vehicle":
-                            string vehicleValue = keyValue[1].ToLower();
-                            var vehicle = OsmSharp.Routing.Vehicles.Vehicle.GetByUniqueName(vehicleValue);
-                            if (vehicle == null)
-                            { // the vehicle with the given name was not detected.
-                                throw new CommandLineParserException("--write-graph",
-                                    string.Format("Invalid parameter for command --write-graph: vehicle={0} not found.", keyValue[1]));
+                        case "contract":
+                            string[] contractionProfileValues;
+                            if (CommandParser.SplitValuesArray(keyValue[1].ToLower(), out contractionProfileValues))
+                            { // split the values array.
+                                var profiles = new Profile[contractionProfileValues.Length];
+                                for (int i = 0; i < contractionProfileValues.Length; i++)
+                                {
+                                    Profile profile;
+                                    if (!Profile.TryGet(contractionProfileValues[i], out profile))
+                                    {
+                                        throw new CommandLineParserException("--write-graph",
+                                            string.Format("Invalid parameter value for command --write-graph: Profile '{0}' not found.",
+                                                contractionProfileValues[i]));
+                                    }
+                                    profiles[i] = profile;
+                                }
+                                commandWriteGraph.ContractionProfiles = profiles;
                             }
-                            commandWriteGraph.Vehicle = vehicle;
                             break;
-                        case "mm":
+                        case "map":
                             commandWriteGraph.MemoryMapFile = keyValue[1];
                             break;
                         default:
@@ -145,34 +159,69 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override ProcessorBase CreateProcessor()
         {
-            // create output stream.
-            var graphStream = (new FileInfo(this.GraphFile)).Open(FileMode.Create);
-
-            // create memory mappped stream if option is there.
-            MemoryMappedStream memoryMappedStream = null;
-            if(!string.IsNullOrWhiteSpace(this.MemoryMapFile))
+            try
             {
-                memoryMappedStream = new MemoryMappedStream((new FileInfo(this.MemoryMapFile)).Open(FileMode.Create));
-            }
+                // create output stream.
+                var graphStream = (new FileInfo(this.File)).Open(FileMode.Create);
 
-            switch(this.GraphType)
-            {
-                case GraphType.Regular:
-                    return new ProcessorTarget(LiveEdgeFlatfileStreamTarget.CreateTarget(graphStream, memoryMappedStream));
-                case GraphType.Contracted:
-                    return new ProcessorTarget(CHEdgeFlatfileStreamTarget.CreateTarget(graphStream, this.Vehicle, memoryMappedStream));
+                if (string.IsNullOrWhiteSpace(this.File))
+                {
+                    throw new InvalidCommandException("Invalid command: " + this.ToString());
+                }
+
+                // create memory mappped stream if option is there.
+                MemoryMap map = null;
+                if (!string.IsNullOrWhiteSpace(this.MemoryMapFile))
+                {
+                    map = new MemoryMapStream((new FileInfo(this.MemoryMapFile)).Open(FileMode.Create));
+                    return new ProcessorTarget(
+                        new Streams.RouterDbSerializerStreamTarget(graphStream, this.Vehicles, this.ContractionProfiles, map));
+                }
+                return new ProcessorTarget(
+                    new Streams.RouterDbSerializerStreamTarget(graphStream, this.Vehicles, this.ContractionProfiles));
             }
-            throw new InvalidCommandException("Invalid command: " + this.ToString());
+            catch
+            {
+                throw new InvalidCommandException("Invalid command: " + this.ToString());
+            }
         }
 
         /// <summary>
         /// Returns a description of this command.
         /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("--write-graph graph={0} type={1}",
-                this.GraphFile, this.GraphType);
+            var vehicles = string.Empty;
+            if(this.Vehicles != null &&
+               this.Vehicles.Length > 0)
+            {
+                vehicles = this.Vehicles[0].UniqueName;
+                for(var i = 1; i < this.Vehicles.Length; i++)
+                {
+                    vehicles += "," + this.Vehicles[i].UniqueName;
+                }
+            }
+            var profiles = string.Empty;
+            if (this.ContractionProfiles != null &&
+               this.ContractionProfiles.Length > 0)
+            {
+                profiles = this.ContractionProfiles[0].Name;
+                for (var i = 1; i < this.ContractionProfiles.Length; i++)
+                {
+                    profiles += "," + this.ContractionProfiles[i].Name;
+                }
+            }
+            var result = string.Format("--write-graph graph={0}",
+                this.File);
+            if (!string.IsNullOrEmpty(vehicles))
+            {
+                result += " vehicles=" + vehicles;
+            }
+            if (!string.IsNullOrEmpty(profiles))
+            {
+                result += " contract=" + profiles;
+            }
+            return result;
         }
     }
 

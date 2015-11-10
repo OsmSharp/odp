@@ -41,10 +41,10 @@ namespace OsmSharpDataProcessor
             OsmSharp.Logging.Log.RegisterListener(new global::OsmSharp.WinForms.UI.Logging.ConsoleTraceListener());
 
             // register OsmSharp vehicles.
-            OsmSharp.Routing.Vehicles.Vehicle.RegisterVehicles();
+            OsmSharp.Routing.Osm.Vehicles.Vehicle.RegisterVehicles();
 
             // parse commands first.
-            Command[] commands = CommandParser.ParseCommands(args);
+            var commands = CommandParser.ParseCommands(args);
 
             // convert commands into data processors.
             if (commands == null)

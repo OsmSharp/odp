@@ -16,10 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using OsmSharpDataProcessor.Commands;
 
@@ -234,7 +230,8 @@ namespace OsmSharpDataProcessor.Unittest
         public void TestWriteGraph()
         {
             // define some args.
-            var args = new string[] { "--rx", "somefile.osm", "--write-graph", "graph=graph.out", "type=contracted" };
+            var args = new string[] { "--rx", "somefile.osm", "--write-graph", "graph=graph.out", 
+                "vehicles=car,pedestrian", "contract=car.fastest" };
 
             // parse.
             var commands = CommandParser.ParseCommands(args);
@@ -245,8 +242,16 @@ namespace OsmSharpDataProcessor.Unittest
             Assert.IsTrue(commands[0] is CommandReadXml);
             Assert.AreEqual("somefile.osm", (commands[0] as CommandReadXml).File);
             Assert.IsTrue(commands[1] is CommandWriteGraph);
-            Assert.AreEqual("graph.out", (commands[1] as CommandWriteGraph).GraphFile);
-            Assert.AreEqual(GraphType.Contracted, (commands[1] as CommandWriteGraph).GraphType);
+            var commandWriteGraph = (commands[1] as CommandWriteGraph);
+            Assert.IsNotNull(commandWriteGraph);
+            Assert.AreEqual("graph.out", commandWriteGraph.File);
+            Assert.IsNotNull(commandWriteGraph.Vehicles);
+            Assert.AreEqual(2, commandWriteGraph.Vehicles.Length);
+            Assert.AreEqual("car", commandWriteGraph.Vehicles[0].UniqueName.ToLower());
+            Assert.AreEqual("pedestrian", commandWriteGraph.Vehicles[1].UniqueName.ToLower());
+            Assert.AreEqual(1, commandWriteGraph.ContractionProfiles.Length);
+            Assert.AreEqual(1, commandWriteGraph.ContractionProfiles.Length);
+            Assert.AreEqual("car.fastest", commandWriteGraph.ContractionProfiles[0].Name.ToLower());
         }
     }
 }
