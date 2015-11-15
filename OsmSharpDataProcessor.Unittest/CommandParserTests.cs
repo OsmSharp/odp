@@ -222,36 +222,5 @@ namespace OsmSharpDataProcessor.Unittest
             Assert.AreEqual(15, (commands[1] as CommandWriteScene).ZoomLevelCutoffs[3]);
             Assert.AreEqual(18, (commands[1] as CommandWriteScene).ZoomLevelCutoffs[4]);
         }
-
-        /// <summary>
-        /// Tests a write graph command.
-        /// </summary>
-        [Test]
-        public void TestWriteGraph()
-        {
-            // define some args.
-            var args = new string[] { "--rx", "somefile.osm", "--write-graph", "graph=graph.out", 
-                "vehicles=car,pedestrian", "contract=car.fastest" };
-
-            // parse.
-            var commands = CommandParser.ParseCommands(args);
-
-            // verify.
-            Assert.NotNull(commands);
-            Assert.AreEqual(2, commands.Length);
-            Assert.IsTrue(commands[0] is CommandReadXml);
-            Assert.AreEqual("somefile.osm", (commands[0] as CommandReadXml).File);
-            Assert.IsTrue(commands[1] is CommandWriteGraph);
-            var commandWriteGraph = (commands[1] as CommandWriteGraph);
-            Assert.IsNotNull(commandWriteGraph);
-            Assert.AreEqual("graph.out", commandWriteGraph.File);
-            Assert.IsNotNull(commandWriteGraph.Vehicles);
-            Assert.AreEqual(2, commandWriteGraph.Vehicles.Length);
-            Assert.AreEqual("car", commandWriteGraph.Vehicles[0].UniqueName.ToLower());
-            Assert.AreEqual("pedestrian", commandWriteGraph.Vehicles[1].UniqueName.ToLower());
-            Assert.AreEqual(1, commandWriteGraph.ContractionProfiles.Length);
-            Assert.AreEqual(1, commandWriteGraph.ContractionProfiles.Length);
-            Assert.AreEqual("car.fastest", commandWriteGraph.ContractionProfiles[0].Name.ToLower());
-        }
     }
 }

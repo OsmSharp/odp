@@ -1,5 +1,5 @@
 ﻿// OsmSharp - OpenStreetMap (OSM) SDK
-// Copyright (C) 2013 Abelshausen Ben
+// Copyright (C) 2015 Abelshausen Ben
 // 
 // This file is part of OsmSharp.
 // 
@@ -16,37 +16,55 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using OsmSharp.Osm.Streams;
+using OsmSharp.Routing;
+using OsmSharp.Routing.Profiles;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
-namespace OsmSharpDataProcessor.Commands.Processors
+namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
 {
     /// <summary>
-    /// Represents a processor that encapsulates a source or a task that depends on at least a filter/target to be executed.
+    /// A routerdb processor source.
     /// </summary>
-    public class ProcessorSource : ProcessorBase
+    public class RouterDbProcessorContract : ProcessorBase
     {
-        /// <summary>
-        /// Holds the osm stream source.
-        /// </summary>
-        private OsmStreamSource _source;
+        private readonly Profile _profile;
 
         /// <summary>
-        /// Creates a new processor source.
+        /// Creates a new processor contract.
         /// </summary>
-        /// <param name="source"></param>
-        public ProcessorSource(OsmStreamSource source)
+        public RouterDbProcessorContract(Profile profile)
         {
-            _source = source;
+            _profile = profile;
         }
+
+        private Func<RouterDb> _getSourceDb;
 
         /// <summary>
         /// Collapses the given list of processors by adding this one to it.
         /// </summary>
         public override void Collapse(List<ProcessorBase> processors)
         {
-            // just add to the list.
+            if (processors == null || processors.Count == 0) { throw new ArgumentOutOfRangeException(); }
+
+            if (processors.Count > 1)
+            { // cannot merge or write multiple router db's.
+                throw new Exception("Cannot register multiple processors.");
+            }
+            if (processors[0] is RouterDbProcessorSource)
+            { // ok there is a source, keep it around for execution.
+                _getSourceDb = (processors[0] as RouterDbProcessorSource).GetRouterDb();
+            }
+            if (processors[0] is ProcessorCreateRouterDb)
+            { // ok there is a source, keep it around for execution.
+                _getSourceDb = (processors[0] as ProcessorCreateRouterDb).GetRouterDb();
+            }
+            if (processors[0] is RouterDbProcessorContract)
+            { // ok there is a source, keep it around for execution.
+                _getSourceDb = (processors[0] as RouterDbProcessorContract).GetRouterDb();
+            }
+            processors.RemoveAt(0);
             processors.Add(this);
         }
 
@@ -75,14 +93,17 @@ namespace OsmSharpDataProcessor.Commands.Processors
         }
 
         /// <summary>
-        /// Returns the source from this processor source.
+        /// Gets the get router db function.
         /// </summary>
-        public virtual OsmStreamSource Source
+        /// <returns></returns>
+        public Func<RouterDb> GetRouterDb()
         {
-            get
+            return () =>
             {
-                return _source;
-            }
+                var db = _getSourceDb();
+                db.AddContracted(_profile);
+                return db;
+            };
         }
     }
 }

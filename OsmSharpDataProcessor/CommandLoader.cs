@@ -27,12 +27,15 @@ namespace OsmSharpDataProcessor
             commands.Add(new CommandFilterStyle());
             commands.Add(new CommandReadPBF());
             commands.Add(new CommandReadXml());
-            commands.Add(new CommandWriteGraph());
+            commands.Add(new CommandCreateRouterDb());
             commands.Add(new CommandWriteScene());
             commands.Add(new CommandWriteXml());
             commands.Add(new CommandWritePBF());
             commands.Add(new CommandFilterPoly());
             commands.Add(new CommandFilterGeoJson());
+            commands.Add(new Commands.RouterDbs.CommandRead());
+            commands.Add(new Commands.RouterDbs.CommandWrite());
+            commands.Add(new Commands.RouterDbs.CommandContract());
 
             // use reflection to load others.
             var executingAssembly = Assembly.GetExecutingAssembly();

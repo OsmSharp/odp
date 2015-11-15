@@ -16,16 +16,15 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using OsmSharp.Osm.PBF.Streams;
 using OsmSharpDataProcessor.Commands.Processors;
 using System.IO;
 
-namespace OsmSharpDataProcessor.Commands
+namespace OsmSharpDataProcessor.Commands.RouterDbs
 {
     /// <summary>
-    /// A PBF reading command.
+    /// A router db read command.
     /// </summary>
-    public class CommandReadPBF : Command
+    public class CommandRead : Command
     {
         /// <summary>
         /// Returns the switches for this command.
@@ -33,7 +32,7 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override string[] GetSwitch()
         {
-            return new string[] { "--rb", "--read-pbf" };
+            return new string[] { "--read-routerdb" };
         }
 
         /// <summary>
@@ -44,20 +43,16 @@ namespace OsmSharpDataProcessor.Commands
         /// <summary>
         /// Parse the command arguments for the read-pbf command.
         /// </summary>
-        /// <param name="args"></param>
-        /// <param name="idx"></param>
-        /// <param name="command"></param>
-        /// <returns></returns>
         public override int Parse(string[] args, int idx, out Command command)
         {
             // check next argument.
             if (args.Length < idx)
             {
-                throw new CommandLineParserException("None", "Invalid file name for read-pbf command!");
+                throw new CommandLineParserException("None", "Invalid file name for read-routerdb command!");
             }
 
             // everything ok, take the next argument as the filename.
-            command = new CommandReadPBF()
+            command = new RouterDbs.CommandRead()
             {
                 File = args[idx]
             };
@@ -70,7 +65,8 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override ProcessorBase CreateProcessor()
         {
-            return new ProcessorSource(new PBFOsmStreamSource(new FileInfo(this.File).OpenRead()));
+            return new Processors.RouterDbs.RouterDbProcessorSource(
+                    new FileInfo(this.File).OpenRead());
         }
 
         /// <summary>
@@ -79,7 +75,7 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("--read-pbf {0}", this.File);
+            return string.Format("--read-routerdb {0}", this.File);
         }
     }
 }

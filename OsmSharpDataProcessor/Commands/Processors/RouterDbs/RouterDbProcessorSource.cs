@@ -1,5 +1,5 @@
 ﻿// OsmSharp - OpenStreetMap (OSM) SDK
-// Copyright (C) 2013 Abelshausen Ben
+// Copyright (C) 2015 Abelshausen Ben
 // 
 // This file is part of OsmSharp.
 // 
@@ -16,29 +16,26 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using OsmSharp.Osm.Streams;
+using OsmSharp.Routing;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
-namespace OsmSharpDataProcessor.Commands.Processors
+namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
 {
     /// <summary>
-    /// Represents a processor that encapsulates a source or a task that depends on at least a filter/target to be executed.
+    /// A routerdb processor source.
     /// </summary>
-    public class ProcessorSource : ProcessorBase
+    public class RouterDbProcessorSource : ProcessorBase
     {
-        /// <summary>
-        /// Holds the osm stream source.
-        /// </summary>
-        private OsmStreamSource _source;
+        private readonly Stream _stream; // the source stream.
 
         /// <summary>
         /// Creates a new processor source.
         /// </summary>
-        /// <param name="source"></param>
-        public ProcessorSource(OsmStreamSource source)
+        public RouterDbProcessorSource(Stream stream)
         {
-            _source = source;
+            _stream = stream;
         }
 
         /// <summary>
@@ -46,7 +43,6 @@ namespace OsmSharpDataProcessor.Commands.Processors
         /// </summary>
         public override void Collapse(List<ProcessorBase> processors)
         {
-            // just add to the list.
             processors.Add(this);
         }
 
@@ -75,14 +71,15 @@ namespace OsmSharpDataProcessor.Commands.Processors
         }
 
         /// <summary>
-        /// Returns the source from this processor source.
+        /// Gets the get router db function.
         /// </summary>
-        public virtual OsmStreamSource Source
+        /// <returns></returns>
+        public Func<RouterDb> GetRouterDb()
         {
-            get
-            {
-                return _source;
-            }
+            return () =>
+                {
+                    return RouterDb.Deserialize(_stream, null);
+                };
         }
     }
 }

@@ -53,7 +53,6 @@ namespace OsmSharpDataProcessor.Commands.Processors
         /// <summary>
         /// Collapses the given list of processors by adding this one to it.
         /// </summary>
-        /// <param name="processors"></param>
         public override void Collapse(List<ProcessorBase> processors)
         {
             if (processors == null) { throw new ArgumentNullException("processors"); }

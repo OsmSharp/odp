@@ -28,7 +28,7 @@ namespace OsmSharpDataProcessor.Commands
     /// <summary>
     /// The graph-write command.
     /// </summary>
-    public class CommandWriteGraph : Command
+    public class CommandCreateRouterDb : Command
     {
         /// <summary>
         /// Returns the switches for this command.
@@ -36,13 +36,8 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override string[] GetSwitch()
         {
-            return new string[] { "--wgr", "--write-graph" };
+            return new string[] { "--create-routerdb" };
         }
-
-        /// <summary>
-        /// Gets or sets the graph output file.
-        /// </summary>
-        public string File { get; set; }
 
         /// <summary>
         /// Gets or sets the vehicles.
@@ -60,16 +55,16 @@ namespace OsmSharpDataProcessor.Commands
         public string MemoryMapFile { get; set; }
 
         /// <summary>
-        /// Parse the command arguments for the write-xml command.
+        /// Parse the command arguments for the command.
         /// </summary>
         public override int Parse(string[] args, int idx, out Command command)
         {
-            var commandWriteGraph = new CommandWriteGraph();
+            var commandWriteGraph = new CommandCreateRouterDb();
 
             // check next argument.
             if (args.Length < idx)
             {
-                throw new CommandLineParserException("None", "Invalid arguments for --write-graph!");
+                throw new CommandLineParserException("None", "Invalid arguments for --create-routerdb!");
             }
 
             // set default vehicle to car.
@@ -90,9 +85,6 @@ namespace OsmSharpDataProcessor.Commands
                     keyValue[1] = CommandParser.RemoveQuotes(keyValue[1]);
                     switch (keyValue[0].ToLower())
                     {
-                        case "graph":
-                            commandWriteGraph.File = keyValue[1];
-                            break;
                         case "vehicles":
                             string[] vehicleValues;
                             if (CommandParser.SplitValuesArray(keyValue[1].ToLower(), out vehicleValues))
@@ -103,8 +95,8 @@ namespace OsmSharpDataProcessor.Commands
                                     Vehicle vehicle;
                                     if (!Vehicle.TryGetByUniqueName(vehicleValues[i], out vehicle))
                                     {
-                                        throw new CommandLineParserException("--write-graph",
-                                            string.Format("Invalid parameter value for command --write-graph: Vehicle profile '{0}' not found.", 
+                                        throw new CommandLineParserException("--create-routerdb",
+                                            string.Format("Invalid parameter value for command --create-routerdb: Vehicle profile '{0}' not found.", 
                                                 vehicleValues[i]));
                                     }
                                     vehicles[i] = vehicle;
@@ -122,7 +114,7 @@ namespace OsmSharpDataProcessor.Commands
                                     Profile profile;
                                     if (!Profile.TryGet(contractionProfileValues[i], out profile))
                                     {
-                                        throw new CommandLineParserException("--write-graph",
+                                        throw new CommandLineParserException("--create-routerdb",
                                             string.Format("Invalid parameter value for command --write-graph: Profile '{0}' not found.",
                                                 contractionProfileValues[i]));
                                     }
@@ -136,13 +128,13 @@ namespace OsmSharpDataProcessor.Commands
                             break;
                         default:
                             // the command splitting succeed but one of the arguments is unknown.
-                            throw new CommandLineParserException("--write-graph",
-                                string.Format("Invalid parameter for command --write-graph: {0} not recognized.", keyValue[0]));
+                            throw new CommandLineParserException("--create-routerdb",
+                                string.Format("Invalid parameter for command --create-routerdb: {0} not recognized.", keyValue[0]));
                     }
                 }
                 else
                 { // the command splitting failed and this is not a switch.
-                    throw new CommandLineParserException("--write-graph", "Invalid parameter for command --write-graph.");
+                    throw new CommandLineParserException("--create-routerdb", "Invalid parameter for command --create-routerdb.");
                 }
 
                 idx++; // increase the index.
@@ -161,24 +153,14 @@ namespace OsmSharpDataProcessor.Commands
         {
             try
             {
-                // create output stream.
-                var graphStream = (new FileInfo(this.File)).Open(FileMode.Create);
-
-                if (string.IsNullOrWhiteSpace(this.File))
-                {
-                    throw new InvalidCommandException("Invalid command: " + this.ToString());
-                }
-
                 // create memory mappped stream if option is there.
                 MemoryMap map = null;
                 if (!string.IsNullOrWhiteSpace(this.MemoryMapFile))
                 {
                     map = new MemoryMapStream((new FileInfo(this.MemoryMapFile)).Open(FileMode.Create));
-                    return new ProcessorTarget(
-                        new Streams.RouterDbSerializerStreamTarget(graphStream, this.Vehicles, this.ContractionProfiles, map));
+                    return new ProcessorCreateRouterDb(map, this.Vehicles, this.ContractionProfiles);
                 }
-                return new ProcessorTarget(
-                    new Streams.RouterDbSerializerStreamTarget(graphStream, this.Vehicles, this.ContractionProfiles));
+                return new ProcessorCreateRouterDb(this.Vehicles, this.ContractionProfiles);
             }
             catch
             {
@@ -211,8 +193,7 @@ namespace OsmSharpDataProcessor.Commands
                     profiles += "," + this.ContractionProfiles[i].Name;
                 }
             }
-            var result = string.Format("--write-graph graph={0}",
-                this.File);
+            var result = "--create-routerdb";
             if (!string.IsNullOrEmpty(vehicles))
             {
                 result += " vehicles=" + vehicles;
