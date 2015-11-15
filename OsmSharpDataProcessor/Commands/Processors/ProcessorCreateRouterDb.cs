@@ -34,16 +34,18 @@ namespace OsmSharpDataProcessor.Commands.Processors
     {
         private readonly Vehicle[] _vehicles;
         private readonly Profile[] _contractionProfiles;
+        private readonly bool _allCore;
         private readonly MemoryMap _map;
 
         /// <summary>
         /// Creates a new processor.
         /// </summary>
         public ProcessorCreateRouterDb(Vehicle[] vehicles, 
-            Profile[] contractionProfiles)
+            Profile[] contractionProfiles, bool allCore)
         {
             _vehicles = vehicles;
             _contractionProfiles = contractionProfiles;
+            _allCore = allCore;
             _map = null;
         }
 
@@ -51,10 +53,11 @@ namespace OsmSharpDataProcessor.Commands.Processors
         /// Creates a new processor.
         /// </summary>
         public ProcessorCreateRouterDb(MemoryMap map, Vehicle[] vehicles,
-            Profile[] contractionProfiles)
+            Profile[] contractionProfiles, bool allCore)
         {
             _vehicles = vehicles;
             _contractionProfiles = contractionProfiles;
+            _allCore = allCore;
             _map = map;
         }
 
@@ -113,7 +116,7 @@ namespace OsmSharpDataProcessor.Commands.Processors
             return () =>
             {
                 var routerDb = new RouterDb();
-                routerDb.LoadOsmData(_source, _vehicles);
+                routerDb.LoadOsmData(_source, _allCore, _vehicles);
 
                 if(_contractionProfiles != null)
                 {

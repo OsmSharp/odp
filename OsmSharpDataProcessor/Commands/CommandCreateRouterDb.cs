@@ -55,6 +55,11 @@ namespace OsmSharpDataProcessor.Commands
         public string MemoryMapFile { get; set; }
 
         /// <summary>
+        /// Gets or sets the all core flag.
+        /// </summary>
+        public bool AllCore { get; set; }
+
+        /// <summary>
         /// Parse the command arguments for the command.
         /// </summary>
         public override int Parse(string[] args, int idx, out Command command)
@@ -72,6 +77,7 @@ namespace OsmSharpDataProcessor.Commands
             {
                 Vehicle.Car
             };
+            commandWriteGraph.AllCore = false;
 
             // parse arguments and keep parsing until the next switch.
             int startIdx = idx;
@@ -126,6 +132,13 @@ namespace OsmSharpDataProcessor.Commands
                         case "map":
                             commandWriteGraph.MemoryMapFile = keyValue[1];
                             break;
+                        case "allcore":
+                            if (!string.IsNullOrWhiteSpace(keyValue[1]) &&
+                                 keyValue[1].ToLowerInvariant() == "yes")
+                            {
+                                commandWriteGraph.AllCore = true;
+                            }
+                            break;
                         default:
                             // the command splitting succeed but one of the arguments is unknown.
                             throw new CommandLineParserException("--create-routerdb",
@@ -158,9 +171,9 @@ namespace OsmSharpDataProcessor.Commands
                 if (!string.IsNullOrWhiteSpace(this.MemoryMapFile))
                 {
                     map = new MemoryMapStream((new FileInfo(this.MemoryMapFile)).Open(FileMode.Create));
-                    return new ProcessorCreateRouterDb(map, this.Vehicles, this.ContractionProfiles);
+                    return new ProcessorCreateRouterDb(map, this.Vehicles, this.ContractionProfiles, this.AllCore);
                 }
-                return new ProcessorCreateRouterDb(this.Vehicles, this.ContractionProfiles);
+                return new ProcessorCreateRouterDb(this.Vehicles, this.ContractionProfiles, this.AllCore);
             }
             catch
             {
