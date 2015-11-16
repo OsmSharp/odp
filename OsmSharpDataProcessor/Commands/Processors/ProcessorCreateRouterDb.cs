@@ -115,7 +115,15 @@ namespace OsmSharpDataProcessor.Commands.Processors
         {
             return () =>
             {
-                var routerDb = new RouterDb();
+                RouterDb routerDb = null;
+                if(_map == null)
+                {
+                    routerDb = new RouterDb();
+                }
+                else
+                {
+                    routerDb = new RouterDb(_map);
+                }
                 routerDb.LoadOsmData(_source, _allCore, _vehicles);
 
                 if(_contractionProfiles != null)

@@ -95,19 +95,41 @@ namespace OsmSharpDataProcessor.Commands
                             string[] vehicleValues;
                             if (CommandParser.SplitValuesArray(keyValue[1].ToLower(), out vehicleValues))
                             { // split the values array.
-                                var vehicles = new Vehicle[vehicleValues.Length];
+                                var vehicles = new System.Collections.Generic.List<Vehicle>(vehicleValues.Length);
                                 for (int i = 0; i < vehicleValues.Length; i++)
                                 {
                                     Vehicle vehicle;
                                     if (!Vehicle.TryGetByUniqueName(vehicleValues[i], out vehicle))
                                     {
-                                        throw new CommandLineParserException("--create-routerdb",
-                                            string.Format("Invalid parameter value for command --create-routerdb: Vehicle profile '{0}' not found.", 
-                                                vehicleValues[i]));
+                                        if(vehicleValues[i] == "all")
+                                        { // all vehicles.
+                                            vehicles.Add(Vehicle.Bicycle);
+                                            vehicles.Add(Vehicle.BigTruck);
+                                            vehicles.Add(Vehicle.Bus);
+                                            vehicles.Add(Vehicle.Car);
+                                            vehicles.Add(Vehicle.Moped);
+                                            vehicles.Add(Vehicle.MotorCycle);
+                                            vehicles.Add(Vehicle.Pedestrian);
+                                            vehicles.Add(Vehicle.SmallTruck);
+                                        }
+                                        else if (vehicleValues[i] == "motorvehicle")
+                                        { // all motor vehicles.
+                                            vehicles.Add(Vehicle.BigTruck);
+                                            vehicles.Add(Vehicle.Bus);
+                                            vehicles.Add(Vehicle.Car);
+                                            vehicles.Add(Vehicle.MotorCycle);
+                                            vehicles.Add(Vehicle.SmallTruck);
+                                        }
+                                        else
+                                        {
+                                            throw new CommandLineParserException("--create-routerdb",
+                                                string.Format("Invalid parameter value for command --create-routerdb: Vehicle profile '{0}' not found.",
+                                                    vehicleValues[i]));
+                                        }
                                     }
                                     vehicles[i] = vehicle;
                                 }
-                                commandWriteGraph.Vehicles = vehicles;
+                                commandWriteGraph.Vehicles = vehicles.ToArray();
                             }
                             break;
                         case "contract":
