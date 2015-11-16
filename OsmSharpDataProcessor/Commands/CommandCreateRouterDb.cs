@@ -101,7 +101,7 @@ namespace OsmSharpDataProcessor.Commands
                                     Vehicle vehicle;
                                     if (!Vehicle.TryGetByUniqueName(vehicleValues[i], out vehicle))
                                     {
-                                        if(vehicleValues[i] == "all")
+                                        if (vehicleValues[i] == "all")
                                         { // all vehicles.
                                             vehicles.Add(Vehicle.Bicycle);
                                             vehicles.Add(Vehicle.BigTruck);
@@ -127,7 +127,10 @@ namespace OsmSharpDataProcessor.Commands
                                                     vehicleValues[i]));
                                         }
                                     }
-                                    vehicles[i] = vehicle;
+                                    else
+                                    {
+                                        vehicles[i] = vehicle;
+                                    }
                                 }
                                 commandWriteGraph.Vehicles = vehicles.ToArray();
                             }
