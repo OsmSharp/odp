@@ -129,7 +129,7 @@ namespace OsmSharpDataProcessor.Commands
                                     }
                                     else
                                     {
-                                        vehicles[i] = vehicle;
+                                        vehicles.Add(vehicle);
                                     }
                                 }
                                 commandWriteGraph.Vehicles = vehicles.ToArray();
