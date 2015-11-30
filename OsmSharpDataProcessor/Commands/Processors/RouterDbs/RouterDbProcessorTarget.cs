@@ -29,13 +29,15 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
     public class RouterDbProcessorTarget : ProcessorBase
     {
         private readonly Stream _stream; // the target stream.
+        private readonly string _fileName; // the filename.
 
         /// <summary>
         /// Creates a new processor target.
         /// </summary>
-        public RouterDbProcessorTarget(Stream stream)
+        public RouterDbProcessorTarget(Stream stream, string fileName)
         {
             _stream = stream;
+            _fileName = fileName;
         }
 
         private Func<RouterDb> _getSourceDb;
@@ -81,7 +83,17 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
         public override void Execute()
         {
             var db = _getSourceDb();
+
+            // add name-tag.
+            // the name is the part of the filename before the first '.'.
+            var i = _fileName.IndexOf('.');
+            if(i > 0)
+            { 
+                db.Meta.Add("name", _fileName.Substring(0, i));
+            }
+
             db.Serialize(_stream);
+
             _stream.Flush();
             _stream.Close();
         }

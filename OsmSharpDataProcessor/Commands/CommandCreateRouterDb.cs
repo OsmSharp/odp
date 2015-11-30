@@ -16,6 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
+using OsmSharp.Geo.Geometries;
 using OsmSharp.IO.MemoryMappedFiles;
 using OsmSharp.Routing.Osm.Vehicles;
 using OsmSharp.Routing.Profiles;
@@ -58,6 +59,11 @@ namespace OsmSharpDataProcessor.Commands
         /// Gets or sets the all core flag.
         /// </summary>
         public bool AllCore { get; set; }
+
+        /// <summary>
+        /// Gets or sets the poly file.
+        /// </summary>
+        public string Poly { get; set; }
 
         /// <summary>
         /// Parse the command arguments for the command.
@@ -157,6 +163,9 @@ namespace OsmSharpDataProcessor.Commands
                         case "map":
                             commandWriteGraph.MemoryMapFile = keyValue[1];
                             break;
+                        case "poly":
+                            commandWriteGraph.Poly = keyValue[1];
+                            break;
                         case "allcore":
                             if (!string.IsNullOrWhiteSpace(keyValue[1]) &&
                                  keyValue[1].ToLowerInvariant() == "yes")
@@ -191,14 +200,42 @@ namespace OsmSharpDataProcessor.Commands
         {
             try
             {
+                LineairRing ring = null;
+                if(!string.IsNullOrWhiteSpace(this.Poly))
+                { // poly file stream.
+                    var polyFile = new FileInfo(this.Poly);
+                    if(!polyFile.Exists)
+                    {
+                        throw new FileNotFoundException("Poly file not found.", polyFile.FullName);
+                    }
+                    using (var polyFileStream = polyFile.OpenRead())
+                    {
+                        var poly = OsmSharp.Geo.Streams.Poly.PolyFileConverter.ReadPolygon(polyFileStream);
+                        if (!(poly.Geometry is LineairRing) &&
+                           !(poly.Geometry is Polygon))
+                        { // oeps, no ring or polygon found.
+                            throw new System.Exception("Could not find a valid polygon to filter on based on poly file.");
+                        }
+                        if (poly.Geometry is LineairRing)
+                        {
+                            ring = poly.Geometry as LineairRing;
+                        }
+                        else
+                        {
+                            var polygon = poly.Geometry as Polygon;
+                            ring = polygon.Ring;
+                        }
+                    }
+                }
+
                 // create memory mappped stream if option is there.
                 MemoryMap map = null;
                 if (!string.IsNullOrWhiteSpace(this.MemoryMapFile))
                 {
                     map = new MemoryMapStream((new FileInfo(this.MemoryMapFile)).Open(FileMode.Create));
-                    return new ProcessorCreateRouterDb(map, this.Vehicles, this.ContractionProfiles, this.AllCore);
+                    return new ProcessorCreateRouterDb(map, this.Vehicles, this.ContractionProfiles, this.AllCore, ring);
                 }
-                return new ProcessorCreateRouterDb(this.Vehicles, this.ContractionProfiles, this.AllCore);
+                return new ProcessorCreateRouterDb(this.Vehicles, this.ContractionProfiles, this.AllCore, ring);
             }
             catch
             {

@@ -70,7 +70,11 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override ProcessorBase CreateProcessor()
         {
-            return new ProcessorSource(new PBFOsmStreamSource(new FileInfo(this.File).OpenRead()));
+            var file = new FileInfo(this.File);
+            var source = new PBFOsmStreamSource(file.OpenRead());
+            source.Meta.Add("filename", file.Name);
+
+            return new ProcessorSource(source);
         }
 
         /// <summary>

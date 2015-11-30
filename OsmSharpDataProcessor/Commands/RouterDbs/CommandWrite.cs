@@ -73,10 +73,10 @@ namespace OsmSharpDataProcessor.Commands.RouterDbs
             if (outputFile.Exists)
             {
                 return new Processors.RouterDbs.RouterDbProcessorTarget(
-                    outputFile.Open(FileMode.Truncate));
+                    outputFile.Open(FileMode.Truncate), outputFile.Name);
             }
             return new Processors.RouterDbs.RouterDbProcessorTarget(
-                outputFile.Open(FileMode.Create));
+                outputFile.Open(FileMode.Create), outputFile.Name);
         }
 
         /// <summary>

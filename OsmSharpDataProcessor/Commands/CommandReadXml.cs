@@ -16,13 +16,9 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using OsmSharp.Osm.Xml.Streams;
-using System.IO;
 using OsmSharpDataProcessor.Commands.Processors;
+using System.IO;
 
 namespace OsmSharpDataProcessor.Commands
 {
@@ -74,8 +70,11 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override ProcessorBase CreateProcessor()
         {
-            var inputFile = new FileInfo(this.File);
-            return new ProcessorSource(new XmlOsmStreamSource(inputFile.Open(FileMode.Open)));
+            var file = new FileInfo(this.File);
+            var source = new XmlOsmStreamSource(file.OpenRead());
+            source.Meta.Add("filename", file.Name);
+
+            return new ProcessorSource(source);
         }
 
         /// <summary>

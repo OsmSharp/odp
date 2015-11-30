@@ -16,6 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
+using OsmSharp;
+using OsmSharp.Geo.Geometries;
 using OsmSharp.Osm.Streams;
 using OsmSharp.Routing;
 using OsmSharp.Routing.Osm;
@@ -36,29 +38,32 @@ namespace OsmSharpDataProcessor.Commands.Processors
         private readonly Profile[] _contractionProfiles;
         private readonly bool _allCore;
         private readonly MemoryMap _map;
+        private readonly LineairRing _poly;
 
         /// <summary>
         /// Creates a new processor.
         /// </summary>
         public ProcessorCreateRouterDb(Vehicle[] vehicles, 
-            Profile[] contractionProfiles, bool allCore)
+            Profile[] contractionProfiles, bool allCore, LineairRing poly)
         {
             _vehicles = vehicles;
             _contractionProfiles = contractionProfiles;
             _allCore = allCore;
             _map = null;
+            _poly = poly;
         }
 
         /// <summary>
         /// Creates a new processor.
         /// </summary>
         public ProcessorCreateRouterDb(MemoryMap map, Vehicle[] vehicles,
-            Profile[] contractionProfiles, bool allCore)
+            Profile[] contractionProfiles, bool allCore, LineairRing poly)
         {
             _vehicles = vehicles;
             _contractionProfiles = contractionProfiles;
             _allCore = allCore;
             _map = map;
+            _poly = poly;
         }
 
         private OsmStreamSource _source;
@@ -125,6 +130,17 @@ namespace OsmSharpDataProcessor.Commands.Processors
                     routerDb = new RouterDb(_map);
                 }
                 routerDb.LoadOsmData(_source, _allCore, _vehicles);
+
+                var sourceMeta = _source.GetAllMeta();
+                sourceMeta.CopyToIfExists(routerDb.Meta, "poly");
+                sourceMeta.CopyToIfExists(routerDb.Meta, "bbox");
+                sourceMeta.CopyToIfExists(routerDb.Meta, "filename", "source_file");
+                routerDb.Meta.Add("creation_date", DateTime.Now.ToInvariantString());
+
+                if(_poly != null)
+                { // override the existing poly definition.
+                    routerDb.Meta.Add("poly", OsmSharp.Geo.Streams.GeoJson.GeoJsonConverter.ToGeoJson(_poly));
+                }
 
                 if(_contractionProfiles != null)
                 {
