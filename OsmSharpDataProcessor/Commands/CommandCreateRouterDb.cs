@@ -17,7 +17,6 @@
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using OsmSharp.Geo.Geometries;
-using OsmSharp.IO.MemoryMappedFiles;
 using OsmSharp.Routing.Osm.Vehicles;
 using OsmSharp.Routing.Profiles;
 using OsmSharpDataProcessor.Commands.Processors;
