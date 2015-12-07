@@ -133,8 +133,8 @@
       <HintPath>..\packages\OsmSharp.Core.0.0.0.65-beta\lib\net45\OsmSharp.Osm.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OsmSharp.Routing, Version=0.0.1.72, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.Routing.0.0.1.72-beta\lib\net45\OsmSharp.Routing.dll</HintPath>
+    <Reference Include="OsmSharp.Routing, Version=0.0.1.73, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OsmSharp.Routing.0.0.1.73-beta\lib\net45\OsmSharp.Routing.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OsmSharp.UI, Version=0.0.0.1084, Culture=neutral, processorArchitecture=MSIL">
@@ -153,8 +153,8 @@
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Reminiscence, Version=0.0.0.28, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Reminiscence.0.0.0.28-beta\lib\portable-net40+sl4+win8+wp7\Reminiscence.dll</HintPath>
+    <Reference Include="Reminiscence, Version=0.1.0.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Reminiscence.0.1.0.29-beta\lib\portable-net40+sl4+win8+wp7\Reminiscence.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

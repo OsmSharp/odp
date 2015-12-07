@@ -20,6 +20,7 @@ using OsmSharp;
 using OsmSharp.Geo.Geometries;
 using OsmSharp.Osm.Streams;
 using OsmSharp.Routing;
+using OsmSharp.Routing.Algorithms.Search;
 using OsmSharp.Routing.Osm;
 using OsmSharp.Routing.Osm.Vehicles;
 using OsmSharp.Routing.Profiles;
@@ -129,7 +130,15 @@ namespace OsmSharpDataProcessor.Commands.Processors
                 {
                     routerDb = new RouterDb(_map);
                 }
-                routerDb.LoadOsmData(_source, _allCore, _vehicles);
+
+                // load the data.
+                var target = new OsmSharp.Routing.Osm.Streams.RouterDbStreamTarget(routerDb,
+                    _vehicles, _allCore, new OsmSharp.Routing.Osm.Streams.NodeCoordinatesDictionary(65536 * 512));
+                target.RegisterSource(_source);
+                target.Pull();
+
+                // sort the network.
+                routerDb.Network.Sort();
 
                 var sourceMeta = _source.GetAllMeta();
                 sourceMeta.CopyToIfExists(routerDb.Meta, "poly");
