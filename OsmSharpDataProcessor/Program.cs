@@ -64,10 +64,13 @@ namespace OsmSharpDataProcessor
                 throw new Exception("Command list could not be interpreted. Make sure you have the correct source/filter/target combinations.");
             }
 
+            var performanceinfo = new PerformanceInfoConsumer("odp", 5000);
+            performanceinfo.Start();
             if(collapsedCommands[0].CanExecute)
             { // execute the last remaining fully collapsed command.
                 collapsedCommands[0].Execute();
             }
+            performanceinfo.Stop();
         }
     }
 }
