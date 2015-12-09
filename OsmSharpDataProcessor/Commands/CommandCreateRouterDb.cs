@@ -117,7 +117,8 @@ namespace OsmSharpDataProcessor.Commands
                                             vehicles.Add(Vehicle.Pedestrian);
                                             vehicles.Add(Vehicle.SmallTruck);
                                         }
-                                        else if (vehicleValues[i] == "motorvehicle")
+                                        else if (vehicleValues[i] == "motorvehicle" ||
+                                            vehicleValues[i] == "motorvehicles")
                                         { // all motor vehicles.
                                             vehicles.Add(Vehicle.BigTruck);
                                             vehicles.Add(Vehicle.Bus);

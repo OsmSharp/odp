@@ -92,7 +92,7 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
                 db.Meta.Add("name", _fileName.Substring(0, i));
             }
 
-            db.Serialize(_stream);
+            db.Serialize(_stream, true);
 
             _stream.Flush();
             _stream.Close();
