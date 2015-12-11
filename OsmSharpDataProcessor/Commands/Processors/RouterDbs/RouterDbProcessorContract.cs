@@ -27,7 +27,7 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
     /// <summary>
     /// A routerdb processor source.
     /// </summary>
-    public class RouterDbProcessorContract : ProcessorBase
+    public class RouterDbProcessorContract : ProcessorBase, IRouterDbSource
     {
         private readonly Profile _profile;
 

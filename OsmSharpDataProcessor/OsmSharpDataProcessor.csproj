@@ -128,8 +128,8 @@
       <HintPath>..\packages\OsmSharp.Core.0.0.0.69-beta\lib\net45\OsmSharp.Osm.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OsmSharp.Routing, Version=0.1.0.87, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.Routing.0.1.0.87-beta\lib\net45\OsmSharp.Routing.dll</HintPath>
+    <Reference Include="OsmSharp.Routing, Version=0.1.0.89, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OsmSharp.Routing.0.1.0.89-beta\lib\net45\OsmSharp.Routing.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OsmSharp.UI, Version=0.0.0.1084, Culture=neutral, processorArchitecture=MSIL">
@@ -187,12 +187,15 @@
     <Compile Include="Commands\Processors\ProcessorMergedFilter.cs" />
     <Compile Include="Commands\Processors\ProcessorSource.cs" />
     <Compile Include="Commands\Processors\ProcessorTarget.cs" />
+    <Compile Include="Commands\Processors\RouterDbs\IRouterDbSource.cs" />
     <Compile Include="Commands\Processors\RouterDbs\RouterDbProcessorContract.cs" />
     <Compile Include="Commands\Processors\RouterDbs\RouterDbProcessorSource.cs" />
     <Compile Include="Commands\Processors\RouterDbs\RouterDbProcessorTarget.cs" />
+    <Compile Include="Commands\Processors\RouterDbs\RouterDbProcessorTargetContracted.cs" />
     <Compile Include="Commands\RouterDbs\CommandContract.cs" />
     <Compile Include="Commands\RouterDbs\CommandRead.cs" />
     <Compile Include="Commands\RouterDbs\CommandWrite.cs" />
+    <Compile Include="Commands\RouterDbs\CommandWriteContracted.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="InvalidCommandException.cs" />
     <Compile Include="PerformanceInfoConsumer.cs" />

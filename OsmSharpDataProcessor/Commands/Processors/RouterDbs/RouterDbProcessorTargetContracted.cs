@@ -17,6 +17,7 @@
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using OsmSharp.Routing;
+using OsmSharp.Routing.Profiles;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,25 +25,42 @@ using System.IO;
 namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
 {
     /// <summary>
-    /// A routerdb processor source.
+    /// A routerdb stream target contracted.
     /// </summary>
-    public class RouterDbProcessorSource : ProcessorBase, IRouterDbSource
+    public class RouterDbProcessorTargetContracted : ProcessorBase, IRouterDbSource
     {
-        private readonly Stream _stream; // the source stream.
+        private readonly Stream _stream; // the target stream.
+        private readonly string _fileName; // the filename.
+        private readonly Profile _profile;
 
         /// <summary>
-        /// Creates a new processor source.
+        /// Creates a new processor target.
         /// </summary>
-        public RouterDbProcessorSource(Stream stream)
+        public RouterDbProcessorTargetContracted(Stream stream, string fileName, Profile profile)
         {
             _stream = stream;
+            _fileName = fileName;
+            _profile = profile;
         }
+
+        private Func<RouterDb> _getSourceDb;
 
         /// <summary>
         /// Collapses the given list of processors by adding this one to it.
         /// </summary>
         public override void Collapse(List<ProcessorBase> processors)
         {
+            if (processors == null || processors.Count == 0) { throw new ArgumentOutOfRangeException(); }
+
+            if (processors.Count > 1)
+            { // cannot merge or write multiple router db's.
+                throw new Exception("Cannot register multiple processors.");
+            }
+            if (processors[0] is IRouterDbSource)
+            { // ok there is a source, keep it around for execution.
+                _getSourceDb = (processors[0] as IRouterDbSource).GetRouterDb();
+            }
+            processors.RemoveAt(0);
             processors.Add(this);
         }
 
@@ -50,35 +68,40 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
         /// Returns true if this processor is ready.
         /// </summary>
         public override bool IsReady
-        { // a source is always ready.
-            get { return true; }
+        { // a source is always ready
+            get { return _getSourceDb != null; }
         }
 
         /// <summary>
         /// Executes the tasks or commands in this processor.
         /// </summary>
         public override void Execute()
-        { // a source cannot be executed.
-            throw new InvalidOperationException("This processor cannot be executed, check CanExecute before calling this method.");
+        {
+            this.GetRouterDb()();
         }
 
         /// <summary>
         /// Returns true if this processor can be executed.
         /// </summary>
         public override bool CanExecute
-        { // a source cannot be executed.
-            get { return false; }
+        { // a target can be executed.
+            get { return true; }
         }
 
         /// <summary>
-        /// Gets the get router db function.
+        /// Gets the router db.
         /// </summary>
         /// <returns></returns>
         public Func<RouterDb> GetRouterDb()
         {
             return () =>
                 {
-                    return RouterDb.Deserialize(_stream, null);
+                    var db = _getSourceDb();
+
+                    // serialize the contracted network.
+                    db.SerializeContracted(_profile, _stream);
+
+                    return db;
                 };
         }
     }
