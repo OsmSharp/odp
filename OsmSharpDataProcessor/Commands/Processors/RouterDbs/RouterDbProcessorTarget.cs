@@ -26,7 +26,7 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
     /// <summary>
     /// A routerdb stream target.
     /// </summary>
-    public class RouterDbProcessorTarget : ProcessorBase
+    public class RouterDbProcessorTarget : ProcessorBase, IRouterDbSource
     {
         private readonly Stream _stream; // the target stream.
         private readonly string _fileName; // the filename.
@@ -74,20 +74,7 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
         /// </summary>
         public override void Execute()
         {
-            var db = _getSourceDb();
-
-            // add name-tag.
-            // the name is the part of the filename before the first '.'.
-            var i = _fileName.IndexOf('.');
-            if(i > 0)
-            { 
-                db.Meta.Add("name", _fileName.Substring(0, i));
-            }
-
-            db.Serialize(_stream, true);
-
-            _stream.Flush();
-            _stream.Close();
+            this.GetRouterDb()();
         }
 
         /// <summary>
@@ -96,6 +83,33 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
         public override bool CanExecute
         { // a target can be executed.
             get { return true; }
+        }
+
+        /// <summary>
+        /// Gets the function to get the router db.
+        /// </summary>
+        /// <returns></returns>
+        public Func<RouterDb> GetRouterDb()
+        {
+            return () =>
+                {
+                    var db = _getSourceDb();
+
+                    // add name-tag.
+                    // the name is the part of the filename before the first '.'.
+                    var i = _fileName.IndexOf('.');
+                    if (i > 0)
+                    {
+                        db.Meta.Add("name", _fileName.Substring(0, i));
+                    }
+
+                    db.Serialize(_stream, true);
+
+                    _stream.Flush();
+                    _stream.Close();
+
+                    return db;
+                };
         }
     }
 }
