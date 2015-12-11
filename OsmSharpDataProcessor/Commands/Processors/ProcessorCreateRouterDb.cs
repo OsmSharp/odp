@@ -33,7 +33,7 @@ namespace OsmSharpDataProcessor.Commands.Processors
     /// <summary>
     /// A processor to create a router db.
     /// </summary>
-    class ProcessorCreateRouterDb : ProcessorBase
+    class ProcessorCreateRouterDb : ProcessorBase, RouterDbs.IRouterDbSource
     {
         private readonly Vehicle[] _vehicles;
         private readonly Profile[] _contractionProfiles;

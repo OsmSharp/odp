@@ -52,17 +52,9 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
             { // cannot merge or write multiple router db's.
                 throw new Exception("Cannot register multiple processors.");
             }
-            if (processors[0] is RouterDbProcessorSource)
+            if (processors[0] is IRouterDbSource)
             { // ok there is a source, keep it around for execution.
-                _getSourceDb = (processors[0] as RouterDbProcessorSource).GetRouterDb();
-            }
-            if (processors[0] is ProcessorCreateRouterDb)
-            { // ok there is a source, keep it around for execution.
-                _getSourceDb = (processors[0] as ProcessorCreateRouterDb).GetRouterDb();
-            }
-            if (processors[0] is RouterDbProcessorContract)
-            { // ok there is a source, keep it around for execution.
-                _getSourceDb = (processors[0] as RouterDbProcessorContract).GetRouterDb();
+                _getSourceDb = (processors[0] as IRouterDbSource).GetRouterDb();
             }
             processors.RemoveAt(0);
             processors.Add(this);

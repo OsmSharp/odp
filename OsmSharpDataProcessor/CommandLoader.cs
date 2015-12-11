@@ -37,6 +37,7 @@ namespace OsmSharpDataProcessor
             commands.Add(new Commands.RouterDbs.CommandWrite());
             commands.Add(new Commands.RouterDbs.CommandContract());
             commands.Add(new Commands.RouterDbs.CommandWriteContracted());
+            commands.Add(new Commands.RouterDbs.CommandMergeContracted());
 
             // use reflection to load others.
             var executingAssembly = Assembly.GetExecutingAssembly();

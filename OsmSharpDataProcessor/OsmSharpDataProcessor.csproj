@@ -188,10 +188,12 @@
     <Compile Include="Commands\Processors\ProcessorSource.cs" />
     <Compile Include="Commands\Processors\ProcessorTarget.cs" />
     <Compile Include="Commands\Processors\RouterDbs\IRouterDbSource.cs" />
+    <Compile Include="Commands\Processors\RouterDbs\RouterDbProcessorMergeContracted.cs" />
     <Compile Include="Commands\Processors\RouterDbs\RouterDbProcessorContract.cs" />
     <Compile Include="Commands\Processors\RouterDbs\RouterDbProcessorSource.cs" />
     <Compile Include="Commands\Processors\RouterDbs\RouterDbProcessorTarget.cs" />
     <Compile Include="Commands\Processors\RouterDbs\RouterDbProcessorTargetContracted.cs" />
+    <Compile Include="Commands\RouterDbs\CommandMergeContracted.cs" />
     <Compile Include="Commands\RouterDbs\CommandContract.cs" />
     <Compile Include="Commands\RouterDbs\CommandRead.cs" />
     <Compile Include="Commands\RouterDbs\CommandWrite.cs" />

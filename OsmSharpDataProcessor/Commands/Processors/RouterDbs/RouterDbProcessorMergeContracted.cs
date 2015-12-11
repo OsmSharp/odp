@@ -24,20 +24,18 @@ using System.IO;
 namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
 {
     /// <summary>
-    /// A routerdb stream target.
+    /// A processor to merge in an existing contracted graph.
     /// </summary>
-    public class RouterDbProcessorTarget : ProcessorBase
+    public class RouterDbProcessorMergeContracted : ProcessorBase, IRouterDbSource
     {
         private readonly Stream _stream; // the target stream.
-        private readonly string _fileName; // the filename.
 
         /// <summary>
-        /// Creates a new processor target.
+        /// Creates a new processor.
         /// </summary>
-        public RouterDbProcessorTarget(Stream stream, string fileName)
+        public RouterDbProcessorMergeContracted(Stream stream)
         {
             _stream = stream;
-            _fileName = fileName;
         }
 
         private Func<RouterDb> _getSourceDb;
@@ -73,29 +71,30 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
         /// Executes the tasks or commands in this processor.
         /// </summary>
         public override void Execute()
-        {
-            var db = _getSourceDb();
-
-            // add name-tag.
-            // the name is the part of the filename before the first '.'.
-            var i = _fileName.IndexOf('.');
-            if(i > 0)
-            { 
-                db.Meta.Add("name", _fileName.Substring(0, i));
-            }
-
-            db.Serialize(_stream, true);
-
-            _stream.Flush();
-            _stream.Close();
+        { // a source cannot be executed.
+            throw new InvalidOperationException("This processor cannot be executed, check CanExecute before calling this method.");
         }
 
         /// <summary>
         /// Returns true if this processor can be executed.
         /// </summary>
         public override bool CanExecute
-        { // a target can be executed.
-            get { return true; }
+        { // a source cannot be executed.
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Gets the get router db function.
+        /// </summary>
+        /// <returns></returns>
+        public Func<RouterDb> GetRouterDb()
+        {
+            return () =>
+            {
+                var db = _getSourceDb();
+                db.DeserializeAndAddContracted(_stream);
+                return db;
+            };
         }
     }
 }

@@ -99,7 +99,9 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
                     var db = _getSourceDb();
 
                     // serialize the contracted network.
+                    _stream.Seek(0, SeekOrigin.Begin);
                     db.SerializeContracted(_profile, _stream);
+                    _stream.Flush();
 
                     return db;
                 };
