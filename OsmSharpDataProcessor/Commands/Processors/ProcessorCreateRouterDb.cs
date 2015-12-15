@@ -133,7 +133,7 @@ namespace OsmSharpDataProcessor.Commands.Processors
 
                 // load the data.
                 var target = new OsmSharp.Routing.Osm.Streams.RouterDbStreamTarget(routerDb,
-                    _vehicles, _allCore, new OsmSharp.Routing.Osm.Streams.NodeCoordinatesDictionary(65536 * 512));
+                    _vehicles, _allCore);
                 target.RegisterSource(_source);
                 target.Pull();
 
