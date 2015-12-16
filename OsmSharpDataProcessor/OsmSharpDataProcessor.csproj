@@ -128,8 +128,8 @@
       <HintPath>..\packages\OsmSharp.Core.0.0.0.71-beta\lib\net45\OsmSharp.Osm.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OsmSharp.Routing, Version=0.1.0.91, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.Routing.0.1.0.91-beta\lib\net45\OsmSharp.Routing.dll</HintPath>
+    <Reference Include="OsmSharp.Routing, Version=0.1.0.93, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OsmSharp.Routing.0.1.0.93-beta\lib\net45\OsmSharp.Routing.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OsmSharp.UI, Version=0.0.0.1084, Culture=neutral, processorArchitecture=MSIL">
