@@ -26,6 +26,14 @@ namespace OsmSharpDataProcessor.Commands.Processors
     public abstract class ProcessorBase
     {
         /// <summary>
+        /// Creates a new processor base.
+        /// </summary>
+        public ProcessorBase()
+        {
+            this.Meta = new Dictionary<string, object>();
+        }
+
+        /// <summary>
         /// Collapses the given list of processors by adding this one to it.
         /// </summary>
         /// <param name="processors"></param>
@@ -54,5 +62,10 @@ namespace OsmSharpDataProcessor.Commands.Processors
         {
             get;
         }
+
+        /// <summary>
+        /// Keeps meta-objects about this processor.
+        /// </summary>
+        public Dictionary<string, object> Meta { get; private set; }
     }
 }

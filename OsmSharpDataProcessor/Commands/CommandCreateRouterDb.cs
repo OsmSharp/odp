@@ -168,7 +168,8 @@ namespace OsmSharpDataProcessor.Commands
                             break;
                         case "allcore":
                             if (!string.IsNullOrWhiteSpace(keyValue[1]) &&
-                                 keyValue[1].ToLowerInvariant() == "yes")
+                                 (keyValue[1].ToLowerInvariant() == "yes" ||
+                                  keyValue[1].ToLowerInvariant() == "true"))
                             {
                                 commandWriteGraph.AllCore = true;
                             }

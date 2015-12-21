@@ -158,6 +158,14 @@ namespace OsmSharpDataProcessor.Commands.Processors
                         routerDb.AddContracted(_contractionProfiles[i]);
                     }
                 }
+
+                // set processor meta.
+                if(_allCore)
+                {
+                    this.Meta["all_core"] = true;
+                    this.Meta["node_id_map"] = target.CoreNodeIdMap;
+                }
+
                 return routerDb;
             };
         }
