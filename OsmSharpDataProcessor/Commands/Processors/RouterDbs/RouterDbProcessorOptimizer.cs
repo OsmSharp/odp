@@ -96,6 +96,7 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
                 var db = _getSourceDb();
 
                 // remove vertices with only two neighbours when possible.
+                OsmSharp.Logging.Log.TraceEvent("Processor - Optimizer", OsmSharp.Logging.TraceEventType.Information, "Removing vertices...");
                 var optimizer = new OsmSharp.Routing.Algorithms.Networks.NetworkOptimizer(
                     db.Network, (EdgeData edgeData1, bool inverted1,
                         EdgeData edgeData2, bool inverted2, out EdgeData mergedEdgeData, out bool mergedInverted) =>
@@ -122,6 +123,8 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
                 optimizer.Run();
 
                 // remove edges of length zero.
+                OsmSharp.Logging.Log.TraceEvent("Processor - Optimizer", OsmSharp.Logging.TraceEventType.Information, 
+                    "Removing edges with length '0'...");
                 var removeZero = new OsmSharp.Routing.Algorithms.Networks.ZeroLengthLinksOptimizer(
                     db.Network, (data) =>
                     {

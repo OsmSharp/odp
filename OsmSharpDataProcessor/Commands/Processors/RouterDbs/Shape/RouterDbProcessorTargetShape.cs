@@ -125,6 +125,7 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs.Shape
         /// </summary>
         private static void WriteShape(string shapefile, RouterDb routerDb, IDictionary<uint, long> nodeIdMap)
         {
+            OsmSharp.Logging.Log.TraceEvent("Processor - Routerdb Shape Writer", OsmSharp.Logging.TraceEventType.Information, "Converting to geometries...");
             var features = new List<NetTopologySuite.Features.IFeature>();
             for (uint edgeId = 0; edgeId < routerDb.Network.EdgeCount; edgeId++)
             {
@@ -267,6 +268,7 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs.Shape
                 features.Add(new Feature(geometry, attributes));
             }
 
+            OsmSharp.Logging.Log.TraceEvent("Processor - Routerdb Shape Writer", OsmSharp.Logging.TraceEventType.Information, "Writing data...");
             var header = ShapefileDataWriter.GetHeader(features[0], features.Count);
             var shapeWriter = new ShapefileDataWriter(shapefile + ".shp", new GeometryFactory())
             {
