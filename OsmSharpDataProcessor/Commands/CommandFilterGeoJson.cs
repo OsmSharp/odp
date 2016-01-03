@@ -47,43 +47,17 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override int Parse(string[] args, int idx, out Command command)
         {
-            var commandFilterGeoJson = new CommandFilterGeoJson();
             // check next argument.
             if (args.Length < idx)
             {
-                throw new CommandLineParserException("None", "Invalid arguments for --bounding-geojson!");
+                throw new CommandLineParserException("None", "Invalid file name for --bounding-geojson command!");
             }
 
-            // parse arguments and keep parsing until the next switch.
-            int startIdx = idx;
-            while (args.Length > idx &&
-                !CommandParser.IsSwitch(args[idx]))
+            // everything ok, take the next argument as the filename.
+            command = new CommandFilterGeoJson()
             {
-                string[] keyValue;
-                if (CommandParser.SplitKeyValue(args[idx], out keyValue))
-                { // the command splitting succeeded.
-                    keyValue[0] = CommandParser.RemoveQuotes(keyValue[0]);
-                    keyValue[1] = CommandParser.RemoveQuotes(keyValue[1]);
-                    switch (keyValue[0].ToLower())
-                    {
-                        case "file":
-                            commandFilterGeoJson.File = keyValue[1];
-                            break;
-                        default:
-                            // the command splitting succeed but one of the arguments is unknown.
-                            throw new CommandLineParserException("--bounding-geojson",
-                                string.Format("Invalid parameter for command --bounding-geojson: {0} not recognized.", keyValue[0]));
-
-                    }
-                }
-                else
-                { // the command splitting failed and this is not a switch.
-                    throw new CommandLineParserException("--bounding-geojson", "Invalid parameter for command --bounding-geojson.");
-                }
-
-                idx++; // increase the index.
-            }
-            command = commandFilterGeoJson;
+                File = args[idx]
+            };
             return 1;
         }
 
