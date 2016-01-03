@@ -1,11 +1,18 @@
-OsmSharpDataProcessor is a simple tool that exposes some of OsmSharp's functionality and that acts as a tool to process OpenSteetMap-data to work better with OsmSharp.
+Osm(Sharp) Data Processor
+=========================
 
-Basic options of the OsmSharpDataProcessor are:
+ODP is a simple tool that exposes some of OsmSharp's functionality to act as a CLI tool to process OpenSteetMap-data.
+
+Basic supported features are:
 
 - Reading/writing OSM-XML (.osm).
-- Reading OSM-PBF (.osm.pbf).
+- Reading/writing OSM-PBF (.osm.pbf).
 - Merging multiple sources.
-- Writing to SQLite DB.
-- Writing to Redis DB.
-- Creating and writing OsmSharp-vector format file for rendering.
 - Creating and writing OsmSharp-routing format file.
+- Creating routable shapefiles based on OSM-data.
+
+Everything ODP can, you can also do by writing code and using OsmSharp and OsmSharp.Routing but this tool allows you to setup regular update processes for example.
+
+## Documentation
+
+All relevant documentation is on the [wiki](https://github.com/OsmSharp/odp/wiki). Only the features documented there are supported.
