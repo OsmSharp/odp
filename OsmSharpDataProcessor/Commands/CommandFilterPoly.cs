@@ -47,43 +47,17 @@ namespace OsmSharpDataProcessor.Commands
         /// <returns></returns>
         public override int Parse(string[] args, int idx, out Command command)
         {
-            var commandFilterPoly = new CommandFilterPoly();
             // check next argument.
             if (args.Length < idx)
             {
-                throw new CommandLineParserException("None", "Invalid arguments for --bounding-polygon!");
+                throw new CommandLineParserException("None", "Invalid file name for --bounding-polygon command!");
             }
 
-            // parse arguments and keep parsing until the next switch.
-            int startIdx = idx;
-            while (args.Length > idx &&
-                !CommandParser.IsSwitch(args[idx]))
+            // everything ok, take the next argument as the filename.
+            command = new CommandFilterPoly()
             {
-                string[] keyValue;
-                if (CommandParser.SplitKeyValue(args[idx], out keyValue))
-                { // the command splitting succeeded.
-                    keyValue[0] = CommandParser.RemoveQuotes(keyValue[0]);
-                    keyValue[1] = CommandParser.RemoveQuotes(keyValue[1]);
-                    switch (keyValue[0].ToLower())
-                    {
-                        case "file":
-                            commandFilterPoly.File = keyValue[1];
-                            break;
-                        default:
-                            // the command splitting succeed but one of the arguments is unknown.
-                            throw new CommandLineParserException("--bounding-polygon",
-                                string.Format("Invalid parameter for command --bounding-polygon: {0} not recognized.", keyValue[0]));
-
-                    }
-                }
-                else
-                { // the command splitting failed and this is not a switch.
-                    throw new CommandLineParserException("--bounding-polygon", "Invalid parameter for command --bounding-polygon.");
-                }
-
-                idx++; // increase the index.
-            }
-            command = commandFilterPoly;
+                File = args[idx]
+            };
             return 1;
         }
 
