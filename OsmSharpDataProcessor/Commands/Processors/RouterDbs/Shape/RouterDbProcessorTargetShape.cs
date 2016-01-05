@@ -126,6 +126,15 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs.Shape
         private static void WriteShape(string shapefile, RouterDb routerDb, IDictionary<uint, long> nodeIdMap)
         {
             OsmSharp.Logging.Log.TraceEvent("Processor - Routerdb Shape Writer", OsmSharp.Logging.TraceEventType.Information, "Converting to geometries...");
+
+            var forPedestrians = routerDb.Supports(Vehicle.Pedestrian.Fastest());
+            var forBicycle = routerDb.Supports(Vehicle.Bicycle.Fastest());
+
+            if(!routerDb.Supports(Vehicle.Car.Fastest()))
+            {
+                throw new Exception("Cannot write routable shapefile without the default 'car' profile being supported.");
+            }
+
             var features = new List<NetTopologySuite.Features.IFeature>();
             for (uint edgeId = 0; edgeId < routerDb.Network.EdgeCount; edgeId++)
             {
@@ -177,10 +186,16 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs.Shape
                     attributes.AddAttribute("oneway", "B");
                 }
 
-                var pedestrian = Vehicle.Pedestrian.CanTraverse(tags);
-                attributes.AddAttribute("byfoot", pedestrian);
-                var bicycle = Vehicle.Bicycle.CanTraverse(tags);
-                attributes.AddAttribute("bybicycle", bicycle);
+                if (forPedestrians)
+                {
+                    var pedestrian = Vehicle.Pedestrian.CanTraverse(tags);
+                    attributes.AddAttribute("byfoot", pedestrian);
+                }
+                if (forBicycle)
+                {
+                    var bicycle = Vehicle.Bicycle.CanTraverse(tags);
+                    attributes.AddAttribute("bybicycle", bicycle);
+                }
                 var car = Vehicle.Car.CanTraverse(tags);
                 attributes.AddAttribute("bycar", car);
 
