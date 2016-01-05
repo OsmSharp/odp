@@ -17,6 +17,7 @@
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using OsmSharp;
+using OsmSharp.Collections.Tags;
 using OsmSharp.Geo.Geometries;
 using OsmSharp.Osm.Streams;
 using OsmSharp.Routing;
@@ -38,6 +39,7 @@ namespace OsmSharpDataProcessor.Commands.Processors
         private readonly Vehicle[] _vehicles;
         private readonly Profile[] _contractionProfiles;
         private readonly bool _allCore;
+        private readonly bool _keepWayIds;
         private readonly MemoryMap _map;
         private readonly LineairRing _poly;
 
@@ -45,11 +47,12 @@ namespace OsmSharpDataProcessor.Commands.Processors
         /// Creates a new processor.
         /// </summary>
         public ProcessorCreateRouterDb(Vehicle[] vehicles, 
-            Profile[] contractionProfiles, bool allCore, LineairRing poly)
+            Profile[] contractionProfiles, bool allCore, bool keepWayIds, LineairRing poly)
         {
             _vehicles = vehicles;
             _contractionProfiles = contractionProfiles;
             _allCore = allCore;
+            _keepWayIds = keepWayIds;
             _map = null;
             _poly = poly;
         }
@@ -58,7 +61,7 @@ namespace OsmSharpDataProcessor.Commands.Processors
         /// Creates a new processor.
         /// </summary>
         public ProcessorCreateRouterDb(MemoryMap map, Vehicle[] vehicles,
-            Profile[] contractionProfiles, bool allCore, LineairRing poly)
+            Profile[] contractionProfiles, bool allCore, bool keepWayIds, LineairRing poly)
         {
             _vehicles = vehicles;
             _contractionProfiles = contractionProfiles;
@@ -134,7 +137,17 @@ namespace OsmSharpDataProcessor.Commands.Processors
                 // load the data.
                 var target = new OsmSharp.Routing.Osm.Streams.RouterDbStreamTarget(routerDb,
                     _vehicles, _allCore);
-                target.RegisterSource(_source);
+                if (_keepWayIds)
+                { // add way id's.
+                    var eventsFilter = new OsmSharp.Osm.Streams.Filters.OsmStreamFilterWithEvents();
+                    eventsFilter.MovedToNextEvent += EventsFilter_AddWayId;
+                    eventsFilter.RegisterSource(_source);
+                    target.RegisterSource(eventsFilter, false);
+                }
+                else
+                { // use the source as-is.
+                    target.RegisterSource(_source);
+                }
                 target.Pull();
 
                 // sort the network.
@@ -168,6 +181,36 @@ namespace OsmSharpDataProcessor.Commands.Processors
 
                 return routerDb;
             };
+        }
+
+        static OsmSharp.Osm.OsmGeo EventsFilter_AddWayId(OsmSharp.Osm.OsmGeo osmGeo, object param)
+        {
+            if (osmGeo.Type == OsmSharp.Osm.OsmGeoType.Way)
+            {
+                var tags = new TagsCollection(osmGeo.Tags);
+                foreach (var tag in tags)
+                {
+                    if (tag.Key == "bridge")
+                    {
+                        continue;
+                    }
+                    if (tag.Key == "tunnel")
+                    {
+                        continue;
+                    }
+                    if (tag.Key == "lanes")
+                    {
+                        continue;
+                    }
+                    if (!Vehicle.Car.IsRelevant(tag.Key, tag.Value))
+                    {
+                        osmGeo.Tags.RemoveKeyValue(tag.Key, tag.Value);
+                    }
+                }
+
+                osmGeo.Tags.Add("way_id", osmGeo.Id.ToString());
+            }
+            return osmGeo;
         }
     }
 }

@@ -60,6 +60,11 @@ namespace OsmSharpDataProcessor.Commands
         public bool AllCore { get; set; }
 
         /// <summary>
+        /// Gets or sets the keep way id's flag.
+        /// </summary>
+        public bool KeepWayIds { get; set; }
+
+        /// <summary>
         /// Gets or sets the poly file.
         /// </summary>
         public string Poly { get; set; }
@@ -174,6 +179,14 @@ namespace OsmSharpDataProcessor.Commands
                                 commandWriteGraph.AllCore = true;
                             }
                             break;
+                        case "keepwayids":
+                            if (!string.IsNullOrWhiteSpace(keyValue[1]) &&
+                                 (keyValue[1].ToLowerInvariant() == "yes" ||
+                                  keyValue[1].ToLowerInvariant() == "true"))
+                            {
+                                commandWriteGraph.KeepWayIds = true;
+                            }
+                            break;
                         default:
                             // the command splitting succeed but one of the arguments is unknown.
                             throw new CommandLineParserException("--create-routerdb",
@@ -234,9 +247,9 @@ namespace OsmSharpDataProcessor.Commands
                 if (!string.IsNullOrWhiteSpace(this.MemoryMapFile))
                 {
                     map = new MemoryMapStream((new FileInfo(this.MemoryMapFile)).Open(FileMode.Create));
-                    return new ProcessorCreateRouterDb(map, this.Vehicles, this.ContractionProfiles, this.AllCore, ring);
+                    return new ProcessorCreateRouterDb(map, this.Vehicles, this.ContractionProfiles, this.AllCore, this.KeepWayIds, ring);
                 }
-                return new ProcessorCreateRouterDb(this.Vehicles, this.ContractionProfiles, this.AllCore, ring);
+                return new ProcessorCreateRouterDb(this.Vehicles, this.ContractionProfiles, this.AllCore, this.KeepWayIds, ring);
             }
             catch
             {

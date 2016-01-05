@@ -219,13 +219,17 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs.Shape
                 attributes.AddAttribute("maxspeed_ve", maxSpeedVerified);
 
                 AddTo("name", attributes, tags);
-                AddTo("way_id", attributes, tags);
+                if (tags.ContainsKey("way_id"))
+                {
+                    AddTo("way_id", attributes, tags);
+                }
                 AddTo("tunnel", attributes, tags);
                 AddTo("bridge", attributes, tags);
                 long startid;
                 if (nodeIdMap == null)
                 { // use the vertex id's.
                     startid = edge.From;
+                    attributes.AddAttribute("startid", startid);
                 }
                 else
                 { // use the node id's.
@@ -242,6 +246,7 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs.Shape
                 if (nodeIdMap == null)
                 { // use the vertex id's.
                     endid = edge.To;
+                    attributes.AddAttribute("endid", endid);
                 }
                 else
                 { // use the node id's.
