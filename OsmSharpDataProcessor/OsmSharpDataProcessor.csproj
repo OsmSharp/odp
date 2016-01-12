@@ -230,6 +230,7 @@
     <Compile Include="Commands\Processors\RouterDbs\RouterDbProcessorSource.cs" />
     <Compile Include="Commands\Processors\RouterDbs\RouterDbProcessorTarget.cs" />
     <Compile Include="Commands\Processors\RouterDbs\RouterDbProcessorTargetContracted.cs" />
+    <Compile Include="Commands\Processors\RouterDbs\Shape\FeaturesList.cs" />
     <Compile Include="Commands\Processors\RouterDbs\Shape\FormOfWay.cs" />
     <Compile Include="Commands\Processors\RouterDbs\Shape\FunctionalRoadClass.cs" />
     <Compile Include="Commands\Processors\RouterDbs\Shape\RouterDbProcessorTargetShape.cs" />
