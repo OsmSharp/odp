@@ -1,5 +1,5 @@
 ﻿// OsmSharp - OpenStreetMap (OSM) SDK
-// Copyright (C) 2013 Abelshausen Ben
+// Copyright (C) 2016 Abelshausen Ben
 // 
 // This file is part of OsmSharp.
 // 
@@ -293,39 +293,5 @@ namespace OsmSharpDataProcessor.Commands
             }
             return result;
         }
-    }
-
-    /// <summary>
-    /// Graph type.
-    /// </summary>
-    public enum GraphType
-    {
-        /// <summary>
-        /// Regular graph definition.
-        /// </summary>
-        Regular,
-        /// <summary>
-        /// Contracted graph definition.
-        /// </summary>
-        Contracted
-    }
-
-    /// <summary>
-    /// Format type.
-    /// </summary>
-    public enum FormatType
-    {
-        /// <summary>
-        /// The flat-file format.
-        /// </summary>
-        Flat,
-        /// <summary>
-        /// The tiled format.
-        /// </summary>
-        Tiled,
-        /// <summary>
-        /// The mobile format.
-        /// </summary>
-        Mobile
     }
 }

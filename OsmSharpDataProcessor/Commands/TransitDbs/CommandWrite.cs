@@ -1,5 +1,5 @@
 ﻿// OsmSharp - OpenStreetMap (OSM) SDK
-// Copyright (C) 2015 Abelshausen Ben
+// Copyright (C) 2016 Abelshausen Ben
 // 
 // This file is part of OsmSharp.
 // 
@@ -17,15 +17,13 @@
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using OsmSharpDataProcessor.Commands.Processors;
-using OsmSharp.Routing.Profiles;
-using System.IO;
 
-namespace OsmSharpDataProcessor.Commands.RouterDbs
+namespace OsmSharpDataProcessor.Commands.TransitDbs
 {
     /// <summary>
-    /// A router db optimization command.
+    /// The write command.
     /// </summary>
-    public class CommandOptimize : Command
+    public class CommandWrite : Command
     {
         /// <summary>
         /// Returns the switches for this command.
@@ -33,24 +31,40 @@ namespace OsmSharpDataProcessor.Commands.RouterDbs
         /// <returns></returns>
         public override string[] GetSwitch()
         {
-            return new string[] { "--optimize" };
+            return new string[] { "--write-transitdb" };
         }
 
         /// <summary>
-        /// Parse the command arguments for the read-pbf command.
+        /// The file to write to.
+        /// </summary>
+        public string File { get; set; }
+
+        /// <summary>
+        /// Parse the command arguments for the write-transitdb command.
         /// </summary>
         public override int Parse(string[] args, int idx, out Command command)
         {
-            command = new RouterDbs.CommandOptimize(); ;
-            return 0;
+            // check next argument.
+            if (args.Length < idx)
+            {
+                throw new CommandLineParserException("None", "Invalid file name for write-transitdb command!");
+            }
+
+            // everything ok, take the next argument as the filename.
+            command = new CommandWrite()
+            {
+                File = args[idx]
+            };
+            return 1;
         }
 
         /// <summary>
-        /// Creates the processor that corresponds to this command.
+        /// Creates a processor that corresponds to this command.
         /// </summary>
+        /// <returns></returns>
         public override ProcessorBase CreateProcessor()
         {
-            return new Processors.RouterDbs.RouterDbProcessorOptimizer();
+            return new Processors.TransitDbs.ProcessorWrite(this.File);
         }
 
         /// <summary>
@@ -59,7 +73,7 @@ namespace OsmSharpDataProcessor.Commands.RouterDbs
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("--optimize");
+            return string.Format("--write-transitdb {0}", this.File);
         }
     }
 }

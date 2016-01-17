@@ -42,6 +42,8 @@ namespace OsmSharpDataProcessor
             commands.Add(new Commands.RouterDbs.CommandOptimize());
             commands.Add(new Commands.GTFS.CommandRead());
             commands.Add(new Commands.GTFS.CommandWrite());
+            commands.Add(new Commands.GTFS.CommandCreateTransitDb());
+            commands.Add(new Commands.TransitDbs.CommandWrite());
 
             return commands;
         }

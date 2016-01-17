@@ -176,6 +176,10 @@
       <HintPath>..\packages\OsmSharp.Routing.0.1.1-beta-0103-beta\lib\net45\OsmSharp.Routing.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="OsmSharp.Routing.Transit, Version=0.1.1.145, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OsmSharp.Transit.0.1.1-beta-0145\lib\net45\OsmSharp.Routing.Transit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="OsmSharp.UI, Version=0.0.0.1084, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OsmSharp.UI.0.0.0.1084-beta\lib\net45\OsmSharp.UI.dll</HintPath>
       <Private>True</Private>
@@ -228,9 +232,11 @@
     <Compile Include="Commands\CommandWriteScene.cs" />
     <Compile Include="Commands\CommandWritePBF.cs" />
     <Compile Include="Commands\CommandWriteXml.cs" />
+    <Compile Include="Commands\GTFS\CommandCreateTransitDb.cs" />
     <Compile Include="Commands\GTFS\CommandRead.cs" />
     <Compile Include="Commands\GTFS\CommandWrite.cs" />
     <Compile Include="Commands\Processors\GTFS\IGTFSSource.cs" />
+    <Compile Include="Commands\Processors\GTFS\ProcessorCreateTransitDb.cs" />
     <Compile Include="Commands\Processors\GTFS\ProcessorRead.cs" />
     <Compile Include="Commands\Processors\GTFS\ProcessorWrite.cs" />
     <Compile Include="Commands\Processors\ProcessorBase.cs" />
@@ -251,6 +257,9 @@
     <Compile Include="Commands\Processors\RouterDbs\Shape\FormOfWay.cs" />
     <Compile Include="Commands\Processors\RouterDbs\Shape\FunctionalRoadClass.cs" />
     <Compile Include="Commands\Processors\RouterDbs\Shape\RouterDbProcessorTargetShape.cs" />
+    <Compile Include="Commands\Processors\TransitDbs\ProcessorWrite.cs" />
+    <Compile Include="Commands\TransitDbs\CommandWrite.cs" />
+    <Compile Include="Commands\Processors\TransitDbs\ITransitDbSource.cs" />
     <Compile Include="Commands\RouterDbs\CommandMergeContracted.cs" />
     <Compile Include="Commands\RouterDbs\CommandContract.cs" />
     <Compile Include="Commands\RouterDbs\CommandOptimize.cs" />
