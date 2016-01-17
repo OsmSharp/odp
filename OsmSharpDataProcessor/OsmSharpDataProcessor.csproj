@@ -236,6 +236,7 @@
     <Compile Include="Commands\GTFS\CommandCreateTransitDb.cs" />
     <Compile Include="Commands\GTFS\CommandRead.cs" />
     <Compile Include="Commands\GTFS\CommandWrite.cs" />
+    <Compile Include="Commands\MultimodalDbs\CommandAddLinks.cs" />
     <Compile Include="Commands\MultimodalDbs\CommandWrite.cs" />
     <Compile Include="Commands\Processors\GTFS\IGTFSSource.cs" />
     <Compile Include="Commands\Processors\GTFS\ProcessorCreateMultimodalDb.cs" />
@@ -244,6 +245,7 @@
     <Compile Include="Commands\Processors\GTFS\ProcessorWrite.cs" />
     <Compile Include="Commands\Processors\MultimodalDbs\IMultimodalDbSource.cs" />
     <Compile Include="Commands\Processors\MultimodalDbs\ProcessorWrite.cs" />
+    <Compile Include="Commands\Processors\MultimodalDbs\ProcessorAddLinks.cs" />
     <Compile Include="Commands\Processors\ProcessorBase.cs" />
     <Compile Include="Commands\Processors\ProcessorCompleteTarget.cs" />
     <Compile Include="Commands\Processors\ProcessorCreateRouterDb.cs" />

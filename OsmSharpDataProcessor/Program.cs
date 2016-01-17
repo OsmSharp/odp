@@ -16,13 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using OsmSharp.Osm.Streams;
-using OsmSharp.Osm.Streams.Complete;
-using OsmSharp.Osm.Streams.Filters;
-using OsmSharp.Routing;
-using OsmSharpDataProcessor.Commands;
 using OsmSharpDataProcessor.Commands.Processors;
-using OsmSharpDataProcessor.Streams;
 using System;
 using System.Collections.Generic;
 
