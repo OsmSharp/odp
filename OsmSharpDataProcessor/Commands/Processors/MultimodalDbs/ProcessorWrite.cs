@@ -16,33 +16,32 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using GTFS;
-using GTFS.IO;
+using OsmSharp.Routing.Transit.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace OsmSharpDataProcessor.Commands.Processors.GTFS
+namespace OsmSharpDataProcessor.Commands.Processors.MultimodalDbs
 {
     /// <summary>
-    /// 
+    /// A write multimodaldb processor.
     /// </summary>
     public class ProcessorWrite : ProcessorBase
     {
         /// <summary>
-        /// Holds the path.
+        /// Holds the file.
         /// </summary>
-        private string _path;
+        private string _file;
 
         /// <summary>
-        /// Creates a new write feed processor.
+        /// Creates a new write multimodaldb processor.
         /// </summary>
-        public ProcessorWrite(string path)
+        public ProcessorWrite(string file)
         {
-            _path = path;
+            _file = file;
         }
 
-        private Func<GTFSFeed> _getFeed;
+        private Func<MultimodalDb> _getMultimodalDb;
 
         /// <summary>
         /// Collapses this processor if possible.
@@ -54,29 +53,23 @@ namespace OsmSharpDataProcessor.Commands.Processors.GTFS
             if (processors[processors.Count - 1] == null) { throw new ArgumentOutOfRangeException("processors", "The last processor in the processors list is null."); }
 
             // take the last processor and collapse.
-            if (processors[processors.Count - 1] is IGTFSSource)
+            if (processors[processors.Count - 1] is IMultimodalDbSource)
             { // ok, processor is a source.
-                var source = processors[processors.Count - 1] as IGTFSSource;
+                var source = processors[processors.Count - 1] as IMultimodalDbSource;
                 processors.RemoveAt(processors.Count - 1);
-
-                this.Source = source;
+                _getMultimodalDb = source.GetMultimodalDb();
                 processors.Add(this);
                 return;
             }
             throw new InvalidOperationException("Last processor before filter is not a source.");
         }
-
-        /// <summary>
-        /// Gets or sets the source for this writer.
-        /// </summary>
-        public IGTFSSource Source { get; set; }
-
+        
         /// <summary>
         /// Returns true if this writer is ready.
         /// </summary>
         public override bool IsReady
         {
-            get { return this.Source != null; }
+            get { return _getMultimodalDb != null; }
         }
 
         /// <summary>
@@ -84,19 +77,9 @@ namespace OsmSharpDataProcessor.Commands.Processors.GTFS
         /// </summary>
         public override void Execute()
         {
-            // read feed.
-            var feed = Source.GetFeed()();
-
-            // create directory if needed.
-            var directory = new DirectoryInfo(_path);
-            if (!directory.Exists)
-            {
-                directory.Create();
-            }
-
-            // write feed.
-            var feedWriter = new GTFSWriter<IGTFSFeed>();
-            feedWriter.Write(feed, new GTFSDirectoryTarget(directory));
+            var multimodalDb = _getMultimodalDb();
+    
+            multimodalDb.Serialize(File.OpenWrite(_file));
         }
 
         /// <summary>

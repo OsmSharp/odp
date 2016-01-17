@@ -21,23 +21,27 @@ using System;
 using System.Collections.Generic;
 using OsmSharp.Routing.Transit.GTFS;
 using OsmSharp.Routing.Transit.Data;
+using OsmSharpDataProcessor.Commands.Processors.RouterDbs;
+using OsmSharp.Routing;
+using OsmSharpDataProcessor.Commands.Processors.TransitDbs;
 
 namespace OsmSharpDataProcessor.Commands.Processors.GTFS
 {
     /// <summary>
     /// A processor to create transit db.
     /// </summary>
-    public class ProcessorCreateTransitDb : ProcessorBase, TransitDbs.ITransitDbSource
+    public class ProcessorCreateMultimodalDb : ProcessorBase, MultimodalDbs.IMultimodalDbSource
     {
         /// <summary>
         /// Creates a new processor.
         /// </summary>
-        public ProcessorCreateTransitDb()
+        public ProcessorCreateMultimodalDb()
         {
 
         }
 
-        private Func<GTFSFeed> _getFeed;
+        private Func<TransitDb> _getTransitDb;
+        private Func<RouterDb> _getRouterDb;
 
         /// <summary>
         /// Collapses the given list of processors by adding this one to it.
@@ -46,10 +50,24 @@ namespace OsmSharpDataProcessor.Commands.Processors.GTFS
         {
             if (processors == null || processors.Count == 0) { throw new ArgumentOutOfRangeException(); }
             
-            if (processors[processors.Count - 1] is IGTFSSource)
-            { // ok there is a source, keep it around for execution.
-                _getFeed = (processors[processors.Count - 1] as IGTFSSource).GetFeed();
+            // ok combine the transit db and the router db into one multimodal db.
+            if (processors[0] is ITransitDbSource &&
+                processors[1] is IRouterDbSource)
+            {
+                _getTransitDb = (processors[0] as ITransitDbSource).GetTransitDb();
+                _getRouterDb = (processors[1] as IRouterDbSource).GetRouterDb();
             }
+            else if(processors[1] is ITransitDbSource &&
+                processors[0] is IRouterDbSource)
+            {
+                _getTransitDb = (processors[1] as ITransitDbSource).GetTransitDb();
+                _getRouterDb = (processors[0] as IRouterDbSource).GetRouterDb();
+            }
+            else
+            {
+                throw new Exception("Creating a multimodal requires a transit db an a router db source.");
+            }
+            processors.RemoveAt(processors.Count - 1);
             processors.RemoveAt(processors.Count - 1);
             processors.Add(this);
         }
@@ -82,18 +100,14 @@ namespace OsmSharpDataProcessor.Commands.Processors.GTFS
         /// Gets the get transit db function.
         /// </summary>
         /// <returns></returns>
-        public Func<TransitDb> GetTransitDb()
+        public Func<MultimodalDb> GetMultimodalDb()
         {
             return () =>
             {
-                var feed = this._getFeed();
+                var transitDb = this._getTransitDb();
+                var routerDb = this._getRouterDb();
 
-                var transitDb = new TransitDb();
-                transitDb.LoadFrom(feed);
-
-                transitDb.SortConnections(DefaultSorting.DepartureTime, null);
-
-                return transitDb;
+                return new MultimodalDb(routerDb, transitDb);
             };
         }
     }

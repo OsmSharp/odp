@@ -48,16 +48,12 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs
         public override void Collapse(List<ProcessorBase> processors)
         {
             if (processors == null || processors.Count == 0) { throw new ArgumentOutOfRangeException(); }
-
-            if(processors.Count > 1)
-            { // cannot merge or write multiple router db's.
-                throw new Exception("Cannot register multiple processors.");
-            }
-            if (processors[0] is IRouterDbSource)
+            
+            if (processors[processors.Count - 1] is IRouterDbSource)
             { // ok there is a source, keep it around for execution.
-                _getSourceDb = (processors[0] as IRouterDbSource).GetRouterDb();
+                _getSourceDb = (processors[processors.Count - 1] as IRouterDbSource).GetRouterDb();
             }
-            processors.RemoveAt(0);
+            processors.RemoveAt(processors.Count - 1);
             processors.Add(this);
         }
 

@@ -43,7 +43,10 @@ namespace OsmSharpDataProcessor
             commands.Add(new Commands.GTFS.CommandRead());
             commands.Add(new Commands.GTFS.CommandWrite());
             commands.Add(new Commands.GTFS.CommandCreateTransitDb());
+            commands.Add(new Commands.CommandCreateMultimodalDb());
             commands.Add(new Commands.TransitDbs.CommandWrite());
+            commands.Add(new Commands.TransitDbs.CommandRead());
+            commands.Add(new Commands.MultimodalDbs.CommandWrite());
 
             return commands;
         }
