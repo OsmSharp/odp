@@ -40,6 +40,8 @@ namespace OsmSharpDataProcessor
             commands.Add(new Commands.RouterDbs.CommandMergeContracted());
             commands.Add(new Commands.RouterDbs.CommandWriteShape());
             commands.Add(new Commands.RouterDbs.CommandOptimize());
+            commands.Add(new Commands.GTFS.CommandRead());
+            commands.Add(new Commands.GTFS.CommandWrite());
 
             return commands;
         }

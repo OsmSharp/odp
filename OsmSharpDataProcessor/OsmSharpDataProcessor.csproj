@@ -124,6 +124,18 @@
       <HintPath>..\packages\GeoAPI.1.7.4\lib\net45\GeoAPI.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GTFS, Version=1.3.6.102, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GTFS.1.3.6-rc1-0102\lib\net40\GTFS.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GTFS.IO, Version=1.3.6.102, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GTFS.1.3.6-rc1-0102\lib\net40\GTFS.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GTFS.IO.Desktop, Version=1.3.6.102, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GTFS.1.3.6-rc1-0102\lib\net40\GTFS.IO.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NetTopologySuite, Version=1.14.0.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
       <HintPath>..\packages\NetTopologySuite.1.14\lib\net45\NetTopologySuite.dll</HintPath>
       <Private>True</Private>
@@ -216,6 +228,11 @@
     <Compile Include="Commands\CommandWriteScene.cs" />
     <Compile Include="Commands\CommandWritePBF.cs" />
     <Compile Include="Commands\CommandWriteXml.cs" />
+    <Compile Include="Commands\GTFS\CommandRead.cs" />
+    <Compile Include="Commands\GTFS\CommandWrite.cs" />
+    <Compile Include="Commands\Processors\GTFS\IGTFSSource.cs" />
+    <Compile Include="Commands\Processors\GTFS\ProcessorRead.cs" />
+    <Compile Include="Commands\Processors\GTFS\ProcessorWrite.cs" />
     <Compile Include="Commands\Processors\ProcessorBase.cs" />
     <Compile Include="Commands\Processors\ProcessorCompleteTarget.cs" />
     <Compile Include="Commands\Processors\ProcessorCreateRouterDb.cs" />
