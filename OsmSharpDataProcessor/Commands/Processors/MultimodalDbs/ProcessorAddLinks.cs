@@ -90,6 +90,9 @@ namespace OsmSharpDataProcessor.Commands.Processors.MultimodalDbs
             return () =>
             {
                 var db = _getMultimodalDb();
+                
+                OsmSharp.Logging.Log.TraceEvent("Processor - Add Links", OsmSharp.Logging.TraceEventType.Information,
+                    "Adding stop links - for {0} ...", _profile.Name);
                 db.AddStopLinksDb(_profile);
                 return db;
             };

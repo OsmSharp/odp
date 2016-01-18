@@ -104,6 +104,10 @@ namespace OsmSharpDataProcessor.Commands.Processors.TransitDbs
                     "Sorting connections...");
                 transitDb.SortConnections(DefaultSorting.DepartureTime, null);
 
+                OsmSharp.Logging.Log.TraceEvent("Processor - Merge", OsmSharp.Logging.TraceEventType.Information,
+                    "Sorting stops...");
+                transitDb.SortStops();
+
                 return transitDb;
             };
         }

@@ -65,9 +65,12 @@ namespace OsmSharpDataProcessor.Commands.Processors.TransitDbs
             }
         }
 
+        /// <summary>
+        /// Executes this processor.
+        /// </summary>
         public override void Execute()
         {
-
+            throw new Exception("Processor cannot be executed.");
         }
 
         /// <summary>
@@ -101,6 +104,8 @@ namespace OsmSharpDataProcessor.Commands.Processors.TransitDbs
             {
                 var db = _getTransitDb();
 
+                OsmSharp.Logging.Log.TraceEvent("Processor - Add Transfers", OsmSharp.Logging.TraceEventType.Information,
+                    "Adding tranfers - max {0}s for {1} ...", _seconds, _profile.Name);
                 db.AddTransfersDb(_profile, new TagsCollection(Tag.Create("highway", "residential")), _seconds);
 
                 return db;
