@@ -172,13 +172,13 @@
       <HintPath>..\packages\OsmSharp.Core.1.0.2\lib\net45\OsmSharp.Osm.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OsmSharp.Routing, Version=0.1.1.103, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.Routing.0.1.1-beta-0103-beta\lib\net45\OsmSharp.Routing.dll</HintPath>
+    <Reference Include="OsmSharp.Routing, Version=0.1.1.114, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OsmSharp.Routing.0.1.1-beta-0114\lib\net45\OsmSharp.Routing.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OsmSharp.Routing.Transit, Version=0.1.1.145, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\transit\Output\OsmSharp.Routing.Transit.dll</HintPath>
+    <Reference Include="OsmSharp.Routing.Transit, Version=0.1.1.147, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OsmSharp.Transit.0.1.1-beta-0147\lib\net45\OsmSharp.Routing.Transit.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="OsmSharp.UI, Version=0.0.0.1084, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OsmSharp.UI.0.0.0.1084-beta\lib\net45\OsmSharp.UI.dll</HintPath>
