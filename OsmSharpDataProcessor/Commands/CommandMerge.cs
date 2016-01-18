@@ -16,11 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using OsmSharp.Osm.Streams.Filters;
 using OsmSharpDataProcessor.Streams;
 using OsmSharpDataProcessor.Commands.Processors;
 
@@ -29,12 +24,11 @@ namespace OsmSharpDataProcessor.Commands
     /// <summary>
     /// A merge filter command.
     /// </summary>
-    public class CommandFilterMerge : Command
+    public class CommandMerge : Command
     {
         /// <summary>
         /// Returns the switches for this command.
         /// </summary>
-        /// <returns></returns>
         public override string[] GetSwitch()
         {
             return new string[] { "--m", "--merge" };
@@ -43,30 +37,24 @@ namespace OsmSharpDataProcessor.Commands
         /// <summary>
         /// Parses the command line arguments for the merge command.
         /// </summary>
-        /// <param name="args"></param>
-        /// <param name="idx"></param>
-        /// <param name="command"></param>
-        /// <returns></returns>
         public override int Parse(string[] args, int idx, out Command command)
         {
             // everything ok, there are no arguments.
-            command = new CommandFilterMerge();
+            command = new CommandMerge();
             return 0;
         }
 
         /// <summary>
         /// Returns the processor that corresponds to this filter.
         /// </summary>
-        /// <returns></returns>
         public override ProcessorBase CreateProcessor()
         {
-            return new ProcessorMergedFilter(new MergedOsmStreamSource());
+            return new ProcessorMerge();
         }
 
         /// <summary>
         /// Returns a description of this command.
         /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             return string.Format("--merge");

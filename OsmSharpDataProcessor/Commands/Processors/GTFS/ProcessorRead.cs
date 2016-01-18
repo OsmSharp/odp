@@ -85,6 +85,9 @@ namespace OsmSharpDataProcessor.Commands.Processors.GTFS
                 // create the reader.
                 var reader = new GTFSReader<GTFSFeed>(false);
 
+                OsmSharp.Logging.Log.TraceEvent("Processor - Read", OsmSharp.Logging.TraceEventType.Information,
+                    "Reading GTFS from {0}...", _path);
+
                 // execute the reader.
                 return reader.Read(new GTFSDirectorySource(new DirectoryInfo(_path)));
             };

@@ -16,34 +16,59 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using GTFS;
-using GTFS.IO;
-using OsmSharp.Routing.Transit.Data;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using OsmSharp.Routing.Profiles;
+using OsmSharp.Routing.Transit.Data;
+using OsmSharp.Collections.Tags;
 
 namespace OsmSharpDataProcessor.Commands.Processors.TransitDbs
 {
     /// <summary>
-    /// A write transitdb processor.
+    /// A processor to add transfers.
     /// </summary>
-    public class ProcessorWrite : ProcessorBase
+    public class ProcessorAddTransfers : ProcessorBase, ITransitDbSource
     {
-        /// <summary>
-        /// Holds the file.
-        /// </summary>
-        private string _file;
+        private readonly Profile _profile;
+        private readonly float _seconds;
 
         /// <summary>
-        /// Creates a new write transitdb processor.
+        /// Creates a processor to add transfers.
         /// </summary>
-        public ProcessorWrite(string file)
+        public ProcessorAddTransfers(Profile profile, float seconds)
         {
-            _file = file;
+            _profile = profile;
+            _seconds = seconds;
         }
 
         private Func<TransitDb> _getTransitDb;
+
+        /// <summary>
+        /// Can never execute on it's own.
+        /// </summary>
+        public override bool CanExecute
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Is always ready.
+        /// </summary>
+        public override bool IsReady
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override void Execute()
+        {
+
+        }
 
         /// <summary>
         /// Collapses this processor if possible.
@@ -65,40 +90,21 @@ namespace OsmSharpDataProcessor.Commands.Processors.TransitDbs
             }
             throw new InvalidOperationException("Last processor before filter is not a source.");
         }
-        
-        /// <summary>
-        /// Returns true if this writer is ready.
-        /// </summary>
-        public override bool IsReady
-        {
-            get { return _getTransitDb != null; }
-        }
 
         /// <summary>
-        /// Executes this processor.
+        /// Gets the function to get the transit db.
         /// </summary>
-        public override void Execute()
+        /// <returns></returns>
+        public Func<TransitDb> GetTransitDb()
         {
-            var transitDb = _getTransitDb();
-
-            if(transitDb.ConnectionSorting == null)
+            return () =>
             {
-                throw new Exception("Transitdb connections need to be sorted before serialization.");
-            }
+                var db = _getTransitDb();
 
-            var fileInfo = new FileInfo(_file);
-            OsmSharp.Logging.Log.TraceEvent("Processor - Read", OsmSharp.Logging.TraceEventType.Information,
-                "Writing to {0}...", fileInfo.Name);
+                db.AddTransfersDb(_profile, new TagsCollection(Tag.Create("highway", "residential")), _seconds);
 
-            transitDb.Serialize(File.OpenWrite(_file));
-        }
-
-        /// <summary>
-        /// Returns true if this processor can execute.
-        /// </summary>
-        public override bool CanExecute
-        {
-            get { return this.IsReady; }
+                return db;
+            };
         }
     }
 }

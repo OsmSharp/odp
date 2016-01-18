@@ -89,6 +89,9 @@ namespace OsmSharpDataProcessor.Commands.Processors.TransitDbs
         {
             return () =>
             {
+                var fileInfo = new FileInfo(_file);
+                OsmSharp.Logging.Log.TraceEvent("Processor - Read", OsmSharp.Logging.TraceEventType.Information,
+                    "Reading source from {0}...", fileInfo.Name);
                 return TransitDb.Deserialize(
                     File.OpenRead(_file));
             };

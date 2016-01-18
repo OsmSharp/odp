@@ -34,7 +34,7 @@ namespace OsmSharpDataProcessor
         {
             var commands = new List<Command>();
             commands.Add(new CommandFilterBoundingBox());
-            commands.Add(new CommandFilterMerge());
+            commands.Add(new CommandMerge());
             commands.Add(new CommandFilterSort());
             commands.Add(new CommandFilterProgress());
             commands.Add(new CommandFilterStyle());
@@ -59,6 +59,7 @@ namespace OsmSharpDataProcessor
             commands.Add(new Commands.CommandCreateMultimodalDb());
             commands.Add(new Commands.TransitDbs.CommandWrite());
             commands.Add(new Commands.TransitDbs.CommandRead());
+            commands.Add(new Commands.TransitDbs.CommandAddTransfers());
             commands.Add(new Commands.MultimodalDbs.CommandWrite());
             commands.Add(new Commands.MultimodalDbs.CommandAddLinks());
 

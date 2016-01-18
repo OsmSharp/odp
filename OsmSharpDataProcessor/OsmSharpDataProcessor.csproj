@@ -117,7 +117,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Antlr3.Runtime.PCL.3.5.0.2\lib\portable-win+net40+sl40+wp\Antlr3.Runtime.dll</HintPath>
+      <HintPath>..\packages\Antlr3.Runtime.PCL.3.5.0.3\lib\portable-win+net40+sl40+wp\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GeoAPI, Version=1.7.4.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
@@ -164,12 +164,12 @@
       <HintPath>..\packages\NetTopologySuite.IO.1.14.0.1\lib\net45\NetTopologySuite.IO.ShapeFile.Extended.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OsmSharp, Version=0.0.2.103, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.Core.0.0.2-rc1-0103\lib\net45\OsmSharp.dll</HintPath>
+    <Reference Include="OsmSharp, Version=1.0.2.109, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OsmSharp.Core.1.0.2\lib\net45\OsmSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OsmSharp.Osm, Version=0.0.2.103, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.Core.0.0.2-rc1-0103\lib\net45\OsmSharp.Osm.dll</HintPath>
+    <Reference Include="OsmSharp.Osm, Version=1.0.2.109, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OsmSharp.Core.1.0.2\lib\net45\OsmSharp.Osm.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OsmSharp.Routing, Version=0.1.1.103, Culture=neutral, processorArchitecture=MSIL">
@@ -177,8 +177,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="OsmSharp.Routing.Transit, Version=0.1.1.145, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.Transit.0.1.1-beta-0145\lib\net45\OsmSharp.Routing.Transit.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\transit\Output\OsmSharp.Routing.Transit.dll</HintPath>
     </Reference>
     <Reference Include="OsmSharp.UI, Version=0.0.0.1084, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OsmSharp.UI.0.0.0.1084-beta\lib\net45\OsmSharp.UI.dll</HintPath>
@@ -196,8 +196,8 @@
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Reminiscence, Version=0.1.0.31, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Reminiscence.0.1.0.31-beta\lib\portable-net403+sl50+win+wp80+Xamarin.iOS10+MonoAndroid10+MonoTouch10\Reminiscence.dll</HintPath>
+    <Reference Include="Reminiscence, Version=1.0.1.39, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Reminiscence.1.0.1\lib\portable-net403+sl50+win+wp80+Xamarin.iOS10+MonoAndroid10+MonoTouch10\Reminiscence.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -218,7 +218,7 @@
     <Compile Include="CommandLoader.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandFilterBoundingBox.cs" />
-    <Compile Include="Commands\CommandFilterMerge.cs" />
+    <Compile Include="Commands\CommandMerge.cs" />
     <Compile Include="Commands\CommandFilterGeoJson.cs" />
     <Compile Include="Commands\CommandFilterProgress.cs" />
     <Compile Include="Commands\CommandFilterSort.cs" />
@@ -250,7 +250,7 @@
     <Compile Include="Commands\Processors\ProcessorCompleteTarget.cs" />
     <Compile Include="Commands\Processors\ProcessorCreateRouterDb.cs" />
     <Compile Include="Commands\Processors\ProcessorFilter.cs" />
-    <Compile Include="Commands\Processors\ProcessorMergedFilter.cs" />
+    <Compile Include="Commands\Processors\ProcessorMerge.cs" />
     <Compile Include="Commands\Processors\ProcessorSource.cs" />
     <Compile Include="Commands\Processors\ProcessorTarget.cs" />
     <Compile Include="Commands\Processors\RouterDbs\IRouterDbSource.cs" />
@@ -264,8 +264,11 @@
     <Compile Include="Commands\Processors\RouterDbs\Shape\FormOfWay.cs" />
     <Compile Include="Commands\Processors\RouterDbs\Shape\FunctionalRoadClass.cs" />
     <Compile Include="Commands\Processors\RouterDbs\Shape\RouterDbProcessorTargetShape.cs" />
+    <Compile Include="Commands\Processors\TransitDbs\ProcessorAddTransfers.cs" />
+    <Compile Include="Commands\Processors\TransitDbs\ProcessorMerge.cs" />
     <Compile Include="Commands\Processors\TransitDbs\ProcessorRead.cs" />
     <Compile Include="Commands\Processors\TransitDbs\ProcessorWrite.cs" />
+    <Compile Include="Commands\TransitDbs\CommandAddTransfers.cs" />
     <Compile Include="Commands\TransitDbs\CommandRead.cs" />
     <Compile Include="Commands\TransitDbs\CommandWrite.cs" />
     <Compile Include="Commands\Processors\TransitDbs\ITransitDbSource.cs" />

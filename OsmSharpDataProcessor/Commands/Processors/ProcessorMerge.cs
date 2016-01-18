@@ -1,5 +1,5 @@
 ﻿// OsmSharp - OpenStreetMap (OSM) SDK
-// Copyright (C) 2013 Abelshausen Ben
+// Copyright (C) 2016 Abelshausen Ben
 // 
 // This file is part of OsmSharp.
 // 
@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using OsmSharp.Osm.Streams;
+using OsmSharpDataProcessor.Commands.Processors.TransitDbs;
 using OsmSharpDataProcessor.Streams;
 using System;
 using System.Collections.Generic;
@@ -26,51 +26,54 @@ namespace OsmSharpDataProcessor.Commands.Processors
     /// <summary>
     /// A processor created by a merged filter command.
     /// </summary>
-    public class ProcessorMergedFilter : ProcessorSource
+    public class ProcessorMerge : ProcessorSource
     {
-        /// <summary>
-        /// Holds the stream filter.
-        /// </summary>
-        private MergedOsmStreamSource _filter;
-
-        /// <summary>
-        /// Holds the ready status flag.
-        /// </summary>
-        private bool _isReady = false;
-
         /// <summary>
         /// Creates a new processor filter.
         /// </summary>
-        /// <param name="filter"></param>
-        public ProcessorMergedFilter(MergedOsmStreamSource filter)
-            : base(filter)
+        public ProcessorMerge()
+            : base(new MergedOsmStreamSource())
         {
-            _filter = filter;
+
         }
+
+        private bool _isReady = false;
 
         /// <summary>
         /// Collapses the given list of processors by adding this one to it.
         /// </summary>
-        /// <param name="processors"></param>
         public override void Collapse(List<ProcessorBase> processors)
         {
             if (processors == null) { throw new ArgumentNullException("processors"); }
             if (processors.Count == 0) { throw new ArgumentOutOfRangeException("processors", "There has to be at least on processor there to collapse this filter."); }
-            if (processors[processors.Count - 1] == null) { throw new ArgumentOutOfRangeException("processors", "The last processor in the processors list is null."); }
-            if (!(processors[processors.Count - 1] is ProcessorSource)) { throw new ArgumentOutOfRangeException("processors", "The last processor in the processors list is not a source."); }
-            
-            // take all processors that are source before this merge operation.
-            while (processors.Count > 0  && 
-                processors[processors.Count - 1] is ProcessorSource)
-            { // ok, processor is a source.
-                var source = processors[processors.Count - 1] as ProcessorSource;
-                if (!source.IsReady) { throw new InvalidOperationException("Last processor before filter is a source but it is not ready."); }
-                processors.RemoveAt(processors.Count - 1);
 
-                _filter.RegisterSource(source.Source);
-                _isReady = true;
+            if (processors[processors.Count - 1] is ProcessorSource)
+            { // take all processors that are sources for this merge operation.
+                while (processors.Count > 0 &&
+                    processors[processors.Count - 1] is ProcessorSource)
+                { // ok, processor is a source.
+                    var source = processors[processors.Count - 1] as ProcessorSource;
+                    if (!source.IsReady) { throw new InvalidOperationException("Last processor before filter is a source but it is not ready."); }
+                    processors.RemoveAt(processors.Count - 1);
+
+                    (this.Source as MergedOsmStreamSource).RegisterSource(source.Source);
+                    _isReady = true;
+                }
+                processors.Add(this);
             }
-            processors.Add(this);
+            else if(processors[processors.Count - 1] is ITransitDbSource)
+            { // take all processor that are transit db sources for this merge operation.
+                var mergeProcessor = new Processors.TransitDbs.ProcessorMerge();
+                while (processors.Count > 0 &&
+                    processors[processors.Count - 1] is ITransitDbSource)
+                { // ok, processor is a source.
+                    var source = processors[processors.Count - 1] as ITransitDbSource;
+                    processors.RemoveAt(processors.Count - 1);
+
+                    mergeProcessor.Add(source);
+                }
+                processors.Add(mergeProcessor);
+            }
         }
 
         /// <summary>

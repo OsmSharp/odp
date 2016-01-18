@@ -16,50 +16,55 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using GTFS;
 using System;
 using System.Collections.Generic;
-using OsmSharp.Routing.Transit.GTFS;
 using OsmSharp.Routing.Transit.Data;
 
-namespace OsmSharpDataProcessor.Commands.Processors.GTFS
+namespace OsmSharpDataProcessor.Commands.Processors.TransitDbs
 {
     /// <summary>
-    /// A processor to create transit db.
+    /// A processor created by a merged filter command.
     /// </summary>
-    public class ProcessorCreateTransitDb : ProcessorBase, TransitDbs.ITransitDbSource
+    public class ProcessorMerge : ProcessorBase, ITransitDbSource
     {
-        /// <summary>
-        /// Creates a new processor.
-        /// </summary>
-        public ProcessorCreateTransitDb()
-        {
+        private readonly List<ITransitDbSource> _sources;
 
+        /// <summary>
+        /// Creates a new processor merge.
+        /// </summary>
+        public ProcessorMerge()
+        {
+            _sources = new List<ITransitDbSource>();
         }
 
-        private Func<GTFSFeed> _getFeed;
+        /// <summary>
+        /// Can never execute on it's own.
+        /// </summary>
+        public override bool CanExecute
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         /// <summary>
-        /// Collapses the given list of processors by adding this one to it.
+        /// Is always ready.
+        /// </summary>
+        public override bool IsReady
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Collapses this processor read.
         /// </summary>
         public override void Collapse(List<ProcessorBase> processors)
         {
-            if (processors == null || processors.Count == 0) { throw new ArgumentOutOfRangeException(); }
-            
-            if (processors[processors.Count - 1] is IGTFSSource)
-            { // ok there is a source, keep it around for execution.
-                _getFeed = (processors[processors.Count - 1] as IGTFSSource).GetFeed();
-            }
-            processors.RemoveAt(processors.Count - 1);
-            processors.Add(this);
-        }
 
-        /// <summary>
-        /// Returns true if this processor is ready.
-        /// </summary>
-        public override bool IsReady
-        { // a source is always ready.
-            get { return true; }
         }
 
         /// <summary>
@@ -71,28 +76,32 @@ namespace OsmSharpDataProcessor.Commands.Processors.GTFS
         }
 
         /// <summary>
-        /// Returns true if this processor can be executed.
+        /// Adds a source.
         /// </summary>
-        public override bool CanExecute
-        { // a source cannot be executed.
-            get { return false; }
+        public void Add(ITransitDbSource transitDbSource)
+        {
+            _sources.Add(transitDbSource);
         }
 
         /// <summary>
-        /// Gets the get transit db function.
+        /// Get the function to get the transit db.
         /// </summary>
-        /// <returns></returns>
         public Func<TransitDb> GetTransitDb()
         {
             return () =>
             {
-                var feed = this._getFeed();
-
-                OsmSharp.Logging.Log.TraceEvent("Processor - Create TransitDb", OsmSharp.Logging.TraceEventType.Information,
-                    "Building TransitDb...");
                 var transitDb = new TransitDb();
-                transitDb.LoadFrom(feed);
 
+                OsmSharp.Logging.Log.TraceEvent("Processor - Merge", OsmSharp.Logging.TraceEventType.Information,
+                    "Reading sources...");
+                foreach (var source in _sources)
+                {
+                    var db = source.GetTransitDb()();
+                    transitDb.CopyFrom(db);
+                }
+
+                OsmSharp.Logging.Log.TraceEvent("Processor - Merge", OsmSharp.Logging.TraceEventType.Information, 
+                    "Sorting connections...");
                 transitDb.SortConnections(DefaultSorting.DepartureTime, null);
 
                 return transitDb;
