@@ -61,7 +61,7 @@ namespace OsmSharpDataProcessor.Commands.TransitDbs
             // set default vehicle to car.
             commandAddTransfers = new CommandAddTransfers()
             {
-                Seconds = 15 * 60 // default 15 mins.
+                Seconds = 3 * 60 // default 15 mins.
             };
 
             // parse arguments and keep parsing until the next switch.
