@@ -363,7 +363,9 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs.Shape
                 switch (highway)
                 { // check there reference values against OSM: http://wiki.openstreetmap.org/wiki/Highway
                     case "motorway":
+                    case "motorway_link":
                     case "trunk":
+                    case "trunk_link":
                         frc = FunctionalRoadClass.Frc0;
                         break;
                     case "primary":
@@ -394,7 +396,9 @@ namespace OsmSharpDataProcessor.Commands.Processors.RouterDbs.Shape
                 switch (highway)
                 { // check there reference values against OSM: http://wiki.openstreetmap.org/wiki/Highway
                     case "motorway":
+                    case "motorway_link":
                     case "trunk":
+                    case "trunk_link":
                         fow = FormOfWay.Motorway;
                         break;
                     case "primary":
