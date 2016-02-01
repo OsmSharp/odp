@@ -16,13 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using OsmSharpDataProcessor.Commands.Processors;
-using System;
-using System.Collections.Generic;
+using OsmSharpDataProcessor.Processors;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OsmSharpDataProcessor.Commands.RouterDbs
 {

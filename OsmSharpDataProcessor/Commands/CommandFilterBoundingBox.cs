@@ -23,7 +23,7 @@ using System.Linq;
 using System.Text;
 using OsmSharp.Math.Geo;
 using OsmSharp.Osm.Streams.Filters;
-using OsmSharpDataProcessor.Commands.Processors;
+using OsmSharpDataProcessor.Processors;
 
 namespace OsmSharpDataProcessor.Commands
 {

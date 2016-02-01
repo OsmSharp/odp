@@ -17,7 +17,7 @@
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using OsmSharp;
-using OsmSharpDataProcessor.Commands.Processors;
+using OsmSharpDataProcessor.Processors;
 
 namespace OsmSharpDataProcessor.Commands.TransitDbs
 {

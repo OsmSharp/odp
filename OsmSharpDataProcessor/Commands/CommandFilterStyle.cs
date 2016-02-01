@@ -25,7 +25,7 @@ using OsmSharp.UI.Map.Styles.Streams;
 using System.IO;
 using OsmSharp.UI.Map.Styles.MapCSS.v0_2.Domain;
 using OsmSharp.UI.Map.Styles.MapCSS;
-using OsmSharpDataProcessor.Commands.Processors;
+using OsmSharpDataProcessor.Processors;
 
 namespace OsmSharpDataProcessor.Commands
 {

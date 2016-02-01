@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using OsmSharpDataProcessor.Commands.Processors;
+using OsmSharpDataProcessor.Processors;
 using System;
 using System.Collections.Generic;
 
@@ -27,7 +27,6 @@ namespace OsmSharpDataProcessor
         /// <summary>
         /// The main entry point of the application.
         /// </summary>
-        /// <param name="args"></param>
         private static void Main(string[] args)
         {
             // enable logging.
@@ -46,23 +45,35 @@ namespace OsmSharpDataProcessor
                 throw new Exception("Please specifiy a valid data processing command!");
             }
 
-            var collapsedCommands = new List<ProcessorBase>();
-            for(int idx = 0; idx < commands.Length; idx++)
+            // create processors.
+            var processors = new List<ProcessorBase>();
+            for (int i = 0; i < commands.Length; i++)
             {
-                var processor = commands[idx].CreateProcessor();
-                processor.Collapse(collapsedCommands);
+                processors.Add(commands[i].CreateProcessor());
             }
 
-            if(collapsedCommands.Count > 1)
-            { // there is more than one command left.
-                throw new Exception("Command list could not be interpreted. Make sure you have the correct source/filter/target combinations.");
+            // collapse processors.
+            int p = 0;
+            while (p < processors.Count)
+            {
+                var consumed = processors[p].Collapse(processors, p);
+                p = p + consumed + 1;
+            }
+
+            // check if all current processors can be executed.
+            for (var i = 0; i < processors.Count; i++)
+            {
+                if (!processors[i].CanExecute)
+                {
+                    throw new Exception("Collapsing processors end in a non-executable processor, invalid processor sequence.");
+                }
             }
 
             var performanceinfo = new PerformanceInfoConsumer("odp", 5000);
             performanceinfo.Start();
-            if(collapsedCommands[0].CanExecute)
-            { // execute the last remaining fully collapsed command.
-                collapsedCommands[0].Execute();
+            for (var i = 0; i < processors.Count; i++)
+            {
+                processors[i].Execute();
             }
             performanceinfo.Stop();
         }

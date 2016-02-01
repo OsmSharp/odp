@@ -19,7 +19,7 @@
 using OsmSharp.Geo.Geometries;
 using OsmSharp.Routing.Osm.Vehicles;
 using OsmSharp.Routing.Profiles;
-using OsmSharpDataProcessor.Commands.Processors;
+using OsmSharpDataProcessor.Processors;
 using Reminiscence.IO;
 using System.IO;
 

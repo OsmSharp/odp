@@ -46,22 +46,25 @@ namespace OsmSharpDataProcessor
             commands.Add(new CommandWritePBF());
             commands.Add(new CommandFilterPoly());
             commands.Add(new CommandFilterGeoJson());
+            commands.Add(new CommandConvertToGeo());
+            commands.Add(new CommandCreateMultimodalDb());
             commands.Add(new Commands.RouterDbs.CommandRead());
             commands.Add(new Commands.RouterDbs.CommandWrite());
             commands.Add(new Commands.RouterDbs.CommandContract());
             commands.Add(new Commands.RouterDbs.CommandWriteContracted());
             commands.Add(new Commands.RouterDbs.CommandMergeContracted());
-            commands.Add(new Commands.RouterDbs.CommandWriteShape());
             commands.Add(new Commands.RouterDbs.CommandOptimize());
             commands.Add(new Commands.GTFS.CommandRead());
             commands.Add(new Commands.GTFS.CommandWrite());
             commands.Add(new Commands.GTFS.CommandCreateTransitDb());
-            commands.Add(new Commands.CommandCreateMultimodalDb());
+            commands.Add(new Commands.GTFS.CommandSplitPoly());
             commands.Add(new Commands.TransitDbs.CommandWrite());
             commands.Add(new Commands.TransitDbs.CommandRead());
             commands.Add(new Commands.TransitDbs.CommandAddTransfers());
             commands.Add(new Commands.MultimodalDbs.CommandWrite());
             commands.Add(new Commands.MultimodalDbs.CommandAddLinks());
+            commands.Add(new Commands.Geo.CommandGeoJsonTarget());
+            commands.Add(new Commands.Geo.CommandShapefileTarget());
 
             return commands;
         }

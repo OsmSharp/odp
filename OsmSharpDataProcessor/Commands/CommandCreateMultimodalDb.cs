@@ -1,4 +1,4 @@
-﻿using OsmSharpDataProcessor.Commands.Processors;
+﻿using OsmSharpDataProcessor.Processors;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -21,7 +21,7 @@ using OsmSharp.UI.Map.Styles.MapCSS;
 using OsmSharp.UI.Map.Styles.MapCSS.v0_2.Domain;
 using OsmSharp.UI.Map.Styles.Streams;
 using OsmSharp.UI.Renderer.Scene;
-using OsmSharpDataProcessor.Commands.Processors;
+using OsmSharpDataProcessor.Processors;
 using System.IO;
 using System.Linq;
 
