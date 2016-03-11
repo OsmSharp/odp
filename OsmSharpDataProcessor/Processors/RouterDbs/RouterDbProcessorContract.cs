@@ -21,6 +21,7 @@ using OsmSharp.Routing.Profiles;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace OsmSharpDataProcessor.Processors.RouterDbs
 {
@@ -29,14 +30,14 @@ namespace OsmSharpDataProcessor.Processors.RouterDbs
     /// </summary>
     public class RouterDbProcessorContract : ProcessorBase, IRouterDbSource
     {
-        private readonly Profile _profile;
+        private readonly List<Profile> _profiles;
 
         /// <summary>
         /// Creates a new processor contract.
         /// </summary>
-        public RouterDbProcessorContract(Profile profile)
+        public RouterDbProcessorContract(List<Profile> profiles)
         {
-            _profile = profile;
+            _profiles = profiles;
         }
 
         private Func<RouterDb> _getSourceDb;
@@ -90,7 +91,18 @@ namespace OsmSharpDataProcessor.Processors.RouterDbs
             return () =>
             {
                 var db = _getSourceDb();
-                db.AddContracted(_profile);
+
+                // execute all tasks.
+                var tasks = new List<Task>(_profiles.Count);
+                foreach(var profile in _profiles)
+                {
+                    tasks.Add(Task.Factory.StartNew(() =>
+                    {
+                        db.AddContracted(profile);
+                    }));
+                }
+                Task.WaitAll(tasks.ToArray());
+                
                 return db;
             };
         }

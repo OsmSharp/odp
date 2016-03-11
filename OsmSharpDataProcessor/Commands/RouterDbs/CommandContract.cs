@@ -39,7 +39,7 @@ namespace OsmSharpDataProcessor.Commands.RouterDbs
         /// <summary>
         /// The profile to contract for.
         /// </summary>
-        public string Profile { get; set; }
+        public string[] Profiles { get; set; }
 
         /// <summary>
         /// Parse the command arguments for the read-pbf command.
@@ -55,7 +55,7 @@ namespace OsmSharpDataProcessor.Commands.RouterDbs
             // everything ok, take the next argument as the filename.
             command = new RouterDbs.CommandContract()
             {
-                Profile = args[idx]
+                Profiles = args[idx].Split(',')
             };
             return 1;
         }
@@ -65,16 +65,20 @@ namespace OsmSharpDataProcessor.Commands.RouterDbs
         /// </summary>
         public override ProcessorBase CreateProcessor()
         {
-            OsmSharp.Routing.Profiles.Profile profile;
-            if (!OsmSharp.Routing.Profiles.Profile.TryGet(this.Profile, out profile))
+            var profiles = new System.Collections.Generic.List<OsmSharp.Routing.Profiles.Profile>();
+            foreach (var profileName in this.Profiles)
             {
-                throw new CommandLineParserException("--contract",
-                    string.Format("Invalid parameter value for command --contract: Profile '{0}' not found.",
-                        this.Profile));
+                OsmSharp.Routing.Profiles.Profile profile;
+                if (!OsmSharp.Routing.Profiles.Profile.TryGet(profileName, out profile))
+                {
+                    throw new CommandLineParserException("--contract",
+                        string.Format("Invalid parameter value for command --contract: Profile '{0}' not found.",
+                            this.Profiles));
+                }
+                profiles.Add(profile);
             }
 
-            return new Processors.RouterDbs.RouterDbProcessorContract(
-                profile);
+            return new Processors.RouterDbs.RouterDbProcessorContract(profiles);
         }
 
         /// <summary>
@@ -83,7 +87,7 @@ namespace OsmSharpDataProcessor.Commands.RouterDbs
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("--contract {0}", this.Profile);
+            return string.Format("--contract {0}", this.Profiles);
         }
     }
 }
