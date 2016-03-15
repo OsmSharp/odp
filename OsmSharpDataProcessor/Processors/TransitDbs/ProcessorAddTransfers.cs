@@ -84,7 +84,7 @@ namespace OsmSharpDataProcessor.Processors.TransitDbs
             if (i < 1) { throw new ArgumentOutOfRangeException("i"); }
 
             // take the last processor and collapse.
-            if (processors[processors.Count - 1] is ITransitDbSource)
+            if (processors[i - 1] is ITransitDbSource)
             { // ok, processor is a source.
                 var source = processors[i - 1] as ITransitDbSource;
                 processors.RemoveAt(i - 1);

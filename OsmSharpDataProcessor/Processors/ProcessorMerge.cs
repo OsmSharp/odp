@@ -70,10 +70,13 @@ namespace OsmSharpDataProcessor.Processors
                 { // ok, processor is a source.
                     var source = processors[i - 1] as ITransitDbSource;
                     processors.RemoveAt(i - 1);
-                    
+
+                    mergeProcessor.Add(source);
+
                     i--;
                     consumed++;
                 }
+                processors[i] = mergeProcessor;
             }
             if(consumed == 0)
             {
