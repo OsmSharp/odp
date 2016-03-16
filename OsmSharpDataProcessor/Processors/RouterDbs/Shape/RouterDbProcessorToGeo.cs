@@ -22,6 +22,7 @@ using OsmSharpDataProcessor.Processors.Geo;
 using System;
 using System.Collections.Generic;
 using NetTopologySuite.Features;
+using OsmSharp.Routing.Osm.Streams;
 
 namespace OsmSharpDataProcessor.Processors.RouterDbs.Shape
 {
@@ -96,11 +97,16 @@ namespace OsmSharpDataProcessor.Processors.RouterDbs.Shape
                     if (_previousMeta.ContainsKey("all_core") &&
                        _previousMeta.ContainsKey("node_id_map"))
                     { // there is a full node map, write the shapefile using the original node id's as id's.
-                        var nodeIdMap = (IDictionary<long, uint>)_previousMeta["node_id_map"];
+                        var nodeIdMap = (CoreNodeIdMap)_previousMeta["node_id_map"];
                         var vertexIdMap = new Dictionary<uint, long>();
-                        foreach (var pair in nodeIdMap)
+                        var vertices = new uint[256];
+                        foreach (var nodeId in nodeIdMap.Nodes)
                         {
-                            vertexIdMap.Add(pair.Value, pair.Key);
+                            var c = nodeIdMap.Get(nodeId, ref vertices);
+                            for (var i = 0; i < c; i++)
+                            {
+                                vertexIdMap.Add(vertices[i], nodeId);
+                            }
                         }
                         return WriteShape(db, vertexIdMap);
                     }
