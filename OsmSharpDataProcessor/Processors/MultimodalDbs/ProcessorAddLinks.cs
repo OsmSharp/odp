@@ -94,7 +94,7 @@ namespace OsmSharpDataProcessor.Processors.MultimodalDbs
                 
                 OsmSharp.Logging.Log.TraceEvent("Processor - Add Links", OsmSharp.Logging.TraceEventType.Information,
                     "Adding stop links - for {0} ...", _profile.Name);
-                db.AddStopLinksDb(_profile);
+                db.AddStopLinksDb(_profile, 0.1f, 100, 4);
                 return db;
             };
         }
