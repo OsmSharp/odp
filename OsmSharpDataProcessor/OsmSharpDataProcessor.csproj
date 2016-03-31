@@ -124,16 +124,16 @@
       <HintPath>..\packages\GeoAPI.1.7.4\lib\net45\GeoAPI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="GTFS, Version=1.4.6.105, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GTFS.1.4.6-rc1-0105\lib\net40\GTFS.dll</HintPath>
+    <Reference Include="GTFS, Version=1.5.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GTFS.1.5.6-rc1\lib\net40\GTFS.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="GTFS.IO, Version=1.4.6.105, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GTFS.1.4.6-rc1-0105\lib\net40\GTFS.IO.dll</HintPath>
+    <Reference Include="GTFS.IO, Version=1.5.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GTFS.1.5.6-rc1\lib\net40\GTFS.IO.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="GTFS.IO.Desktop, Version=1.4.6.105, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GTFS.1.4.6-rc1-0105\lib\net40\GTFS.IO.Desktop.dll</HintPath>
+    <Reference Include="GTFS.IO.Desktop, Version=1.5.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GTFS.1.5.6-rc1\lib\net40\GTFS.IO.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NetTopologySuite, Version=1.14.0.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
