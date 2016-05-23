@@ -172,8 +172,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\OsmSharp.Core.1.3.5-rc1\lib\portable-net403+sl50+win+wp80+Xamarin.iOS10+MonoAndroid10+MonoTouch10\OsmSharp.Osm.dll</HintPath>
     </Reference>
-    <Reference Include="OsmSharp.Routing, Version=0.5.15.154, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OsmSharp.Routing.0.5.15-rc1-0154\lib\net45\OsmSharp.Routing.dll</HintPath>
+    <Reference Include="OsmSharp.Routing, Version=0.6.1.158, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OsmSharp.Routing.0.6.1-rc1-0158\lib\net45\OsmSharp.Routing.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OsmSharp.Routing.Transit, Version=0.1.4.161, Culture=neutral, processorArchitecture=MSIL">
